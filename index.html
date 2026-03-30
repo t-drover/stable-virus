@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RDU Command Centre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0F0D0B;--surface:#1A1714;--card:#221F1B;--border:#2E2A25;
+  --rust:#C05A2E;--rust-lt:#D4703F;--rust-dk:#8A3B1C;
+  --amber:#E8A234;--green:#4CAF7D;--red:#E05252;--blue:#5B9BD5;
+  --text:#F5F0E8;--text-2:#9A8E82;--text-3:#5C544C;
+  --font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;
+}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;min-height:100vh;overflow-x:hidden}
+#authScreen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:1000}
+.auth-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:2.5rem;width:380px;text-align:center}
+.auth-logo{font-family:var(--font-head);font-size:1.5rem;font-weight:700;color:var(--text);margin-bottom:0.25rem}
+.auth-logo span{color:var(--rust)}
+.auth-sub{font-size:0.8rem;color:var(--text-2);margin-bottom:2rem;letter-spacing:0.08em;text-transform:uppercase}
+.auth-field{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem;text-align:left}
+.auth-field label{font-size:0.75rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-2)}
+.auth-field input{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:0.7rem 1rem;color:var(--text);font-family:var(--font-body);font-size:0.9rem;outline:none;transition:border-color 0.2s}
+.auth-field input:focus{border-color:var(--rust)}
+.auth-btn{width:100%;background:var(--rust);color:var(--text);border:none;border-radius:6px;padding:0.8rem;font-family:var(--font-head);font-size:0.9rem;font-weight:600;cursor:pointer;transition:background 0.2s;margin-top:0.5rem}
+.auth-btn:hover{background:var(--rust-lt)}
+.auth-err{font-size:0.8rem;color:var(--red);margin-top:0.75rem;display:none}
+.auth-paw{font-size:2.5rem;margin-bottom:1rem}
+#app{display:none;min-height:100vh}
+.layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+.sidebar{background:var(--surface);border-right:1px solid var(--border);padding:1.5rem 0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar-logo{padding:0 1.25rem 1.5rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
+.sidebar-logo .brand{font-family:var(--font-head);font-size:1.1rem;font-weight:700;color:var(--text)}
+.sidebar-logo .brand span{color:var(--rust)}
+.sidebar-logo .tagline{font-size:0.7rem;color:var(--text-3);letter-spacing:0.1em;text-transform:uppercase;margin-top:2px}
+.sidebar-user{padding:0.75rem 1.25rem;margin-bottom:0.5rem}
+.sidebar-user .user-name{font-size:0.82rem;font-weight:500;color:var(--text)}
+.sidebar-user .user-role{font-size:0.7rem;color:var(--text-2);text-transform:uppercase;letter-spacing:0.08em}
+.nav-section{padding:0 0.75rem;margin-bottom:0.5rem}
+.nav-label{font-size:0.65rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-3);padding:0.5rem 0.75rem;display:block}
+.nav-item{display:flex;align-items:center;gap:0.65rem;padding:0.6rem 0.75rem;border-radius:6px;cursor:pointer;transition:background 0.15s,color 0.15s;color:var(--text-2);font-size:0.85rem;font-weight:400;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{background:var(--card);color:var(--text)}
+.nav-item.active{background:rgba(192,90,46,0.15);color:var(--rust)}
+.nav-icon{font-size:1rem;width:18px;text-align:center;flex-shrink:0}
+.nav-badge{margin-left:auto;background:var(--rust);color:white;font-size:0.65rem;font-weight:600;padding:1px 6px;border-radius:10px}
+.sidebar-bottom{margin-top:auto;padding:1rem 0.75rem 0;border-top:1px solid var(--border)}
+.logout-btn{display:flex;align-items:center;gap:0.65rem;padding:0.6rem 0.75rem;border-radius:6px;cursor:pointer;color:var(--text-3);font-size:0.82rem;border:none;background:none;width:100%;transition:color 0.15s}
+.logout-btn:hover{color:var(--red)}
+.main{padding:2rem;overflow-y:auto}
+.page{display:none}
+.page.active{display:block}
+.page-header{margin-bottom:2rem}
+.page-header h1{font-family:var(--font-head);font-size:1.6rem;font-weight:700;color:var(--text);line-height:1}
+.page-header p{font-size:0.85rem;color:var(--text-2);margin-top:0.4rem}
+.page-actions{display:flex;gap:0.75rem;margin-top:1rem;flex-wrap:wrap}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem}
+.card-title{font-size:0.7rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-2);margin-bottom:1rem}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:2rem}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem}
+.stat-label{font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-2);margin-bottom:0.4rem}
+.stat-value{font-family:var(--font-head);font-size:2rem;font-weight:700;color:var(--text);line-height:1}
+.stat-sub{font-size:0.75rem;color:var(--text-3);margin-top:0.3rem}
+.stat-card.highlight{border-color:var(--rust);background:rgba(192,90,46,0.08)}
+.stat-card.highlight .stat-value{color:var(--rust-lt)}
+.btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.55rem 1.1rem;border-radius:6px;font-family:var(--font-body);font-size:0.82rem;font-weight:500;cursor:pointer;border:none;transition:all 0.15s}
+.btn-primary{background:var(--rust);color:white}.btn-primary:hover{background:var(--rust-lt)}
+.btn-secondary{background:var(--card);border:1px solid var(--border);color:var(--text)}.btn-secondary:hover{border-color:var(--rust);color:var(--rust)}
+.btn-danger{background:rgba(224,82,82,0.12);color:var(--red);border:1px solid rgba(224,82,82,0.25)}.btn-danger:hover{background:rgba(224,82,82,0.22)}
+.btn-sm{padding:0.35rem 0.75rem;font-size:0.78rem}
+.table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border)}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--surface);border-bottom:1px solid var(--border)}
+th{padding:0.75rem 1rem;text-align:left;font-size:0.68rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-2)}
+td{padding:0.85rem 1rem;font-size:0.85rem;color:var(--text);border-bottom:1px solid var(--border)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,0.02)}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:0.72rem;font-weight:500}
+.badge::before{content:'';width:5px;height:5px;border-radius:50%}
+.badge-active{background:rgba(76,175,125,0.15);color:var(--green)}.badge-active::before{background:var(--green)}
+.badge-pending{background:rgba(232,162,52,0.15);color:var(--amber)}.badge-pending::before{background:var(--amber)}
+.badge-complete{background:rgba(91,155,213,0.15);color:var(--blue)}.badge-complete::before{background:var(--blue)}
+.badge-quoted{background:rgba(192,90,46,0.15);color:var(--rust-lt)}.badge-quoted::before{background:var(--rust-lt)}
+.badge-cancelled{background:rgba(92,84,76,0.15);color:var(--text-2)}.badge-cancelled::before{background:var(--text-2)}
+.badge-new{background:rgba(232,162,52,0.15);color:var(--amber)}.badge-new::before{background:var(--amber)}
+.badge-converted{background:rgba(76,175,125,0.15);color:var(--green)}.badge-converted::before{background:var(--green)}
+.badge-lost{background:rgba(92,84,76,0.15);color:var(--text-2)}.badge-lost::before{background:var(--text-2)}
+.badge-contacted{background:rgba(91,155,213,0.15);color:var(--blue)}.badge-contacted::before{background:var(--blue)}
+.badge-paused{background:rgba(92,84,76,0.15);color:var(--text-2)}.badge-paused::before{background:var(--text-2)}
+.badge-sent{background:rgba(91,155,213,0.15);color:var(--blue)}.badge-sent::before{background:var(--blue)}
+.badge-accepted{background:rgba(76,175,125,0.15);color:var(--green)}.badge-accepted::before{background:var(--green)}
+.badge-declined{background:rgba(224,82,82,0.15);color:var(--red)}.badge-declined::before{background:var(--red)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-field{display:flex;flex-direction:column;gap:0.4rem}
+.form-field.full{grid-column:1/-1}
+.form-field label{font-size:0.72rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-2)}
+.form-field input,.form-field select,.form-field textarea{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:0.65rem 0.9rem;color:var(--text);font-family:var(--font-body);font-size:0.88rem;outline:none;transition:border-color 0.2s;width:100%}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--rust)}
+.form-field select option{background:var(--card)}
+.form-field textarea{resize:vertical;min-height:80px}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:2rem;width:100%;max-width:560px;max-height:90vh;overflow-y:auto}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.modal-title{font-family:var(--font-head);font-size:1.1rem;font-weight:600;color:var(--text)}
+.modal-close{background:none;border:none;color:var(--text-2);font-size:1.2rem;cursor:pointer;padding:4px;line-height:1}
+.modal-close:hover{color:var(--red)}
+.modal-actions{display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+.toast{position:fixed;bottom:2rem;right:2rem;z-index:999;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:0.75rem 1.25rem;font-size:0.85rem;color:var(--text);transform:translateY(100px);opacity:0;transition:all 0.3s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{border-color:var(--green);color:var(--green)}
+.toast.error{border-color:var(--red);color:var(--red)}
+.workflow-step{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.25rem;margin-bottom:0.75rem}
+.workflow-step-header{display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem}
+.workflow-num{width:28px;height:28px;border-radius:50%;background:rgba(192,90,46,0.15);color:var(--rust-lt);font-family:var(--font-head);font-size:0.78rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.workflow-step-title{font-weight:500;font-size:0.9rem;color:var(--text)}
+.workflow-step p{font-size:0.82rem;color:var(--text-2);line-height:1.6;padding-left:2.5rem}
+.inspection-section{margin-bottom:1.5rem}
+.inspection-section h4{font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-2);margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+.mb-1{margin-bottom:1rem}.mb-2{margin-bottom:1.5rem}.mb-3{margin-bottom:2rem}
+.empty-state{text-align:center;padding:3rem;color:var(--text-2)}
+.empty-state .empty-icon{font-size:2.5rem;margin-bottom:1rem}
+.empty-state p{font-size:0.88rem}
+@media(max-width:768px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .form-grid,.grid-2,.grid-3{grid-template-columns:1fr}
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .main{padding:1rem}
+}
+</style>
+</head>
+<body>
+
+<div id="authScreen">
+  <div class="auth-box">
+    <div class="auth-paw">🐾</div>
+    <div class="auth-logo">RDU <span>Command Centre</span></div>
+    <div class="auth-sub">Roofing Down Under — Team Portal</div>
+    <div class="auth-field"><label>Email</label><input type="email" id="authEmail" placeholder="you@roofingdownunder.com"></div>
+    <div class="auth-field"><label>Password</label><input type="password" id="authPass" placeholder="••••••••"></div>
+    <button class="auth-btn" onclick="signIn()">Sign In</button>
+    <div class="auth-err" id="authErr"></div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="brand">RDU <span>Command</span></div>
+        <div class="tagline">Cattle Dogs. Roofing. Repeat.</div>
+      </div>
+      <div class="sidebar-user">
+        <div class="user-name" id="sidebarUser">Loading...</div>
+        <div class="user-role" id="sidebarRole">Team Member</div>
+      </div>
+      <div class="nav-section">
+        <span class="nav-label">Overview</span>
+        <button class="nav-item active" onclick="showPage('dashboard')"><span class="nav-icon">🏠</span> Dashboard</button>
+      </div>
+      <div class="nav-section">
+        <span class="nav-label">Operations</span>
+        <button class="nav-item" onclick="showPage('jobs')"><span class="nav-icon">🔨</span> Jobs <span class="nav-badge" id="jobsBadge">0</span></button>
+        <button class="nav-item" onclick="showPage('leads')"><span class="nav-icon">📋</span> Leads <span class="nav-badge" id="leadsBadge">0</span></button>
+        <button class="nav-item" onclick="showPage('schedule')"><span class="nav-icon">📅</span> Schedule</button>
+        <button class="nav-item" onclick="showPage('inspections')"><span class="nav-icon">🔍</span> Inspections</button>
+      </div>
+      <div class="nav-section">
+        <span class="nav-label">Business</span>
+        <button class="nav-item" onclick="showPage('advertising')"><span class="nav-icon">📢</span> Advertising</button>
+        <button class="nav-item" onclick="showPage('workflow')"><span class="nav-icon">📌</span> RDU Workflow</button>
+      </div>
+      <div class="sidebar-bottom">
+        <button class="logout-btn" onclick="doSignOut()"><span>🚪</span> Sign Out</button>
+      </div>
+    </aside>
+
+    <main class="main">
+
+      <!-- DASHBOARD -->
+      <div class="page active" id="page-dashboard">
+        <div class="page-header">
+          <h1>Good day, <span id="firstName" style="color:var(--rust)">Mate</span> 🐾</h1>
+          <p>Here's what's happening at RDU today.</p>
+        </div>
+        <div class="stat-grid">
+          <div class="stat-card highlight"><div class="stat-label">Active Jobs</div><div class="stat-value" id="statActiveJobs">—</div><div class="stat-sub">Currently on site</div></div>
+          <div class="stat-card"><div class="stat-label">Open Leads</div><div class="stat-value" id="statLeads">—</div><div class="stat-sub">Awaiting follow-up</div></div>
+          <div class="stat-card"><div class="stat-label">This Week</div><div class="stat-value" id="statWeek">—</div><div class="stat-sub">Scheduled events</div></div>
+          <div class="stat-card"><div class="stat-label">Inspections</div><div class="stat-value" id="statInspections">—</div><div class="stat-sub">Pending quotes</div></div>
+        </div>
+        <div class="grid-2">
+          <div class="card"><div class="card-title">Recent Jobs</div><div id="dashRecentJobs"><div class="empty-state"><div class="empty-icon">🔨</div><p>No jobs yet</p></div></div></div>
+          <div class="card"><div class="card-title">Latest Leads</div><div id="dashRecentLeads"><div class="empty-state"><div class="empty-icon">📋</div><p>No leads yet</p></div></div></div>
+        </div>
+      </div>
+
+      <!-- JOBS -->
+      <div class="page" id="page-jobs">
+        <div class="page-header">
+          <h1>Jobs</h1>
+          <p>Track every job from quote to completion.</p>
+          <div class="page-actions"><button class="btn btn-primary" onclick="openModal('jobModal')">+ New Job</button></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>ID</th><th>Client</th><th>Type</th><th>Location</th><th>Assigned</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="jobsTable"><tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No jobs yet</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- LEADS -->
+      <div class="page" id="page-leads">
+        <div class="page-header">
+          <h1>Leads</h1>
+          <p>Manage enquiries and convert them to jobs.</p>
+          <div class="page-actions"><button class="btn btn-primary" onclick="openModal('leadModal')">+ New Lead</button></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Name</th><th>Service</th><th>Location</th><th>Contact</th><th>Source</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="leadsTable"><tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No leads yet</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SCHEDULE -->
+      <div class="page" id="page-schedule">
+        <div class="page-header">
+          <h1>Schedule</h1>
+          <p>Team scheduling and job calendar.</p>
+          <div class="page-actions"><button class="btn btn-primary" onclick="openModal('scheduleModal')">+ Add Event</button></div>
+        </div>
+        <div id="scheduleList" class="card"><div class="empty-state"><div class="empty-icon">📅</div><p>No events scheduled</p></div></div>
+      </div>
+
+      <!-- INSPECTIONS -->
+      <div class="page" id="page-inspections">
+        <div class="page-header">
+          <h1>Inspections</h1>
+          <p>Job inspections, quotes, cut lists and mud maps.</p>
+          <div class="page-actions"><button class="btn btn-primary" onclick="openModal('inspectionModal')">+ New Inspection</button></div>
+        </div>
+        <div id="inspectionsList"><div class="empty-state card"><div class="empty-icon">🔍</div><p>No inspections recorded yet</p></div></div>
+      </div>
+
+      <!-- ADVERTISING -->
+      <div class="page" id="page-advertising">
+        <div class="page-header">
+          <h1>Advertising</h1>
+          <p>All active campaigns and performance in one place.</p>
+          <div class="page-actions"><button class="btn btn-primary" onclick="openModal('adModal')">+ Add Campaign</button></div>
+        </div>
+        <div class="stat-grid mb-2">
+          <div class="stat-card"><div class="stat-label">Total Spend</div><div class="stat-value" id="adSpend">$0</div><div class="stat-sub">All active campaigns</div></div>
+          <div class="stat-card highlight"><div class="stat-label">Total Leads</div><div class="stat-value" id="adLeadsTotal">0</div><div class="stat-sub">From advertising</div></div>
+          <div class="stat-card"><div class="stat-label">Cost Per Lead</div><div class="stat-value" id="adCPL">$0</div><div class="stat-sub">Average</div></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Campaign</th><th>Platform</th><th>Budget</th><th>Leads</th><th>CPL</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="adsTable"><tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No campaigns yet</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- WORKFLOW -->
+      <div class="page" id="page-workflow">
+        <div class="page-header">
+          <h1>RDU Workflow</h1>
+          <p>Standard operating process for every job — direct client and builder-referred.</p>
+        </div>
+        <div class="grid-2">
+          <div>
+            <h3 style="font-family:var(--font-head);font-size:1rem;color:var(--rust-lt);margin-bottom:1rem">Direct Client Jobs</h3>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">01</div><div class="workflow-step-title">Initial Enquiry</div></div><p>Client contacts via website, Rocky chatbot, or referral. Log as lead immediately in the dashboard with source tagged.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">02</div><div class="workflow-step-title">Site Inspection</div></div><p>Book within 48hrs. Harry or Ronny attends. Record all findings in the Inspections module — photos, measurements, issues noted.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">03</div><div class="workflow-step-title">Quote Preparation</div></div><p>Itemised quote issued within 24hrs of inspection. Include cut list if Colorbond. Payment terms: 10% booking, 30% materials, 30% progress, 30% completion.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">04</div><div class="workflow-step-title">Quote Acceptance</div></div><p>Client signs off. Booking deposit collected. Job added to schedule. Crew briefed. Lead status updated to Converted.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">05</div><div class="workflow-step-title">Works on Site</div></div><p>Harry leads crew. Daily Activity Reports filed. Progress photos at each milestone. Job status updated in dashboard.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">06</div><div class="workflow-step-title">Completion and Sign-Off</div></div><p>Walkthrough with client before final invoice. Site left clean. Job status set to Complete. Request Google review.</p></div>
+          </div>
+          <div>
+            <h3 style="font-family:var(--font-head);font-size:1rem;color:var(--rust-lt);margin-bottom:1rem">Builder-Referred Jobs</h3>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">01</div><div class="workflow-step-title">Builder Referral</div></div><p>Builder contacts Ronny directly. Log in leads with source tagged as "Builder Referral" and builder name in notes.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">02</div><div class="workflow-step-title">Plans and Scope Review</div></div><p>Obtain plans from builder. Review scope. Confirm inclusions and exclusions in writing before quoting.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">03</div><div class="workflow-step-title">Quote to Builder</div></div><p>Quote issued to builder, not end client. Separate pricing from direct client rates. Include provisional sums if plans incomplete.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">04</div><div class="workflow-step-title">Scheduling</div></div><p>Coordinate with builder's program. Confirm slab/frame readiness before committing crew. Add to schedule with builder contact noted.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">05</div><div class="workflow-step-title">Works and Variations</div></div><p>All variations approved in writing before proceeding. Harry to notify Ronny of any scope changes same day they arise.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">06</div><div class="workflow-step-title">Practical Completion</div></div><p>Invoice builder on PC. Note defects liability period. Follow up for referrals to next project.</p></div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- JOB MODAL -->
+<div class="modal-overlay" id="jobModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title" id="jobModalTitle">New Job</div><button class="modal-close" onclick="closeModal('jobModal')">✕</button></div>
+    <input type="hidden" id="jobId">
+    <div class="form-grid">
+      <div class="form-field"><label>Client Name</label><input id="jobClient" placeholder="e.g. John Smith"></div>
+      <div class="form-field"><label>Phone</label><input id="jobPhone" placeholder="04XX XXX XXX"></div>
+      <div class="form-field"><label>Service Type</label><select id="jobType"><option>Roof Repairs</option><option>New Roof Installation</option><option>Re-Roofing</option><option>Gutters & Downpipes</option><option>Commercial Roofing</option><option>Roof Inspection</option></select></div>
+      <div class="form-field"><label>Status</label><select id="jobStatus"><option value="pending">Pending</option><option value="active">Active</option><option value="quoted">Quoted</option><option value="complete">Complete</option><option value="cancelled">Cancelled</option></select></div>
+      <div class="form-field full"><label>Location</label><input id="jobLocation" placeholder="Full address"></div>
+      <div class="form-field"><label>Assigned To</label><select id="jobAssigned"><option>Harry</option><option>Pauly</option><option>Josh</option><option>Ronny</option></select></div>
+      <div class="form-field"><label>Start Date</label><input type="date" id="jobDate"></div>
+      <div class="form-field"><label>Quote Value ($)</label><input type="number" id="jobValue" placeholder="0"></div>
+      <div class="form-field full"><label>Notes</label><textarea id="jobNotes" placeholder="Job details, special instructions..."></textarea></div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('jobModal')">Cancel</button><button class="btn btn-primary" onclick="saveJob()">Save Job</button></div>
+  </div>
+</div>
+
+<!-- LEAD MODAL -->
+<div class="modal-overlay" id="leadModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">New Lead</div><button class="modal-close" onclick="closeModal('leadModal')">✕</button></div>
+    <input type="hidden" id="leadId">
+    <div class="form-grid">
+      <div class="form-field"><label>Name</label><input id="leadName" placeholder="Client name"></div>
+      <div class="form-field"><label>Phone</label><input id="leadPhone" placeholder="04XX XXX XXX"></div>
+      <div class="form-field"><label>Email</label><input id="leadEmail" placeholder="email@example.com"></div>
+      <div class="form-field"><label>Service Needed</label><select id="leadService"><option>Roof Repairs</option><option>New Roof Installation</option><option>Re-Roofing</option><option>Gutters & Downpipes</option><option>Commercial Roofing</option><option>Roof Inspection</option><option>Not Sure</option></select></div>
+      <div class="form-field"><label>Location</label><input id="leadLocation" placeholder="Suburb / State"></div>
+      <div class="form-field"><label>Source</label><select id="leadSource"><option>Website</option><option>Rocky Chatbot</option><option>Google</option><option>Facebook</option><option>Instagram</option><option>Referral</option><option>BNI</option><option>Builder Referral</option><option>Other</option></select></div>
+      <div class="form-field"><label>Status</label><select id="leadStatus"><option value="new">New</option><option value="contacted">Contacted</option><option value="quoted">Quoted</option><option value="converted">Converted</option><option value="lost">Lost</option></select></div>
+      <div class="form-field full"><label>Notes</label><textarea id="leadNotes" placeholder="Details, urgency, what they said..."></textarea></div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('leadModal')">Cancel</button><button class="btn btn-primary" onclick="saveLead()">Save Lead</button></div>
+  </div>
+</div>
+
+<!-- SCHEDULE MODAL -->
+<div class="modal-overlay" id="scheduleModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Add Event</div><button class="modal-close" onclick="closeModal('scheduleModal')">✕</button></div>
+    <div class="form-grid">
+      <div class="form-field full"><label>Event Title</label><input id="schedTitle" placeholder="e.g. Woolooware Re-Roof Day 1"></div>
+      <div class="form-field"><label>Date</label><input type="date" id="schedDate"></div>
+      <div class="form-field"><label>Time</label><input type="time" id="schedTime"></div>
+      <div class="form-field"><label>Crew</label><select id="schedCrew"><option>All Crew</option><option>Harry</option><option>Pauly</option><option>Josh</option><option>Ronny</option><option>Myla</option><option>Toneth</option></select></div>
+      <div class="form-field"><label>Type</label><select id="schedType"><option>Site Work</option><option>Inspection</option><option>Quote Meeting</option><option>BNI Meeting</option><option>Admin</option><option>Other</option></select></div>
+      <div class="form-field full"><label>Notes</label><textarea id="schedNotes" placeholder="Additional details..."></textarea></div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('scheduleModal')">Cancel</button><button class="btn btn-primary" onclick="saveSchedule()">Save Event</button></div>
+  </div>
+</div>
+
+<!-- INSPECTION MODAL -->
+<div class="modal-overlay" id="inspectionModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">New Inspection</div><button class="modal-close" onclick="closeModal('inspectionModal')">✕</button></div>
+    <div class="inspection-section">
+      <h4>Client and Site Details</h4>
+      <div class="form-grid">
+        <div class="form-field"><label>Client Name</label><input id="inspClient" placeholder="Client name"></div>
+        <div class="form-field"><label>Phone</label><input id="inspPhone" placeholder="04XX XXX XXX"></div>
+        <div class="form-field full"><label>Address</label><input id="inspAddress" placeholder="Full site address"></div>
+        <div class="form-field"><label>Inspection Date</label><input type="date" id="inspDate"></div>
+        <div class="form-field"><label>Inspected By</label><select id="inspBy"><option>Ronny</option><option>Harry</option></select></div>
+      </div>
+    </div>
+    <div class="inspection-section">
+      <h4>Roof Findings</h4>
+      <div class="form-grid">
+        <div class="form-field"><label>Roof Type</label><select id="inspRoofType"><option>Colorbond</option><option>Terracotta Tile</option><option>Concrete Tile</option><option>Zincalume</option><option>Other</option></select></div>
+        <div class="form-field"><label>Roof Age (approx)</label><input id="inspAge" placeholder="e.g. 20 years"></div>
+        <div class="form-field full"><label>Condition Notes</label><textarea id="inspCondition" placeholder="Issues found, areas of concern, overall condition..."></textarea></div>
+      </div>
+    </div>
+    <div class="inspection-section">
+      <h4>Quote, Cut List and Mud Map</h4>
+      <div class="form-grid">
+        <div class="form-field"><label>Estimated Quote ($)</label><input type="number" id="inspQuote" placeholder="0"></div>
+        <div class="form-field"><label>Quote Status</label><select id="inspQuoteStatus"><option>Pending</option><option>Sent</option><option>Accepted</option><option>Declined</option></select></div>
+        <div class="form-field full"><label>Cut List / Materials</label><textarea id="inspCutList" placeholder="e.g. Colorbond Surfmist 6m x 24 sheets, Ridge capping x 8..."></textarea></div>
+        <div class="form-field full"><label>Mud Map Notes</label><textarea id="inspMudMap" placeholder="Roof layout, ridgelines, valleys, dimensions, gutters..."></textarea></div>
+      </div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('inspectionModal')">Cancel</button><button class="btn btn-primary" onclick="saveInspection()">Save Inspection</button></div>
+  </div>
+</div>
+
+<!-- AD MODAL -->
+<div class="modal-overlay" id="adModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Add Campaign</div><button class="modal-close" onclick="closeModal('adModal')">✕</button></div>
+    <div class="form-grid">
+      <div class="form-field full"><label>Campaign Name</label><input id="adName" placeholder="e.g. Google Ads Sydney Roofing"></div>
+      <div class="form-field"><label>Platform</label><select id="adPlatform"><option>Google Ads</option><option>Facebook</option><option>Instagram</option><option>LinkedIn</option><option>BNI</option><option>Letterbox Drop</option><option>Other</option></select></div>
+      <div class="form-field"><label>Monthly Budget ($)</label><input type="number" id="adBudget" placeholder="0"></div>
+      <div class="form-field"><label>Leads Generated</label><input type="number" id="adLeadsNum" placeholder="0"></div>
+      <div class="form-field"><label>Status</label><select id="adStatus"><option value="active">Active</option><option value="paused">Paused</option><option value="complete">Complete</option></select></div>
+      <div class="form-field"><label>Start Date</label><input type="date" id="adStart"></div>
+      <div class="form-field full"><label>Notes</label><textarea id="adNotes" placeholder="Campaign details, targeting, notes..."></textarea></div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('adModal')">Cancel</button><button class="btn btn-primary" onclick="saveAd()">Save Campaign</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword, signOut as fbSignOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, collection, addDoc, getDocs, updateDoc, deleteDoc, doc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC1ur8rYfmjYzdAeU7h7sAM3AAA3mte-LE",
+  authDomain: "rdu-dashboard.firebaseapp.com",
+  projectId: "rdu-dashboard",
+  storageBucket: "rdu-dashboard.firebasestorage.app",
+  messagingSenderId: "806124078648",
+  appId: "1:806124078648:web:4b9463aaf99fa5c00848cd"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const TEAM = {
+  'ronny@roofingdownunder.com':{name:'Ronny',role:'Owner'},
+  'harry@roofingdownunder.com':{name:'Harry',role:'Site Lead'},
+  'pauly@roofingdownunder.com':{name:'Pauly',role:'Crew'},
+  'josh@roofingdownunder.com':{name:'Josh',role:'Crew'},
+  'myla@roofingdownunder.com':{name:'Myla',role:'Operations'},
+  'toneth@roofingdownunder.com':{name:'Toneth',role:'Admin'},
+};
+
+onAuthStateChanged(auth, user => {
+  if(user){
+    document.getElementById('authScreen').style.display='none';
+    document.getElementById('app').style.display='block';
+    const info = TEAM[user.email]||{name:user.email.split('@')[0],role:'Team Member'};
+    document.getElementById('sidebarUser').textContent=info.name;
+    document.getElementById('sidebarRole').textContent=info.role;
+    document.getElementById('firstName').textContent=info.name;
+    loadAll();
+  } else {
+    document.getElementById('authScreen').style.display='flex';
+    document.getElementById('app').style.display='none';
+  }
+});
+
+window.signIn = async () => {
+  const email = document.getElementById('authEmail').value;
+  const pass = document.getElementById('authPass').value;
+  const err = document.getElementById('authErr');
+  err.style.display='none';
+  try { await signInWithEmailAndPassword(auth,email,pass); }
+  catch(e){ err.textContent='Wrong email or password.'; err.style.display='block'; }
+};
+
+window.doSignOut = () => fbSignOut(auth);
+document.getElementById('authPass').addEventListener('keydown',e=>{if(e.key==='Enter')window.signIn();});
+
+function showToast(msg,type='success'){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className=`toast ${type} show`;
+  setTimeout(()=>t.className='toast',3000);
+}
+
+function badge(s){
+  const map={active:'badge-active',pending:'badge-pending',complete:'badge-complete',quoted:'badge-quoted',
+    cancelled:'badge-cancelled',new:'badge-new',contacted:'badge-contacted',converted:'badge-converted',
+    lost:'badge-lost',paused:'badge-paused',sent:'badge-sent',accepted:'badge-accepted',declined:'badge-declined'};
+  return `<span class="badge ${map[s?.toLowerCase()]||'badge-pending'}">${s}</span>`;
+}
+
+window.openModal=id=>document.getElementById(id).classList.add('open');
+window.closeModal=id=>document.getElementById(id).classList.remove('open');
+
+window.showPage=id=>{
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById(`page-${id}`).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>{if(n.getAttribute('onclick')?.includes(`'${id}'`))n.classList.add('active');});
+};
+
+async function loadAll(){await Promise.all([loadJobs(),loadLeads(),loadSchedule(),loadInspections(),loadAds()]);}
+
+async function loadJobs(){
+  const snap=await getDocs(collection(db,'jobs'));
+  const jobs=[];snap.forEach(d=>jobs.push({id:d.id,...d.data()}));
+  const active=jobs.filter(j=>j.status==='active').length;
+  document.getElementById('jobsBadge').textContent=active;
+  document.getElementById('statActiveJobs').textContent=active;
+  const tb=document.getElementById('jobsTable');
+  tb.innerHTML=jobs.length?jobs.map(j=>`<tr>
+    <td style="font-family:var(--font-head);color:var(--rust-lt);font-size:0.8rem">#${j.id.slice(-4).toUpperCase()}</td>
+    <td><div style="font-weight:500">${j.client||''}</div><div style="font-size:0.75rem;color:var(--text-2)">${j.phone||''}</div></td>
+    <td>${j.type||''}</td><td style="font-size:0.82rem">${j.location||'—'}</td>
+    <td><span style="background:var(--surface);padding:2px 8px;border-radius:4px;font-size:0.78rem">${j.assigned||'—'}</span></td>
+    <td>${badge(j.status)}</td>
+    <td><div style="display:flex;gap:0.5rem"><button class="btn btn-sm btn-secondary" onclick="editJob('${j.id}')">Edit</button><button class="btn btn-sm btn-danger" onclick="delItem('jobs','${j.id}',loadJobs)">Del</button></div></td>
+  </tr>`).join(''):'<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No jobs yet</td></tr>';
+  const recent=jobs.slice(0,4);
+  const el=document.getElementById('dashRecentJobs');
+  el.innerHTML=recent.length?recent.map(j=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem 0;border-bottom:1px solid var(--border)"><div><div style="font-weight:500;font-size:0.85rem">${j.client||''}</div><div style="font-size:0.75rem;color:var(--text-2)">${j.type||''}</div></div>${badge(j.status)}</div>`).join(''):'<div class="empty-state"><div class="empty-icon">🔨</div><p>No jobs yet</p></div>';
+}
+
+window.saveJob=async()=>{
+  const id=document.getElementById('jobId').value;
+  const data={client:document.getElementById('jobClient').value,phone:document.getElementById('jobPhone').value,type:document.getElementById('jobType').value,status:document.getElementById('jobStatus').value,location:document.getElementById('jobLocation').value,assigned:document.getElementById('jobAssigned').value,date:document.getElementById('jobDate').value,value:document.getElementById('jobValue').value,notes:document.getElementById('jobNotes').value,updated:new Date().toISOString()};
+  try{
+    if(id)await updateDoc(doc(db,'jobs',id),data);
+    else await addDoc(collection(db,'jobs'),{...data,created:new Date().toISOString()});
+    closeModal('jobModal');['jobId','jobClient','jobPhone','jobLocation','jobDate','jobValue','jobNotes'].forEach(i=>document.getElementById(i).value='');
+    document.getElementById('jobModalTitle').textContent='New Job';
+    await loadJobs();showToast(id?'Job updated':'Job added');
+  }catch(e){showToast('Error saving job','error');}
+};
+
+window.editJob=async(id)=>{
+  const snap=await getDocs(collection(db,'jobs'));
+  const j=snap.docs.find(d=>d.id===id)?.data();if(!j)return;
+  document.getElementById('jobId').value=id;
+  document.getElementById('jobClient').value=j.client||'';document.getElementById('jobPhone').value=j.phone||'';
+  document.getElementById('jobType').value=j.type||'';document.getElementById('jobStatus').value=j.status||'pending';
+  document.getElementById('jobLocation').value=j.location||'';document.getElementById('jobAssigned').value=j.assigned||'Harry';
+  document.getElementById('jobDate').value=j.date||'';document.getElementById('jobValue').value=j.value||'';
+  document.getElementById('jobNotes').value=j.notes||'';
+  document.getElementById('jobModalTitle').textContent='Edit Job';openModal('jobModal');
+};
+
+async function loadLeads(){
+  const snap=await getDocs(collection(db,'leads'));
+  const leads=[];snap.forEach(d=>leads.push({id:d.id,...d.data()}));
+  const open=leads.filter(l=>l.status==='new'||l.status==='contacted').length;
+  document.getElementById('leadsBadge').textContent=open;document.getElementById('statLeads').textContent=open;
+  const tb=document.getElementById('leadsTable');
+  tb.innerHTML=leads.length?leads.map(l=>`<tr>
+    <td><div style="font-weight:500">${l.name||''}</div></td>
+    <td style="font-size:0.82rem">${l.service||''}</td>
+    <td style="font-size:0.82rem">${l.location||'—'}</td>
+    <td><div style="font-size:0.82rem">${l.phone||''}</div><div style="font-size:0.75rem;color:var(--text-2)">${l.email||''}</div></td>
+    <td><span style="background:var(--surface);padding:2px 8px;border-radius:4px;font-size:0.78rem">${l.source||''}</span></td>
+    <td>${badge(l.status)}</td>
+    <td><div style="display:flex;gap:0.5rem"><button class="btn btn-sm btn-secondary" onclick="editLead('${l.id}')">Edit</button><button class="btn btn-sm btn-danger" onclick="delItem('leads','${l.id}',loadLeads)">Del</button></div></td>
+  </tr>`).join(''):'<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No leads yet</td></tr>';
+  const el=document.getElementById('dashRecentLeads');
+  const recent=leads.slice(0,4);
+  el.innerHTML=recent.length?recent.map(l=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem 0;border-bottom:1px solid var(--border)"><div><div style="font-weight:500;font-size:0.85rem">${l.name||''}</div><div style="font-size:0.75rem;color:var(--text-2)">${l.service||''} · ${l.source||''}</div></div>${badge(l.status)}</div>`).join(''):'<div class="empty-state"><div class="empty-icon">📋</div><p>No leads yet</p></div>';
+}
+
+window.saveLead=async()=>{
+  const id=document.getElementById('leadId').value;
+  const data={name:document.getElementById('leadName').value,phone:document.getElementById('leadPhone').value,email:document.getElementById('leadEmail').value,service:document.getElementById('leadService').value,location:document.getElementById('leadLocation').value,source:document.getElementById('leadSource').value,status:document.getElementById('leadStatus').value,notes:document.getElementById('leadNotes').value,updated:new Date().toISOString()};
+  try{
+    if(id)await updateDoc(doc(db,'leads',id),data);
+    else await addDoc(collection(db,'leads'),{...data,created:new Date().toISOString()});
+    closeModal('leadModal');['leadId','leadName','leadPhone','leadEmail','leadLocation','leadNotes'].forEach(i=>document.getElementById(i).value='');
+    await loadLeads();showToast(id?'Lead updated':'Lead added');
+  }catch(e){showToast('Error saving lead','error');}
+};
+
+window.editLead=async(id)=>{
+  const snap=await getDocs(collection(db,'leads'));
+  const l=snap.docs.find(d=>d.id===id)?.data();if(!l)return;
+  document.getElementById('leadId').value=id;
+  document.getElementById('leadName').value=l.name||'';document.getElementById('leadPhone').value=l.phone||'';
+  document.getElementById('leadEmail').value=l.email||'';document.getElementById('leadService').value=l.service||'';
+  document.getElementById('leadLocation').value=l.location||'';document.getElementById('leadSource').value=l.source||'Website';
+  document.getElementById('leadStatus').value=l.status||'new';document.getElementById('leadNotes').value=l.notes||'';
+  openModal('leadModal');
+};
+
+async function loadSchedule(){
+  const snap=await getDocs(collection(db,'schedule'));
+  const events=[];snap.forEach(d=>events.push({id:d.id,...d.data()}));
+  events.sort((a,b)=>a.date>b.date?1:-1);
+  const now=new Date();const week=new Date(now.getTime()+7*24*60*60*1000);
+  document.getElementById('statWeek').textContent=events.filter(e=>{const d=new Date(e.date+'T00:00:00');return d>=now&&d<=week;}).length;
+  const el=document.getElementById('scheduleList');
+  el.innerHTML=events.length?`<div class="card-title">Upcoming Events</div>`+events.map(e=>`
+    <div style="display:flex;align-items:center;gap:1rem;padding:0.85rem 0;border-bottom:1px solid var(--border)">
+      <div style="background:var(--surface);border-radius:8px;padding:0.5rem 0.75rem;text-align:center;min-width:52px">
+        <div style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;color:var(--rust-lt)">${e.date?e.date.slice(8):''}</div>
+        <div style="font-size:0.65rem;color:var(--text-2);text-transform:uppercase">${e.date?new Date(e.date+'T00:00:00').toLocaleString('en',{month:'short'}):''}</div>
+      </div>
+      <div style="flex:1"><div style="font-weight:500;font-size:0.9rem">${e.title||''}</div>
+        <div style="font-size:0.78rem;color:var(--text-2)">${e.time||''} · ${e.crew||''} · ${e.type||''}</div>
+        ${e.notes?`<div style="font-size:0.78rem;color:var(--text-3);margin-top:2px">${e.notes}</div>`:''}
+      </div>
+      <button class="btn btn-sm btn-danger" onclick="delItem('schedule','${e.id}',loadSchedule)">✕</button>
+    </div>`).join(''):'<div class="empty-state"><div class="empty-icon">📅</div><p>No events scheduled</p></div>';
+}
+
+window.saveSchedule=async()=>{
+  const data={title:document.getElementById('schedTitle').value,date:document.getElementById('schedDate').value,time:document.getElementById('schedTime').value,crew:document.getElementById('schedCrew').value,type:document.getElementById('schedType').value,notes:document.getElementById('schedNotes').value,created:new Date().toISOString()};
+  try{await addDoc(collection(db,'schedule'),data);closeModal('scheduleModal');['schedTitle','schedDate','schedTime','schedNotes'].forEach(i=>document.getElementById(i).value='');await loadSchedule();showToast('Event added');}
+  catch(e){showToast('Error saving event','error');}
+};
+
+async function loadInspections(){
+  const snap=await getDocs(collection(db,'inspections'));
+  const items=[];snap.forEach(d=>items.push({id:d.id,...d.data()}));
+  document.getElementById('statInspections').textContent=items.filter(i=>i.quoteStatus==='Pending').length;
+  const el=document.getElementById('inspectionsList');
+  el.innerHTML=items.length?items.map(i=>`
+    <div class="card mb-1">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem">
+        <div><div style="font-family:var(--font-head);font-size:1rem;font-weight:600">${i.client||''}</div>
+          <div style="font-size:0.8rem;color:var(--text-2)">${i.address||''} · ${i.date||''} · By ${i.inspBy||''}</div></div>
+        <div style="display:flex;gap:0.5rem;align-items:center">${badge(i.quoteStatus?.toLowerCase()||'pending')}
+          <button class="btn btn-sm btn-danger" onclick="delItem('inspections','${i.id}',loadInspections)">✕</button></div>
+      </div>
+      <div class="grid-3">
+        <div><div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-2);margin-bottom:4px">Roof Type</div><div style="font-size:0.85rem">${i.roofType||'—'}</div></div>
+        <div><div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-2);margin-bottom:4px">Age</div><div style="font-size:0.85rem">${i.age||'—'}</div></div>
+        <div><div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-2);margin-bottom:4px">Quote</div><div style="font-size:0.85rem;color:var(--rust-lt);font-weight:500">${i.quote?'$'+Number(i.quote).toLocaleString():'TBC'}</div></div>
+      </div>
+      ${i.condition?`<div style="margin-top:0.75rem;padding:0.75rem;background:var(--surface);border-radius:6px;font-size:0.82rem;color:var(--text-2)">${i.condition}</div>`:''}
+      ${i.cutList?`<div style="margin-top:0.5rem"><div style="font-size:0.68rem;text-transform:uppercase;color:var(--text-2);margin-bottom:4px">Cut List</div><div style="font-size:0.82rem;white-space:pre-wrap;background:var(--surface);padding:0.75rem;border-radius:6px">${i.cutList}</div></div>`:''}
+      ${i.mudMap?`<div style="margin-top:0.5rem"><div style="font-size:0.68rem;text-transform:uppercase;color:var(--text-2);margin-bottom:4px">Mud Map</div><div style="font-size:0.82rem;background:var(--surface);padding:0.75rem;border-radius:6px">${i.mudMap}</div></div>`:''}
+    </div>`).join(''):'<div class="empty-state card"><div class="empty-icon">🔍</div><p>No inspections recorded yet</p></div>';
+}
+
+window.saveInspection=async()=>{
+  const data={client:document.getElementById('inspClient').value,phone:document.getElementById('inspPhone').value,address:document.getElementById('inspAddress').value,date:document.getElementById('inspDate').value,inspBy:document.getElementById('inspBy').value,roofType:document.getElementById('inspRoofType').value,age:document.getElementById('inspAge').value,condition:document.getElementById('inspCondition').value,quote:document.getElementById('inspQuote').value,quoteStatus:document.getElementById('inspQuoteStatus').value,cutList:document.getElementById('inspCutList').value,mudMap:document.getElementById('inspMudMap').value,created:new Date().toISOString()};
+  try{await addDoc(collection(db,'inspections'),data);closeModal('inspectionModal');['inspClient','inspPhone','inspAddress','inspDate','inspAge','inspCondition','inspQuote','inspCutList','inspMudMap'].forEach(i=>document.getElementById(i).value='');await loadInspections();showToast('Inspection saved');}
+  catch(e){showToast('Error saving inspection','error');}
+};
+
+async function loadAds(){
+  const snap=await getDocs(collection(db,'ads'));
+  const ads=[];snap.forEach(d=>ads.push({id:d.id,...d.data()}));
+  let ts=0,tl=0;ads.forEach(a=>{ts+=Number(a.budget||0);tl+=Number(a.leads||0);});
+  document.getElementById('adSpend').textContent='$'+ts.toLocaleString();
+  document.getElementById('adLeadsTotal').textContent=tl;
+  document.getElementById('adCPL').textContent=tl>0?'$'+Math.round(ts/tl):'$0';
+  const tb=document.getElementById('adsTable');
+  tb.innerHTML=ads.length?ads.map(a=>`<tr>
+    <td style="font-weight:500">${a.name||''}</td>
+    <td><span style="background:var(--surface);padding:2px 8px;border-radius:4px;font-size:0.78rem">${a.platform||''}</span></td>
+    <td>$${Number(a.budget||0).toLocaleString()}/mo</td>
+    <td>${a.leads||0}</td>
+    <td style="color:var(--rust-lt)">${a.leads>0?'$'+Math.round(a.budget/a.leads):'$0'}</td>
+    <td>${badge(a.status)}</td>
+    <td><button class="btn btn-sm btn-danger" onclick="delItem('ads','${a.id}',loadAds)">Del</button></td>
+  </tr>`).join(''):'<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No campaigns yet</td></tr>';
+}
+
+window.saveAd=async()=>{
+  const data={name:document.getElementById('adName').value,platform:document.getElementById('adPlatform').value,budget:document.getElementById('adBudget').value,leads:document.getElementById('adLeadsNum').value,status:document.getElementById('adStatus').value,start:document.getElementById('adStart').value,notes:document.getElementById('adNotes').value,created:new Date().toISOString()};
+  try{await addDoc(collection(db,'ads'),data);closeModal('adModal');['adName','adBudget','adLeadsNum','adStart','adNotes'].forEach(i=>document.getElementById(i).value='');await loadAds();showToast('Campaign added');}
+  catch(e){showToast('Error saving campaign','error');}
+};
+
+window.delItem=async(col,id,reload)=>{
+  if(!confirm('Delete this item?'))return;
+  try{await deleteDoc(doc(db,col,id));await reload();showToast('Deleted');}
+  catch(e){showToast('Error deleting','error');}
+};
+
+window.loadJobs=loadJobs;window.loadLeads=loadLeads;window.loadSchedule=loadSchedule;window.loadInspections=loadInspections;window.loadAds=loadAds;
+</script>
+</body>
+</html>
