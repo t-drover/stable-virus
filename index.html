@@ -16,202 +16,205 @@
   --font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;
 }
 body{font-family:var(--font-body);background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;min-height:100vh;overflow-x:hidden}
-
-/* AUTH */
 #authScreen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:1000}
 .auth-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:2.5rem;width:380px;text-align:center}
-.auth-logo{font-family:var(--font-head);font-size:1.5rem;font-weight:700;color:var(--text);margin-bottom:0.25rem}
+.auth-logo{font-family:var(--font-head);font-size:1.5rem;font-weight:700;color:var(--text);margin-bottom:.25rem}
 .auth-logo span{color:var(--rust)}
-.auth-sub{font-size:0.8rem;color:var(--text-2);margin-bottom:0.25rem;letter-spacing:0.08em;text-transform:uppercase}
-.auth-tagline{font-size:0.75rem;color:var(--text-3);margin-bottom:2rem;font-style:italic}
-.auth-field{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem;text-align:left}
-.auth-field label{font-size:0.75rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-2)}
-.auth-field input{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:0.7rem 1rem;color:var(--text);font-family:var(--font-body);font-size:0.9rem;outline:none;transition:border-color 0.2s}
+.auth-sub{font-size:.8rem;color:var(--text-2);margin-bottom:.25rem;letter-spacing:.08em;text-transform:uppercase}
+.auth-tagline{font-size:.75rem;color:var(--text-3);margin-bottom:2rem;font-style:italic}
+.auth-field{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1rem;text-align:left}
+.auth-field label{font-size:.75rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2)}
+.auth-field input{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:.7rem 1rem;color:var(--text);font-family:var(--font-body);font-size:.9rem;outline:none;transition:border-color .2s}
 .auth-field input:focus{border-color:var(--rust)}
-.auth-btn{width:100%;background:var(--rust);color:var(--text);border:none;border-radius:6px;padding:0.8rem;font-family:var(--font-head);font-size:0.9rem;font-weight:600;cursor:pointer;transition:background 0.2s;margin-top:0.5rem}
+.auth-btn{width:100%;background:var(--rust);color:var(--text);border:none;border-radius:6px;padding:.8rem;font-family:var(--font-head);font-size:.9rem;font-weight:600;cursor:pointer;transition:background .2s;margin-top:.5rem}
 .auth-btn:hover{background:var(--rust-lt)}
-.auth-err{font-size:0.8rem;color:var(--red);margin-top:0.75rem;display:none}
+.auth-err{font-size:.8rem;color:var(--red);margin-top:.75rem;display:none}
 .auth-paw{font-size:2.5rem;margin-bottom:1rem}
-
-/* LAYOUT */
 #app{display:none;min-height:100vh}
 .layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
 .sidebar{background:var(--surface);border-right:1px solid var(--border);padding:1.5rem 0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
 .sidebar-logo{padding:0 1.25rem 1.5rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
 .sidebar-logo .brand{font-family:var(--font-head);font-size:1.1rem;font-weight:700;color:var(--text)}
 .sidebar-logo .brand span{color:var(--rust)}
-.sidebar-logo .tagline{font-size:0.65rem;color:var(--text-3);letter-spacing:0.06em;margin-top:4px;font-style:italic;line-height:1.4}
-.sidebar-user{padding:0.75rem 1.25rem;margin-bottom:0.5rem}
-.sidebar-user .user-name{font-size:0.82rem;font-weight:500;color:var(--text)}
-.sidebar-user .user-role{font-size:0.7rem;color:var(--text-2);text-transform:uppercase;letter-spacing:0.08em}
-.nav-section{padding:0 0.75rem;margin-bottom:0.5rem}
-.nav-label{font-size:0.65rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--text-3);padding:0.5rem 0.75rem;display:block}
-.nav-item{display:flex;align-items:center;gap:0.65rem;padding:0.6rem 0.75rem;border-radius:6px;cursor:pointer;transition:background 0.15s,color 0.15s;color:var(--text-2);font-size:0.85rem;font-weight:400;border:none;background:none;width:100%;text-align:left}
+.sidebar-logo .tagline{font-size:.65rem;color:var(--text-3);letter-spacing:.06em;margin-top:4px;font-style:italic;line-height:1.4}
+.sidebar-user{padding:.75rem 1.25rem;margin-bottom:.5rem}
+.sidebar-user .user-name{font-size:.82rem;font-weight:500;color:var(--text)}
+.sidebar-user .user-role{font-size:.7rem;color:var(--text-2);text-transform:uppercase;letter-spacing:.08em}
+.nav-section{padding:0 .75rem;margin-bottom:.5rem}
+.nav-label{font-size:.65rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);padding:.5rem .75rem;display:block}
+.nav-item{display:flex;align-items:center;gap:.65rem;padding:.6rem .75rem;border-radius:6px;cursor:pointer;transition:background .15s,color .15s;color:var(--text-2);font-size:.85rem;font-weight:400;border:none;background:none;width:100%;text-align:left}
 .nav-item:hover{background:var(--card);color:var(--text)}
-.nav-item.active{background:rgba(192,90,46,0.15);color:var(--rust)}
+.nav-item.active{background:rgba(192,90,46,.15);color:var(--rust)}
 .nav-icon{font-size:1rem;width:18px;text-align:center;flex-shrink:0}
-.nav-badge{margin-left:auto;background:var(--rust);color:white;font-size:0.65rem;font-weight:600;padding:1px 6px;border-radius:10px}
-.sidebar-bottom{margin-top:auto;padding:1rem 0.75rem 0;border-top:1px solid var(--border)}
-.logout-btn{display:flex;align-items:center;gap:0.65rem;padding:0.6rem 0.75rem;border-radius:6px;cursor:pointer;color:var(--text-3);font-size:0.82rem;border:none;background:none;width:100%;transition:color 0.15s}
+.nav-badge{margin-left:auto;background:var(--rust);color:white;font-size:.65rem;font-weight:600;padding:1px 6px;border-radius:10px}
+.sidebar-bottom{margin-top:auto;padding:1rem .75rem 0;border-top:1px solid var(--border)}
+.logout-btn{display:flex;align-items:center;gap:.65rem;padding:.6rem .75rem;border-radius:6px;cursor:pointer;color:var(--text-3);font-size:.82rem;border:none;background:none;width:100%;transition:color .15s}
 .logout-btn:hover{color:var(--red)}
 .main{padding:2rem;overflow-y:auto}
-.page{display:none}
-.page.active{display:block}
+.page{display:none}.page.active{display:block}
 .page-header{margin-bottom:2rem}
 .page-header h1{font-family:var(--font-head);font-size:1.6rem;font-weight:700;color:var(--text);line-height:1}
-.page-header p{font-size:0.85rem;color:var(--text-2);margin-top:0.4rem}
-.page-actions{display:flex;gap:0.75rem;margin-top:1rem;flex-wrap:wrap}
-
-/* CARDS */
+.page-header p{font-size:.85rem;color:var(--text-2);margin-top:.4rem}
+.page-actions{display:flex;gap:.75rem;margin-top:1rem;flex-wrap:wrap}
 .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem}
-.card-title{font-size:0.7rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-2);margin-bottom:1rem}
+.card-title{font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-2);margin-bottom:1rem}
 .stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:1rem;margin-bottom:2rem}
 .stat-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem}
-.stat-label{font-size:0.72rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-2);margin-bottom:0.4rem}
+.stat-label{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2);margin-bottom:.4rem}
 .stat-value{font-family:var(--font-head);font-size:2rem;font-weight:700;color:var(--text);line-height:1}
-.stat-sub{font-size:0.75rem;color:var(--text-3);margin-top:0.3rem}
-.stat-card.highlight{border-color:var(--rust);background:rgba(192,90,46,0.08)}
+.stat-sub{font-size:.75rem;color:var(--text-3);margin-top:.3rem}
+.stat-card.highlight{border-color:var(--rust);background:rgba(192,90,46,.08)}
 .stat-card.highlight .stat-value{color:var(--rust-lt)}
-
-/* BUTTONS */
-.btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.55rem 1.1rem;border-radius:6px;font-family:var(--font-body);font-size:0.82rem;font-weight:500;cursor:pointer;border:none;transition:all 0.15s}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1.1rem;border-radius:6px;font-family:var(--font-body);font-size:.82rem;font-weight:500;cursor:pointer;border:none;transition:all .15s}
 .btn-primary{background:var(--rust);color:white}.btn-primary:hover{background:var(--rust-lt)}
 .btn-secondary{background:var(--card);border:1px solid var(--border);color:var(--text)}.btn-secondary:hover{border-color:var(--rust);color:var(--rust)}
-.btn-danger{background:rgba(224,82,82,0.12);color:var(--red);border:1px solid rgba(224,82,82,0.25)}.btn-danger:hover{background:rgba(224,82,82,0.22)}
-.btn-success{background:rgba(76,175,125,0.12);color:var(--green);border:1px solid rgba(76,175,125,0.25)}.btn-success:hover{background:rgba(76,175,125,0.22)}
-.btn-stage{background:rgba(232,162,52,0.12);color:var(--amber);border:1px solid rgba(232,162,52,0.25);font-size:0.75rem;padding:0.3rem 0.7rem}.btn-stage:hover{background:rgba(232,162,52,0.22)}
-.btn-sm{padding:0.35rem 0.75rem;font-size:0.78rem}
-.btn-xs{padding:0.25rem 0.55rem;font-size:0.72rem}
-
-/* TABLES */
+.btn-danger{background:rgba(224,82,82,.12);color:var(--red);border:1px solid rgba(224,82,82,.25)}.btn-danger:hover{background:rgba(224,82,82,.22)}
+.btn-success{background:rgba(76,175,125,.12);color:var(--green);border:1px solid rgba(76,175,125,.25)}.btn-success:hover{background:rgba(76,175,125,.22)}
+.btn-stage{background:rgba(232,162,52,.12);color:var(--amber);border:1px solid rgba(232,162,52,.25);font-size:.75rem;padding:.3rem .7rem}.btn-stage:hover{background:rgba(232,162,52,.22)}
+.btn-sm{padding:.35rem .75rem;font-size:.78rem}.btn-xs{padding:.25rem .55rem;font-size:.72rem}
 .table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border)}
 table{width:100%;border-collapse:collapse}
 thead tr{background:var(--surface);border-bottom:1px solid var(--border)}
-th{padding:0.75rem 1rem;text-align:left;font-size:0.68rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-2)}
-td{padding:0.85rem 1rem;font-size:0.85rem;color:var(--text);border-bottom:1px solid var(--border)}
+th{padding:.75rem 1rem;text-align:left;font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-2)}
+td{padding:.85rem 1rem;font-size:.85rem;color:var(--text);border-bottom:1px solid var(--border)}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:rgba(255,255,255,0.02)}
-
-/* BADGES */
-.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:0.72rem;font-weight:500}
+tr:hover td{background:rgba(255,255,255,.02)}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:500}
 .badge::before{content:'';width:5px;height:5px;border-radius:50%}
-.badge-active{background:rgba(76,175,125,0.15);color:var(--green)}.badge-active::before{background:var(--green)}
-.badge-pending{background:rgba(232,162,52,0.15);color:var(--amber)}.badge-pending::before{background:var(--amber)}
-.badge-complete,.badge-completed{background:rgba(91,155,213,0.15);color:var(--blue)}.badge-complete::before,.badge-completed::before{background:var(--blue)}
-.badge-quoted{background:rgba(192,90,46,0.15);color:var(--rust-lt)}.badge-quoted::before{background:var(--rust-lt)}
-.badge-cancelled{background:rgba(92,84,76,0.15);color:var(--text-2)}.badge-cancelled::before{background:var(--text-2)}
-.badge-new{background:rgba(232,162,52,0.15);color:var(--amber)}.badge-new::before{background:var(--amber)}
-.badge-converted{background:rgba(76,175,125,0.15);color:var(--green)}.badge-converted::before{background:var(--green)}
-.badge-lost{background:rgba(92,84,76,0.15);color:var(--text-2)}.badge-lost::before{background:var(--text-2)}
-.badge-contacted{background:rgba(91,155,213,0.15);color:var(--blue)}.badge-contacted::before{background:var(--blue)}
-.badge-paused{background:rgba(92,84,76,0.15);color:var(--text-2)}.badge-paused::before{background:var(--text-2)}
-.badge-sent{background:rgba(91,155,213,0.15);color:var(--blue)}.badge-sent::before{background:var(--blue)}
-.badge-accepted{background:rgba(76,175,125,0.15);color:var(--green)}.badge-accepted::before{background:var(--green)}
-.badge-declined{background:rgba(224,82,82,0.15);color:var(--red)}.badge-declined::before{background:var(--red)}
-.badge-paid{background:rgba(76,175,125,0.15);color:var(--green)}.badge-paid::before{background:var(--green)}
-.badge-overdue{background:rgba(224,82,82,0.15);color:var(--red)}.badge-overdue::before{background:var(--red)}
-.badge-lead{background:rgba(155,114,207,0.15);color:var(--purple)}.badge-lead::before{background:var(--purple)}
-.badge-inspection{background:rgba(232,162,52,0.15);color:var(--amber)}.badge-inspection::before{background:var(--amber)}
-.badge-approved{background:rgba(76,175,125,0.15);color:var(--green)}.badge-approved::before{background:var(--green)}
-.badge-deposit_paid{background:rgba(76,175,125,0.15);color:var(--green)}.badge-deposit_paid::before{background:var(--green)}
-.badge-in_progress{background:rgba(192,90,46,0.15);color:var(--rust-lt)}.badge-in_progress::before{background:var(--rust-lt)}
-.badge-progress_claim{background:rgba(232,162,52,0.15);color:var(--amber)}.badge-progress_claim::before{background:var(--amber)}
-.badge-retention_released{background:rgba(91,155,213,0.15);color:var(--blue)}.badge-retention_released::before{background:var(--blue)}
-
-/* FORMS */
+.badge-active{background:rgba(76,175,125,.15);color:var(--green)}.badge-active::before{background:var(--green)}
+.badge-pending{background:rgba(232,162,52,.15);color:var(--amber)}.badge-pending::before{background:var(--amber)}
+.badge-complete,.badge-completed{background:rgba(91,155,213,.15);color:var(--blue)}.badge-complete::before,.badge-completed::before{background:var(--blue)}
+.badge-quoted{background:rgba(192,90,46,.15);color:var(--rust-lt)}.badge-quoted::before{background:var(--rust-lt)}
+.badge-cancelled{background:rgba(92,84,76,.15);color:var(--text-2)}.badge-cancelled::before{background:var(--text-2)}
+.badge-new{background:rgba(232,162,52,.15);color:var(--amber)}.badge-new::before{background:var(--amber)}
+.badge-converted{background:rgba(76,175,125,.15);color:var(--green)}.badge-converted::before{background:var(--green)}
+.badge-lost{background:rgba(92,84,76,.15);color:var(--text-2)}.badge-lost::before{background:var(--text-2)}
+.badge-contacted{background:rgba(91,155,213,.15);color:var(--blue)}.badge-contacted::before{background:var(--blue)}
+.badge-paused{background:rgba(92,84,76,.15);color:var(--text-2)}.badge-paused::before{background:var(--text-2)}
+.badge-sent{background:rgba(91,155,213,.15);color:var(--blue)}.badge-sent::before{background:var(--blue)}
+.badge-accepted{background:rgba(76,175,125,.15);color:var(--green)}.badge-accepted::before{background:var(--green)}
+.badge-declined{background:rgba(224,82,82,.15);color:var(--red)}.badge-declined::before{background:var(--red)}
+.badge-paid{background:rgba(76,175,125,.15);color:var(--green)}.badge-paid::before{background:var(--green)}
+.badge-overdue{background:rgba(224,82,82,.15);color:var(--red)}.badge-overdue::before{background:var(--red)}
+.badge-lead{background:rgba(155,114,207,.15);color:var(--purple)}.badge-lead::before{background:var(--purple)}
+.badge-inspection{background:rgba(232,162,52,.15);color:var(--amber)}.badge-inspection::before{background:var(--amber)}
+.badge-approved{background:rgba(76,175,125,.15);color:var(--green)}.badge-approved::before{background:var(--green)}
+.badge-deposit_paid{background:rgba(76,175,125,.15);color:var(--green)}.badge-deposit_paid::before{background:var(--green)}
+.badge-in_progress{background:rgba(192,90,46,.15);color:var(--rust-lt)}.badge-in_progress::before{background:var(--rust-lt)}
+.badge-progress_claim{background:rgba(232,162,52,.15);color:var(--amber)}.badge-progress_claim::before{background:var(--amber)}
+.badge-retention_released{background:rgba(91,155,213,.15);color:var(--blue)}.badge-retention_released::before{background:var(--blue)}
+.badge-raised{background:rgba(155,114,207,.15);color:var(--purple)}.badge-raised::before{background:var(--purple)}
+.badge-received{background:rgba(76,175,125,.15);color:var(--green)}.badge-received::before{background:var(--green)}
+.badge-due{background:rgba(232,162,52,.15);color:var(--amber)}.badge-due::before{background:var(--amber)}
+.badge-draft{background:rgba(92,84,76,.15);color:var(--text-2)}.badge-draft::before{background:var(--text-2)}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-.form-field{display:flex;flex-direction:column;gap:0.4rem}
+.form-field{display:flex;flex-direction:column;gap:.4rem}
 .form-field.full{grid-column:1/-1}
-.form-field label{font-size:0.72rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-2)}
-.form-field input,.form-field select,.form-field textarea{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:0.65rem 0.9rem;color:var(--text);font-family:var(--font-body);font-size:0.88rem;outline:none;transition:border-color 0.2s;width:100%}
+.form-field label{font-size:.72rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2)}
+.form-field input,.form-field select,.form-field textarea{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.65rem .9rem;color:var(--text);font-family:var(--font-body);font-size:.88rem;outline:none;transition:border-color .2s;width:100%}
 .form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--rust)}
 .form-field select option{background:var(--card)}
 .form-field textarea{resize:vertical;min-height:80px}
-
-/* MODALS */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem}
 .modal-overlay.open{display:flex}
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:2rem;width:100%;max-width:600px;max-height:90vh;overflow-y:auto}
-.modal-lg{max-width:800px}
 .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
 .modal-title{font-family:var(--font-head);font-size:1.1rem;font-weight:600;color:var(--text)}
 .modal-close{background:none;border:none;color:var(--text-2);font-size:1.2rem;cursor:pointer;padding:4px;line-height:1}
 .modal-close:hover{color:var(--red)}
-.modal-actions{display:flex;gap:0.75rem;justify-content:flex-end;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)}
-
-/* TOAST */
-.toast{position:fixed;bottom:2rem;right:2rem;z-index:999;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:0.75rem 1.25rem;font-size:0.85rem;color:var(--text);transform:translateY(100px);opacity:0;transition:all 0.3s;pointer-events:none}
+.modal-actions{display:flex;gap:.75rem;justify-content:flex-end;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+.toast{position:fixed;bottom:2rem;right:2rem;z-index:999;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.75rem 1.25rem;font-size:.85rem;color:var(--text);transform:translateY(100px);opacity:0;transition:all .3s;pointer-events:none}
 .toast.show{transform:translateY(0);opacity:1}
 .toast.success{border-color:var(--green);color:var(--green)}
 .toast.error{border-color:var(--red);color:var(--red)}
-
-/* WORKFLOW */
-.workflow-step{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.25rem;margin-bottom:0.75rem}
-.workflow-step-header{display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem}
-.workflow-num{width:28px;height:28px;border-radius:50%;background:rgba(192,90,46,0.15);color:var(--rust-lt);font-family:var(--font-head);font-size:0.78rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.workflow-step-title{font-weight:500;font-size:0.9rem;color:var(--text)}
-.workflow-step p{font-size:0.82rem;color:var(--text-2);line-height:1.6;padding-left:2.5rem}
-
-/* JOB DETAIL */
+.workflow-step{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.25rem;margin-bottom:.75rem}
+.workflow-step-header{display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem}
+.workflow-num{width:28px;height:28px;border-radius:50%;background:rgba(192,90,46,.15);color:var(--rust-lt);font-family:var(--font-head);font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.workflow-step-title{font-weight:500;font-size:.9rem;color:var(--text)}
+.workflow-step p{font-size:.82rem;color:var(--text-2);line-height:1.6;padding-left:2.5rem}
 .job-detail-header{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:1.5rem}
-.job-stage-track{display:flex;align-items:center;gap:0;margin:1rem 0;overflow-x:auto;padding-bottom:0.5rem}
+.job-stage-track{display:flex;align-items:center;gap:0;margin:1rem 0;overflow-x:auto;padding-bottom:.5rem}
 .stage-dot{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0}
 .stage-dot-circle{width:10px;height:10px;border-radius:50%;background:var(--border)}
 .stage-dot-circle.done{background:var(--green)}
-.stage-dot-circle.current{background:var(--rust-lt);box-shadow:0 0 0 3px rgba(192,90,46,0.25)}
-.stage-dot-label{font-size:0.6rem;color:var(--text-3);text-align:center;max-width:60px;line-height:1.2;text-transform:uppercase;letter-spacing:0.04em}
-.stage-dot-label.current{color:var(--rust-lt)}
-.stage-dot-label.done{color:var(--text-2)}
+.stage-dot-circle.current{background:var(--rust-lt);box-shadow:0 0 0 3px rgba(192,90,46,.25)}
+.stage-dot-label{font-size:.6rem;color:var(--text-3);text-align:center;max-width:60px;line-height:1.2;text-transform:uppercase;letter-spacing:.04em}
+.stage-dot-label.current{color:var(--rust-lt)}.stage-dot-label.done{color:var(--text-2)}
 .stage-line{height:2px;flex:1;background:var(--border);min-width:20px;flex-shrink:0}
 .stage-line.done{background:var(--green)}
-.stage-actions{display:flex;gap:0.5rem;flex-wrap:wrap;margin-top:1rem}
-
-/* INVOICE CARDS */
-.invoice-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem}
-.invoice-card.paid{border-color:rgba(76,175,125,0.3)}
-.invoice-info .inv-type{font-weight:500;font-size:0.88rem}
-.invoice-info .inv-meta{font-size:0.75rem;color:var(--text-2);margin-top:2px}
+.stage-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem}
+.invoice-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+.invoice-card.paid{border-color:rgba(76,175,125,.3)}
+.invoice-info .inv-type{font-weight:500;font-size:.88rem}
+.invoice-info .inv-meta{font-size:.75rem;color:var(--text-2);margin-top:2px}
 .invoice-amount{font-family:var(--font-head);font-size:1.1rem;font-weight:700;color:var(--rust-lt)}
 .invoice-amount.paid{color:var(--green)}
-
-/* DAILY REPORTS */
-.report-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:0.75rem}
-.report-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem}
-.report-date{font-size:0.78rem;color:var(--text-2)}
-.report-crew{font-size:0.78rem;background:var(--surface);padding:2px 8px;border-radius:4px}
-.report-work{font-size:0.85rem;color:var(--text);margin-bottom:0.4rem}
-.report-issue{font-size:0.82rem;color:var(--amber);margin-top:0.4rem}
-
-/* INSPECTION */
+.report-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:.75rem}
+.report-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+.report-date{font-size:.78rem;color:var(--text-2)}
+.report-crew{font-size:.78rem;background:var(--surface);padding:2px 8px;border-radius:4px}
+.report-work{font-size:.85rem;color:var(--text);margin-bottom:.4rem}
+.report-issue{font-size:.82rem;color:var(--amber);margin-top:.4rem}
 .inspection-section{margin-bottom:1.5rem}
-.inspection-section h4{font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-2);margin-bottom:0.75rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border)}
-
-/* UTILS */
+.inspection-section h4{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-2);margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
+.comments-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;height:340px}
+.comments-list{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.75rem}
+.comment-item{display:flex;gap:.65rem;align-items:flex-start}
+.comment-avatar{width:28px;height:28px;border-radius:50%;background:var(--rust-dk);color:white;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-head)}
+.comment-bubble{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.6rem .85rem;flex:1;min-width:0}
+.comment-bubble.mine{background:rgba(192,90,46,.1);border-color:rgba(192,90,46,.25)}
+.comment-meta{font-size:.68rem;color:var(--text-3);margin-bottom:3px}
+.comment-meta strong{color:var(--text-2);font-weight:600}
+.comment-text{font-size:.83rem;color:var(--text);line-height:1.5;word-break:break-word}
+.comment-mention{color:var(--rust-lt);font-weight:500}
+.comments-input{display:flex;gap:.5rem;padding:.75rem;border-top:1px solid var(--border)}
+.comments-input input{flex:1;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:.55rem .85rem;color:var(--text);font-family:var(--font-body);font-size:.85rem;outline:none;transition:border-color .2s}
+.comments-input input:focus{border-color:var(--rust)}
+.comments-input button{background:var(--rust);color:white;border:none;border-radius:6px;padding:.55rem 1rem;font-size:.82rem;cursor:pointer}
+.comments-input button:hover{background:var(--rust-lt)}
+.quick-links-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.75rem;margin-top:1rem}
+.quick-link-tile{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem;text-align:center;text-decoration:none;color:var(--text);transition:border-color .15s,background .15s;display:flex;flex-direction:column;align-items:center;gap:.4rem}
+.quick-link-tile:hover{border-color:var(--rust);background:rgba(192,90,46,.06)}
+.quick-link-icon{font-size:1.5rem}
+.quick-link-label{font-size:.78rem;font-weight:500;color:var(--text-2)}
+.task-group{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem;margin-bottom:1rem}
+.task-group-title{font-weight:600;font-size:.9rem;margin-bottom:.75rem;display:flex;align-items:center;justify-content:space-between}
+.task-item{display:flex;align-items:center;gap:.65rem;padding:.5rem 0;border-bottom:1px solid var(--border)}
+.task-item:last-child{border-bottom:none}
+.task-check{width:16px;height:16px;border-radius:4px;border:1px solid var(--border);cursor:pointer;appearance:none;background:var(--surface);flex-shrink:0;position:relative;transition:all .15s}
+.task-check:checked{background:var(--green);border-color:var(--green)}
+.task-check:checked::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:10px;color:white}
+.task-text{font-size:.85rem;flex:1}
+.task-text.done{text-decoration:line-through;color:var(--text-3)}
+.task-add-row{display:flex;gap:.5rem;margin-top:.75rem}
+.task-add-row input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.45rem .75rem;color:var(--text);font-family:var(--font-body);font-size:.82rem;outline:none}
+.task-add-row input:focus{border-color:var(--rust)}
+.task-add-row button{background:var(--rust);color:white;border:none;border-radius:6px;padding:.45rem .85rem;font-size:.8rem;cursor:pointer}
+.reminder-item{display:flex;justify-content:space-between;align-items:center;padding:.85rem 1rem;background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:.5rem}
+.reminder-item.overdue{border-color:rgba(224,82,82,.35);background:rgba(224,82,82,.04)}
+.reminder-left .reminder-title{font-weight:500;font-size:.88rem}
+.reminder-left .reminder-meta{font-size:.75rem;color:var(--text-2);margin-top:2px}
+.reminder-right{display:flex;align-items:center;gap:.75rem}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
 .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
 .mb-1{margin-bottom:1rem}.mb-2{margin-bottom:1.5rem}.mb-3{margin-bottom:2rem}
 .empty-state{text-align:center;padding:3rem;color:var(--text-2)}
 .empty-state .empty-icon{font-size:2.5rem;margin-bottom:1rem}
-.empty-state p{font-size:0.88rem}
-.divider{height:1px;background:var(--border);margin:1.5rem 0}
+.empty-state p{font-size:.88rem}
 .section-title{font-family:var(--font-head);font-size:1rem;color:var(--rust-lt);margin-bottom:1rem}
-.tab-bar{display:flex;gap:0.25rem;background:var(--surface);border-radius:8px;padding:4px;margin-bottom:1.5rem;border:1px solid var(--border)}
-.tab-btn{flex:1;padding:0.5rem;border:none;background:none;color:var(--text-2);font-family:var(--font-body);font-size:0.82rem;border-radius:5px;cursor:pointer;transition:all 0.15s}
+.tab-bar{display:flex;gap:.25rem;background:var(--surface);border-radius:8px;padding:4px;margin-bottom:1.5rem;border:1px solid var(--border);flex-wrap:wrap}
+.tab-btn{flex:1;padding:.5rem;border:none;background:none;color:var(--text-2);font-family:var(--font-body);font-size:.82rem;border-radius:5px;cursor:pointer;transition:all .15s;white-space:nowrap}
 .tab-btn.active{background:var(--card);color:var(--text);border:1px solid var(--border)}
 .tab-content{display:none}.tab-content.active{display:block}
-
+.admin-only{display:none}
 @media(max-width:768px){
-  .layout{grid-template-columns:1fr}
-  .sidebar{display:none}
+  .layout{grid-template-columns:1fr}.sidebar{display:none}
   .form-grid,.grid-2,.grid-3{grid-template-columns:1fr}
-  .stat-grid{grid-template-columns:1fr 1fr}
-  .main{padding:1rem}
+  .stat-grid{grid-template-columns:1fr 1fr}.main{padding:1rem}
 }
 </style>
 </head>
 <body>
-
-<!-- AUTH -->
 <div id="authScreen">
   <div class="auth-box">
     <div class="auth-paw">🐾</div>
@@ -224,8 +227,6 @@ tr:hover td{background:rgba(255,255,255,0.02)}
     <div class="auth-err" id="authErr"></div>
   </div>
 </div>
-
-<!-- APP -->
 <div id="app">
   <div class="layout">
     <aside class="sidebar">
@@ -252,20 +253,23 @@ tr:hover td{background:rgba(255,255,255,0.02)}
         <span class="nav-label">Finance</span>
         <button class="nav-item" onclick="showPage('invoices')"><span class="nav-icon">💰</span> Invoices <span class="nav-badge" id="invoicesBadge">0</span></button>
         <button class="nav-item" onclick="showPage('reports')"><span class="nav-icon">📊</span> Daily Reports</button>
+        <button class="nav-item" onclick="showPage('reminders')"><span class="nav-icon">🔔</span> Reminders <span class="nav-badge" id="remindersBadge">0</span></button>
+      </div>
+      <div class="nav-section">
+        <span class="nav-label">Team</span>
+        <button class="nav-item" onclick="showPage('tasks')"><span class="nav-icon">✅</span> Tasks</button>
       </div>
       <div class="nav-section">
         <span class="nav-label">Business</span>
         <button class="nav-item" onclick="showPage('advertising')"><span class="nav-icon">📢</span> Advertising</button>
         <button class="nav-item" onclick="showPage('workflow')"><span class="nav-icon">📌</span> RDU Workflow</button>
+        <button class="nav-item admin-only" id="navAdmin" onclick="showPage('admin')"><span class="nav-icon">⚙️</span> Admin</button>
       </div>
       <div class="sidebar-bottom">
         <button class="logout-btn" onclick="doSignOut()"><span>🚪</span> Sign Out</button>
       </div>
     </aside>
-
     <main class="main">
-
-      <!-- DASHBOARD -->
       <div class="page active" id="page-dashboard">
         <div class="page-header">
           <h1>Good day, <span id="firstName" style="color:var(--rust)">Mate</span> 🐾</h1>
@@ -277,68 +281,63 @@ tr:hover td{background:rgba(255,255,255,0.02)}
           <div class="stat-card"><div class="stat-label">This Week</div><div class="stat-value" id="statWeek">—</div><div class="stat-sub">Scheduled events</div></div>
           <div class="stat-card"><div class="stat-label">Unpaid Invoices</div><div class="stat-value" id="statUnpaid">—</div><div class="stat-sub">Awaiting payment</div></div>
         </div>
+        <div class="card mb-2" id="dashQuickLauncher" style="display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="card-title" style="margin-bottom:0">Quick Launcher</div>
+            <button class="btn btn-xs btn-secondary admin-only" onclick="openModal('quickLinkModal')">+ Add Link</button>
+          </div>
+          <div class="quick-links-grid" id="quickLinksGrid"></div>
+        </div>
         <div class="grid-2">
           <div class="card"><div class="card-title">Recent Jobs</div><div id="dashRecentJobs"><div class="empty-state"><div class="empty-icon">🔨</div><p>No jobs yet</p></div></div></div>
           <div class="card"><div class="card-title">Latest Leads</div><div id="dashRecentLeads"><div class="empty-state"><div class="empty-icon">📋</div><p>No leads yet</p></div></div></div>
         </div>
       </div>
-
-      <!-- JOBS -->
       <div class="page" id="page-jobs">
-        <div class="page-header">
-          <h1>Jobs</h1>
-          <p>Track every job through the full workflow.</p>
+        <div class="page-header"><h1>Jobs</h1><p>Track every job through the full workflow.</p>
           <div class="page-actions"><button class="btn btn-primary" onclick="openJobModal()">+ New Job</button></div>
         </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>ID</th><th>Client</th><th>Type</th><th>Location</th><th>Assigned</th><th>Stage</th><th>Value</th><th>Actions</th></tr></thead>
-            <tbody id="jobsTable"><tr><td colspan="8" style="text-align:center;color:var(--text-2);padding:2rem">No jobs yet</td></tr></tbody>
-          </table>
-        </div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>ID</th><th>Client</th><th>Type</th><th>Location</th><th>Assigned</th><th>Stage</th><th>Value</th><th>Actions</th></tr></thead>
+          <tbody id="jobsTable"><tr><td colspan="8" style="text-align:center;color:var(--text-2);padding:2rem">No jobs yet</td></tr></tbody>
+        </table></div>
       </div>
-
-      <!-- JOB DETAIL -->
       <div class="page" id="page-jobdetail">
         <div class="page-header" style="margin-bottom:1rem">
           <button class="btn btn-secondary btn-sm" onclick="showPage('jobs')" style="margin-bottom:1rem">← Back to Jobs</button>
-          <h1 id="detailJobTitle">Job Detail</h1>
-          <p id="detailJobSub"></p>
+          <h1 id="detailJobTitle">Job Detail</h1><p id="detailJobSub"></p>
         </div>
-
         <div class="job-detail-header">
           <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem">
-            <div>
-              <div style="font-size:0.72rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-2);margin-bottom:4px">Current Stage</div>
-              <div id="detailStageBadge"></div>
-            </div>
-            <div style="display:flex;gap:0.75rem">
-              <button class="btn btn-secondary btn-sm" onclick="openEditJobModal()">Edit Job</button>
-            </div>
+            <div><div style="font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Current Stage</div><div id="detailStageBadge"></div></div>
+            <button class="btn btn-secondary btn-sm" onclick="openEditJobModal()">Edit Job</button>
           </div>
           <div class="job-stage-track" id="stageTrack"></div>
           <div class="stage-actions" id="stageActions"></div>
         </div>
-
         <div class="tab-bar">
-          <button class="tab-btn active" onclick="switchTab('tab-overview')">Overview</button>
-          <button class="tab-btn" onclick="switchTab('tab-invoices')">Invoices</button>
-          <button class="tab-btn" onclick="switchTab('tab-dailyreports')">Daily Reports</button>
+          <button class="tab-btn active" onclick="switchTab('tab-overview',this)">Overview</button>
+          <button class="tab-btn" onclick="switchTab('tab-invoices',this)">Invoices</button>
+          <button class="tab-btn" onclick="switchTab('tab-pos',this)">Purchase Orders</button>
+          <button class="tab-btn" onclick="switchTab('tab-quotes',this)">Quotes</button>
+          <button class="tab-btn" onclick="switchTab('tab-dailyreports',this)">Daily Reports</button>
         </div>
-
         <div class="tab-content active" id="tab-overview">
-          <div class="grid-2">
-            <div class="card">
-              <div class="card-title">Job Details</div>
-              <div id="detailInfo"></div>
-            </div>
-            <div class="card">
-              <div class="card-title">Notes</div>
-              <div id="detailNotes" style="font-size:0.85rem;color:var(--text-2);line-height:1.7"></div>
+          <div class="grid-2 mb-2">
+            <div class="card"><div class="card-title">Details</div><div id="detailInfo"></div></div>
+            <div class="card"><div class="card-title">Job Notes / Details</div><div id="detailNotes" style="font-size:.85rem;color:var(--text-2);line-height:1.7"></div></div>
+          </div>
+          <div class="card">
+            <div class="card-title">Internal Notes</div>
+            <div class="comments-box">
+              <div class="comments-list" id="commentsList"></div>
+              <div class="comments-input">
+                <input id="commentInput" placeholder="Write a note… use @Harry, @Ronny to mention" onkeydown="if(event.key==='Enter')sendComment()">
+                <button onclick="sendComment()">Send</button>
+              </div>
             </div>
           </div>
         </div>
-
         <div class="tab-content" id="tab-invoices">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
             <div class="section-title" style="margin-bottom:0">Invoices</div>
@@ -346,7 +345,20 @@ tr:hover td{background:rgba(255,255,255,0.02)}
           </div>
           <div id="jobInvoicesList"></div>
         </div>
-
+        <div class="tab-content" id="tab-pos">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+            <div class="section-title" style="margin-bottom:0">Purchase Orders</div>
+            <button class="btn btn-primary btn-sm" onclick="openPOModal()">+ Add PO</button>
+          </div>
+          <div id="jobPOsList"></div>
+        </div>
+        <div class="tab-content" id="tab-quotes">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+            <div class="section-title" style="margin-bottom:0">Quotes</div>
+            <button class="btn btn-primary btn-sm" onclick="openQuoteModal()">+ Add Quote</button>
+          </div>
+          <div id="jobQuotesList"></div>
+        </div>
         <div class="tab-content" id="tab-dailyreports">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
             <div class="section-title" style="margin-bottom:0">Daily Reports</div>
@@ -355,47 +367,29 @@ tr:hover td{background:rgba(255,255,255,0.02)}
           <div id="jobReportsList"></div>
         </div>
       </div>
-
-      <!-- LEADS -->
       <div class="page" id="page-leads">
-        <div class="page-header">
-          <h1>Leads</h1>
-          <p>Manage enquiries and convert them to jobs.</p>
+        <div class="page-header"><h1>Leads</h1><p>Manage enquiries and convert them to jobs.</p>
           <div class="page-actions"><button class="btn btn-primary" onclick="openModal('leadModal')">+ New Lead</button></div>
         </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Name</th><th>Service</th><th>Location</th><th>Contact</th><th>Source</th><th>Status</th><th>Actions</th></tr></thead>
-            <tbody id="leadsTable"><tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No leads yet</td></tr></tbody>
-          </table>
-        </div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>#</th><th>Name</th><th>Service</th><th>Location</th><th>Contact</th><th>Source</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="leadsTable"><tr><td colspan="8" style="text-align:center;color:var(--text-2);padding:2rem">No leads yet</td></tr></tbody>
+        </table></div>
       </div>
-
-      <!-- SCHEDULE -->
       <div class="page" id="page-schedule">
-        <div class="page-header">
-          <h1>Schedule</h1>
-          <p>Team scheduling and job calendar.</p>
+        <div class="page-header"><h1>Schedule</h1><p>Team scheduling and job calendar.</p>
           <div class="page-actions"><button class="btn btn-primary" onclick="openModal('scheduleModal')">+ Add Event</button></div>
         </div>
         <div id="scheduleList" class="card"><div class="empty-state"><div class="empty-icon">📅</div><p>No events scheduled</p></div></div>
       </div>
-
-      <!-- INSPECTIONS -->
       <div class="page" id="page-inspections">
-        <div class="page-header">
-          <h1>Inspections</h1>
-          <p>Job inspections, quotes, cut lists and mud maps.</p>
+        <div class="page-header"><h1>Inspections</h1><p>Job inspections, quotes, cut lists and mud maps.</p>
           <div class="page-actions"><button class="btn btn-primary" onclick="openModal('inspectionModal')">+ New Inspection</button></div>
         </div>
         <div id="inspectionsList"><div class="empty-state card"><div class="empty-icon">🔍</div><p>No inspections recorded yet</p></div></div>
       </div>
-
-      <!-- INVOICES -->
       <div class="page" id="page-invoices">
-        <div class="page-header">
-          <h1>Invoices</h1>
-          <p>All invoices across every job.</p>
+        <div class="page-header"><h1>Invoices</h1><p>All invoices across every job.</p>
           <div class="page-actions"><button class="btn btn-primary" onclick="openInvoiceModalStandalone()">+ New Invoice</button></div>
         </div>
         <div class="stat-grid mb-2">
@@ -403,29 +397,31 @@ tr:hover td{background:rgba(255,255,255,0.02)}
           <div class="stat-card"><div class="stat-label">Paid This Month</div><div class="stat-value" id="invPaidMonth">$0</div><div class="stat-sub">Collected</div></div>
           <div class="stat-card"><div class="stat-label">Total Invoiced</div><div class="stat-value" id="invTotal">$0</div><div class="stat-sub">All time</div></div>
         </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Invoice</th><th>Job / Client</th><th>Type</th><th>Amount</th><th>Issued</th><th>Status</th><th>Actions</th></tr></thead>
-            <tbody id="invoicesTable"><tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No invoices yet</td></tr></tbody>
-          </table>
-        </div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Invoice</th><th>Job / Client</th><th>Type</th><th>Amount</th><th>Issued</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="invoicesTable"><tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No invoices yet</td></tr></tbody>
+        </table></div>
       </div>
-
-      <!-- DAILY REPORTS -->
       <div class="page" id="page-reports">
-        <div class="page-header">
-          <h1>Daily Reports</h1>
-          <p>All crew activity reports across jobs.</p>
+        <div class="page-header"><h1>Daily Reports</h1><p>All crew activity reports across jobs.</p>
           <div class="page-actions"><button class="btn btn-primary" onclick="openReportModalStandalone()">+ New Report</button></div>
         </div>
         <div id="allReportsList"><div class="empty-state card"><div class="empty-icon">📊</div><p>No reports yet</p></div></div>
       </div>
-
-      <!-- ADVERTISING -->
+      <div class="page" id="page-reminders">
+        <div class="page-header"><h1>Reminders</h1><p>Supplier payments, wages, POs and subscriptions.</p>
+          <div class="page-actions"><button class="btn btn-primary" onclick="openModal('reminderModal')">+ New Reminder</button></div>
+        </div>
+        <div id="remindersList"><div class="empty-state card"><div class="empty-icon">🔔</div><p>No reminders yet</p></div></div>
+      </div>
+      <div class="page" id="page-tasks">
+        <div class="page-header"><h1>Tasks</h1><p>Team task lists. Admin creates groups, team adds items.</p>
+          <div class="page-actions admin-only"><button class="btn btn-primary" onclick="openModal('taskGroupModal')">+ New Task Group</button></div>
+        </div>
+        <div id="tasksList"><div class="empty-state card"><div class="empty-icon">✅</div><p>No tasks yet</p></div></div>
+      </div>
       <div class="page" id="page-advertising">
-        <div class="page-header">
-          <h1>Advertising</h1>
-          <p>All active campaigns and performance in one place.</p>
+        <div class="page-header"><h1>Advertising</h1><p>All active campaigns and performance in one place.</p>
           <div class="page-actions"><button class="btn btn-primary" onclick="openModal('adModal')">+ Add Campaign</button></div>
         </div>
         <div class="stat-grid mb-2">
@@ -433,47 +429,54 @@ tr:hover td{background:rgba(255,255,255,0.02)}
           <div class="stat-card highlight"><div class="stat-label">Total Leads</div><div class="stat-value" id="adLeadsTotal">0</div><div class="stat-sub">From advertising</div></div>
           <div class="stat-card"><div class="stat-label">Cost Per Lead</div><div class="stat-value" id="adCPL">$0</div><div class="stat-sub">Average</div></div>
         </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Campaign</th><th>Platform</th><th>Budget</th><th>Leads</th><th>CPL</th><th>Status</th><th>Actions</th></tr></thead>
-            <tbody id="adsTable"><tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No campaigns yet</td></tr></tbody>
-          </table>
-        </div>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Campaign</th><th>Platform</th><th>Budget</th><th>Leads</th><th>CPL</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="adsTable"><tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No campaigns yet</td></tr></tbody>
+        </table></div>
       </div>
-
-      <!-- WORKFLOW -->
       <div class="page" id="page-workflow">
-        <div class="page-header">
-          <h1>RDU Workflow</h1>
-          <p>Standard operating process for every job — direct client and builder-referred.</p>
-        </div>
+        <div class="page-header"><h1>RDU Workflow</h1><p>Standard operating process for every job.</p></div>
         <div class="grid-2">
           <div>
             <h3 class="section-title">Direct Client Jobs</h3>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">01</div><div class="workflow-step-title">Initial Enquiry</div></div><p>Client contacts via website, Rocky chatbot, or referral. Log as lead immediately in the dashboard with source tagged.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">02</div><div class="workflow-step-title">Site Inspection</div></div><p>Book within 48hrs. Harry or Ronny attends. Record all findings in the Inspections module — photos, measurements, issues noted.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">03</div><div class="workflow-step-title">Quote Preparation</div></div><p>Itemised quote issued within 24hrs of inspection. Include cut list if Colorbond. Payment terms: 10% deposit, 40% materials, 30% progress, 20% retention.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">04</div><div class="workflow-step-title">Quote Acceptance</div></div><p>Client signs off. Deposit invoice generated automatically. Job added to schedule. Crew briefed. Lead status updated to Converted.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">05</div><div class="workflow-step-title">Works on Site</div></div><p>Harry leads crew. Daily Activity Reports filed. Progress photos at each milestone. Job status updated in dashboard.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">06</div><div class="workflow-step-title">Completion and Sign-Off</div></div><p>Walkthrough with client before final invoice. Site left clean. Job status set to Completed. Request Google review.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">01</div><div class="workflow-step-title">Initial Enquiry</div></div><p>Client contacts via website, Rocky chatbot, or referral. Log as lead immediately with source tagged.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">02</div><div class="workflow-step-title">Site Inspection</div></div><p>Book within 48hrs. Harry or Ronny attends. Record all findings in Inspections module.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">03</div><div class="workflow-step-title">Quote Preparation</div></div><p>Itemised quote within 24hrs of inspection. Payment terms: 10% deposit, 40% materials, 30% progress, 20% retention.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">04</div><div class="workflow-step-title">Quote Acceptance</div></div><p>Client signs off. Deposit invoice generated automatically. Job added to schedule. Lead updated to Converted.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">05</div><div class="workflow-step-title">Works on Site</div></div><p>Harry leads crew. Daily Activity Reports filed. Progress photos at each milestone.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">06</div><div class="workflow-step-title">Completion and Sign-Off</div></div><p>Walkthrough before final invoice. Site left clean. Job set to Completed. Request Google review.</p></div>
           </div>
           <div>
             <h3 class="section-title">Builder-Referred Jobs</h3>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">01</div><div class="workflow-step-title">Builder Referral</div></div><p>Builder contacts Ronny directly. Log in leads with source tagged as "Builder Referral" and builder name in notes.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">02</div><div class="workflow-step-title">Plans and Scope Review</div></div><p>Obtain plans from builder. Review scope. Confirm inclusions and exclusions in writing before quoting.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">03</div><div class="workflow-step-title">Quote to Builder</div></div><p>Quote issued to builder, not end client. Separate pricing from direct client rates. Include provisional sums if plans incomplete.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">04</div><div class="workflow-step-title">Scheduling</div></div><p>Coordinate with builder's program. Confirm slab/frame readiness before committing crew. Add to schedule with builder contact noted.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">05</div><div class="workflow-step-title">Works and Variations</div></div><p>All variations approved in writing before proceeding. Harry to notify Ronny of any scope changes same day they arise.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">06</div><div class="workflow-step-title">Practical Completion</div></div><p>Invoice builder on PC. Note defects liability period. Follow up for referrals to next project.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">01</div><div class="workflow-step-title">Builder Referral</div></div><p>Builder contacts Ronny directly. Log in leads with source "Builder Referral" and builder name in notes.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">02</div><div class="workflow-step-title">Plans and Scope Review</div></div><p>Obtain plans from builder. Confirm inclusions and exclusions in writing before quoting.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">03</div><div class="workflow-step-title">Quote to Builder</div></div><p>Quote to builder, not end client. Include provisional sums if plans incomplete.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">04</div><div class="workflow-step-title">Scheduling</div></div><p>Coordinate with builder's program. Confirm slab/frame readiness before committing crew.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">05</div><div class="workflow-step-title">Works and Variations</div></div><p>All variations approved in writing. Harry to notify Ronny of scope changes same day.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">06</div><div class="workflow-step-title">Practical Completion</div></div><p>Invoice builder on PC. Note defects liability period. Follow up for referrals.</p></div>
           </div>
         </div>
       </div>
-
+      <div class="page" id="page-admin">
+        <div class="page-header"><h1>Admin Settings</h1><p>System configuration — admin access only.</p></div>
+        <div class="card mb-2">
+          <div class="card-title">Quick Launcher Links</div>
+          <div id="adminQuickLinks"></div>
+          <button class="btn btn-primary btn-sm" style="margin-top:1rem" onclick="openModal('quickLinkModal')">+ Add Link</button>
+        </div>
+        <div class="card">
+          <div class="card-title">System Info</div>
+          <div style="font-size:.85rem;color:var(--text-2);line-height:2">
+            <div>Firebase Project: <span style="color:var(--text)">rdu-dashboard</span></div>
+            <div>Admin: <span style="color:var(--text)">toneth@roofingdownunder.com</span></div>
+            <div>Version: <span style="color:var(--text)">Commit 1 — Core Systems</span></div>
+          </div>
+        </div>
+      </div>
     </main>
   </div>
 </div>
-
-<!-- JOB MODAL -->
+<!-- MODALS -->
 <div class="modal-overlay" id="jobModal">
   <div class="modal">
     <div class="modal-header"><div class="modal-title" id="jobModalTitle">New Job</div><button class="modal-close" onclick="closeModal('jobModal')">✕</button></div>
@@ -482,17 +485,7 @@ tr:hover td{background:rgba(255,255,255,0.02)}
       <div class="form-field"><label>Client Name</label><input id="jobClient" placeholder="e.g. John Smith"></div>
       <div class="form-field"><label>Phone</label><input id="jobPhone" placeholder="04XX XXX XXX"></div>
       <div class="form-field"><label>Service Type</label><select id="jobType"><option>Roof Repairs</option><option>New Roof Installation</option><option>Re-Roofing</option><option>Gutters & Downpipes</option><option>Commercial Roofing</option><option>Roof Inspection</option></select></div>
-      <div class="form-field"><label>Stage</label><select id="jobStage">
-        <option value="lead">Lead</option>
-        <option value="inspection">Inspection</option>
-        <option value="quoted">Quoted</option>
-        <option value="approved">Approved</option>
-        <option value="deposit_paid">Deposit Paid</option>
-        <option value="in_progress">In Progress</option>
-        <option value="progress_claim">Progress Claim</option>
-        <option value="completed">Completed</option>
-        <option value="retention_released">Retention Released</option>
-      </select></div>
+      <div class="form-field"><label>Stage</label><select id="jobStage"><option value="lead">Lead</option><option value="inspection">Inspection</option><option value="quoted">Quoted</option><option value="approved">Approved</option><option value="deposit_paid">Deposit Paid</option><option value="in_progress">In Progress</option><option value="progress_claim">Progress Claim</option><option value="completed">Completed</option><option value="retention_released">Retention Released</option></select></div>
       <div class="form-field full"><label>Location</label><input id="jobLocation" placeholder="Full address"></div>
       <div class="form-field"><label>Assigned To</label><select id="jobAssigned"><option>Harry</option><option>Pauly</option><option>Josh</option><option>Ronny</option></select></div>
       <div class="form-field"><label>Start Date</label><input type="date" id="jobDate"></div>
@@ -502,11 +495,9 @@ tr:hover td{background:rgba(255,255,255,0.02)}
     <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('jobModal')">Cancel</button><button class="btn btn-primary" onclick="saveJob()">Save Job</button></div>
   </div>
 </div>
-
-<!-- LEAD MODAL -->
 <div class="modal-overlay" id="leadModal">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title">New Lead</div><button class="modal-close" onclick="closeModal('leadModal')">✕</button></div>
+    <div class="modal-header"><div class="modal-title" id="leadModalTitle">New Lead</div><button class="modal-close" onclick="closeModal('leadModal')">✕</button></div>
     <input type="hidden" id="leadId">
     <div class="form-grid">
       <div class="form-field"><label>Name</label><input id="leadName" placeholder="Client name"></div>
@@ -521,8 +512,6 @@ tr:hover td{background:rgba(255,255,255,0.02)}
     <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('leadModal')">Cancel</button><button class="btn btn-primary" onclick="saveLead()">Save Lead</button></div>
   </div>
 </div>
-
-<!-- SCHEDULE MODAL -->
 <div class="modal-overlay" id="scheduleModal">
   <div class="modal">
     <div class="modal-header"><div class="modal-title">Add Event</div><button class="modal-close" onclick="closeModal('scheduleModal')">✕</button></div>
@@ -532,18 +521,15 @@ tr:hover td{background:rgba(255,255,255,0.02)}
       <div class="form-field"><label>Time</label><input type="time" id="schedTime"></div>
       <div class="form-field"><label>Crew</label><select id="schedCrew"><option>All Crew</option><option>Harry</option><option>Pauly</option><option>Josh</option><option>Ronny</option><option>Myla</option><option>Toneth</option></select></div>
       <div class="form-field"><label>Type</label><select id="schedType"><option>Site Work</option><option>Inspection</option><option>Quote Meeting</option><option>BNI Meeting</option><option>Admin</option><option>Other</option></select></div>
-      <div class="form-field full"><label>Notes</label><textarea id="schedNotes" placeholder="Additional details..."></textarea></div>
+      <div class="form-field full"><label>Notes</label><textarea id="schedNotes"></textarea></div>
     </div>
     <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('scheduleModal')">Cancel</button><button class="btn btn-primary" onclick="saveSchedule()">Save Event</button></div>
   </div>
 </div>
-
-<!-- INSPECTION MODAL -->
 <div class="modal-overlay" id="inspectionModal">
   <div class="modal">
     <div class="modal-header"><div class="modal-title">New Inspection</div><button class="modal-close" onclick="closeModal('inspectionModal')">✕</button></div>
-    <div class="inspection-section">
-      <h4>Client and Site Details</h4>
+    <div class="inspection-section"><h4>Client and Site Details</h4>
       <div class="form-grid">
         <div class="form-field"><label>Client Name</label><input id="inspClient" placeholder="Client name"></div>
         <div class="form-field"><label>Phone</label><input id="inspPhone" placeholder="04XX XXX XXX"></div>
@@ -552,69 +538,45 @@ tr:hover td{background:rgba(255,255,255,0.02)}
         <div class="form-field"><label>Inspected By</label><select id="inspBy"><option>Ronny</option><option>Harry</option></select></div>
       </div>
     </div>
-    <div class="inspection-section">
-      <h4>Roof Findings</h4>
+    <div class="inspection-section"><h4>Roof Findings</h4>
       <div class="form-grid">
         <div class="form-field"><label>Roof Type</label><select id="inspRoofType"><option>Colorbond</option><option>Terracotta Tile</option><option>Concrete Tile</option><option>Zincalume</option><option>Other</option></select></div>
         <div class="form-field"><label>Roof Age (approx)</label><input id="inspAge" placeholder="e.g. 20 years"></div>
-        <div class="form-field full"><label>Condition Notes</label><textarea id="inspCondition" placeholder="Issues found, areas of concern, overall condition..."></textarea></div>
+        <div class="form-field full"><label>Condition Notes</label><textarea id="inspCondition" placeholder="Issues found, areas of concern..."></textarea></div>
       </div>
     </div>
-    <div class="inspection-section">
-      <h4>Quote, Cut List and Mud Map</h4>
+    <div class="inspection-section"><h4>Quote, Cut List and Mud Map</h4>
       <div class="form-grid">
         <div class="form-field"><label>Estimated Quote ($)</label><input type="number" id="inspQuote" placeholder="0"></div>
         <div class="form-field"><label>Quote Status</label><select id="inspQuoteStatus"><option>Pending</option><option>Sent</option><option>Accepted</option><option>Declined</option></select></div>
-        <div class="form-field full"><label>Cut List / Materials</label><textarea id="inspCutList" placeholder="e.g. Colorbond Surfmist 6m x 24 sheets, Ridge capping x 8..."></textarea></div>
-        <div class="form-field full"><label>Mud Map Notes</label><textarea id="inspMudMap" placeholder="Roof layout, ridgelines, valleys, dimensions, gutters..."></textarea></div>
+        <div class="form-field full"><label>Cut List / Materials</label><textarea id="inspCutList" placeholder="e.g. Colorbond Surfmist 6m x 24 sheets..."></textarea></div>
+        <div class="form-field full"><label>Mud Map Notes</label><textarea id="inspMudMap" placeholder="Roof layout, ridgelines, valleys, dimensions..."></textarea></div>
       </div>
     </div>
     <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('inspectionModal')">Cancel</button><button class="btn btn-primary" onclick="saveInspection()">Save Inspection</button></div>
   </div>
 </div>
-
-<!-- INVOICE MODAL -->
 <div class="modal-overlay" id="invoiceModal">
   <div class="modal">
     <div class="modal-header"><div class="modal-title" id="invoiceModalTitle">New Invoice</div><button class="modal-close" onclick="closeModal('invoiceModal')">✕</button></div>
-    <input type="hidden" id="invJobId">
-    <input type="hidden" id="invId">
+    <input type="hidden" id="invJobId"><input type="hidden" id="invId">
     <div class="form-grid">
-      <div class="form-field full" id="invJobFieldWrap">
-        <label>Job</label>
-        <select id="invJobSelect"></select>
-      </div>
-      <div class="form-field"><label>Invoice Type</label><select id="invType">
-        <option value="deposit">Deposit (10%)</option>
-        <option value="materials">Materials (40%)</option>
-        <option value="progress">Progress (30%)</option>
-        <option value="retention">Retention (20%)</option>
-        <option value="other">Other</option>
-      </select></div>
+      <div class="form-field full" id="invJobFieldWrap"><label>Job</label><select id="invJobSelect"></select></div>
+      <div class="form-field"><label>Invoice Type</label><select id="invType"><option value="deposit">Deposit (10%)</option><option value="materials">Materials (40%)</option><option value="progress">Progress (30%)</option><option value="retention">Retention (20%)</option><option value="other">Other</option></select></div>
       <div class="form-field"><label>Amount ($)</label><input type="number" id="invAmount" placeholder="0"></div>
-      <div class="form-field"><label>Status</label><select id="invStatus">
-        <option value="pending">Pending</option>
-        <option value="sent">Sent</option>
-        <option value="paid">Paid</option>
-        <option value="overdue">Overdue</option>
-      </select></div>
+      <div class="form-field"><label>Status</label><select id="invStatus"><option value="pending">Pending</option><option value="sent">Sent</option><option value="paid">Paid</option><option value="overdue">Overdue</option></select></div>
       <div class="form-field"><label>Issued Date</label><input type="date" id="invIssued"></div>
-      <div class="form-field full"><label>Notes</label><textarea id="invNotes" placeholder="Invoice details..."></textarea></div>
+      <div class="form-field full"><label>Notes</label><textarea id="invNotes"></textarea></div>
     </div>
     <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('invoiceModal')">Cancel</button><button class="btn btn-primary" onclick="saveInvoice()">Save Invoice</button></div>
   </div>
 </div>
-
-<!-- DAILY REPORT MODAL -->
 <div class="modal-overlay" id="reportModal">
   <div class="modal">
     <div class="modal-header"><div class="modal-title">Daily Report</div><button class="modal-close" onclick="closeModal('reportModal')">✕</button></div>
     <input type="hidden" id="rptJobId">
     <div class="form-grid">
-      <div class="form-field full" id="rptJobFieldWrap">
-        <label>Job</label>
-        <select id="rptJobSelect"></select>
-      </div>
+      <div class="form-field full" id="rptJobFieldWrap"><label>Job</label><select id="rptJobSelect"></select></div>
       <div class="form-field"><label>Date</label><input type="date" id="rptDate"></div>
       <div class="form-field"><label>Crew Member</label><select id="rptCrew"><option>Harry</option><option>Pauly</option><option>Josh</option><option>Ronny</option></select></div>
       <div class="form-field full"><label>Work Done</label><textarea id="rptWork" placeholder="Describe work completed today..."></textarea></div>
@@ -623,8 +585,68 @@ tr:hover td{background:rgba(255,255,255,0.02)}
     <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('reportModal')">Cancel</button><button class="btn btn-primary" onclick="saveReport()">Save Report</button></div>
   </div>
 </div>
-
-<!-- AD MODAL -->
+<div class="modal-overlay" id="poModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Purchase Order</div><button class="modal-close" onclick="closeModal('poModal')">✕</button></div>
+    <input type="hidden" id="poJobId">
+    <div class="form-grid">
+      <div class="form-field"><label>PO Number (Xero)</label><input id="poNumber" placeholder="e.g. PO-0042"></div>
+      <div class="form-field"><label>Supplier</label><input id="poSupplier" placeholder="Supplier name"></div>
+      <div class="form-field"><label>Amount ($)</label><input type="number" id="poAmount" placeholder="0"></div>
+      <div class="form-field"><label>Status</label><select id="poStatus"><option value="raised">Raised</option><option value="sent">Sent</option><option value="received">Received</option><option value="paid">Paid</option></select></div>
+      <div class="form-field full"><label>Notes</label><textarea id="poNotes" placeholder="Items ordered, delivery details..."></textarea></div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('poModal')">Cancel</button><button class="btn btn-primary" onclick="savePO()">Save PO</button></div>
+  </div>
+</div>
+<div class="modal-overlay" id="quoteModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Quote</div><button class="modal-close" onclick="closeModal('quoteModal')">✕</button></div>
+    <input type="hidden" id="qtJobId">
+    <div class="form-grid">
+      <div class="form-field"><label>Quote Number (Xero)</label><input id="qtNumber" placeholder="e.g. QT-0018"></div>
+      <div class="form-field"><label>Amount ($)</label><input type="number" id="qtAmount" placeholder="0"></div>
+      <div class="form-field"><label>Status</label><select id="qtStatus"><option value="draft">Draft</option><option value="sent">Sent</option><option value="accepted">Accepted</option><option value="declined">Declined</option></select></div>
+      <div class="form-field"><label>Date Issued</label><input type="date" id="qtDate"></div>
+      <div class="form-field full"><label>Notes</label><textarea id="qtNotes" placeholder="Scope, inclusions, exclusions..."></textarea></div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('quoteModal')">Cancel</button><button class="btn btn-primary" onclick="saveQuote()">Save Quote</button></div>
+  </div>
+</div>
+<div class="modal-overlay" id="reminderModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">New Reminder</div><button class="modal-close" onclick="closeModal('reminderModal')">✕</button></div>
+    <div class="form-grid">
+      <div class="form-field full"><label>Title</label><input id="remTitle" placeholder="e.g. Bluescope invoice due"></div>
+      <div class="form-field"><label>Type</label><select id="remType"><option value="supplier">Supplier</option><option value="po">Purchase Order</option><option value="wages">Wages</option><option value="subscription">Subscription</option><option value="other">Other</option></select></div>
+      <div class="form-field"><label>Due Date</label><input type="date" id="remDue"></div>
+      <div class="form-field"><label>Status</label><select id="remStatus"><option value="due">Due</option><option value="paid">Paid</option><option value="cancelled">Cancelled</option></select></div>
+      <div class="form-field full"><label>Notes</label><textarea id="remNotes"></textarea></div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('reminderModal')">Cancel</button><button class="btn btn-primary" onclick="saveReminder()">Save Reminder</button></div>
+  </div>
+</div>
+<div class="modal-overlay" id="taskGroupModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">New Task Group</div><button class="modal-close" onclick="closeModal('taskGroupModal')">✕</button></div>
+    <div class="form-grid">
+      <div class="form-field full"><label>Task Group Title</label><input id="taskGroupTitle" placeholder="e.g. Weekly Site Checks"></div>
+      <div class="form-field full"><label>Description</label><textarea id="taskGroupDesc" placeholder="What this task group is for..."></textarea></div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('taskGroupModal')">Cancel</button><button class="btn btn-primary" onclick="saveTaskGroup()">Create Group</button></div>
+  </div>
+</div>
+<div class="modal-overlay" id="quickLinkModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Add Quick Link</div><button class="modal-close" onclick="closeModal('quickLinkModal')">✕</button></div>
+    <div class="form-grid">
+      <div class="form-field full"><label>Title</label><input id="qlTitle" placeholder="e.g. Xero"></div>
+      <div class="form-field full"><label>URL</label><input id="qlUrl" placeholder="https://..."></div>
+      <div class="form-field full"><label>Icon (emoji)</label><input id="qlIcon" placeholder="e.g. 📊" maxlength="2"></div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('quickLinkModal')">Cancel</button><button class="btn btn-primary" onclick="saveQuickLink()">Add Link</button></div>
+  </div>
+</div>
 <div class="modal-overlay" id="adModal">
   <div class="modal">
     <div class="modal-header"><div class="modal-title">Add Campaign</div><button class="modal-close" onclick="closeModal('adModal')">✕</button></div>
@@ -635,18 +657,16 @@ tr:hover td{background:rgba(255,255,255,0.02)}
       <div class="form-field"><label>Leads Generated</label><input type="number" id="adLeadsNum" placeholder="0"></div>
       <div class="form-field"><label>Status</label><select id="adStatus"><option value="active">Active</option><option value="paused">Paused</option><option value="complete">Complete</option></select></div>
       <div class="form-field"><label>Start Date</label><input type="date" id="adStart"></div>
-      <div class="form-field full"><label>Notes</label><textarea id="adNotes" placeholder="Campaign details, targeting, notes..."></textarea></div>
+      <div class="form-field full"><label>Notes</label><textarea id="adNotes"></textarea></div>
     </div>
     <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('adModal')">Cancel</button><button class="btn btn-primary" onclick="saveAd()">Save Campaign</button></div>
   </div>
 </div>
-
 <div class="toast" id="toast"></div>
-
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, signOut as fbSignOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, collection, addDoc, getDocs, getDoc, updateDoc, deleteDoc, doc, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, collection, addDoc, getDocs, getDoc, updateDoc, doc, query, where, orderBy, onSnapshot, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const firebaseConfig = {
   apiKey: "AIzaSyC1ur8rYfmjYzdAeU7h7sAM3AAA3mte-LE",
@@ -661,721 +681,584 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ─── WORKFLOW ────────────────────────────────────────────────────────────────
+const ADMIN_EMAIL = 'toneth@roofingdownunder.com';
 const STAGES = ['lead','inspection','quoted','approved','deposit_paid','in_progress','progress_claim','completed','retention_released'];
-const STAGE_LABELS = {
-  lead:'Lead', inspection:'Inspection', quoted:'Quoted', approved:'Approved',
-  deposit_paid:'Deposit Paid', in_progress:'In Progress',
-  progress_claim:'Progress Claim', completed:'Completed', retention_released:'Retention Released'
-};
-const VALID_TRANSITIONS = {
-  lead:['inspection'],
-  inspection:['quoted'],
-  quoted:['approved','lead'],
-  approved:['deposit_paid'],
-  deposit_paid:['in_progress'],
-  in_progress:['progress_claim','completed'],
-  progress_claim:['completed'],
-  completed:['retention_released'],
-  retention_released:[]
-};
+const STAGE_LABELS = {lead:'Lead',inspection:'Inspection',quoted:'Quoted',approved:'Approved',deposit_paid:'Deposit Paid',in_progress:'In Progress',progress_claim:'Progress Claim',completed:'Completed',retention_released:'Retention Released'};
+const VALID_TRANSITIONS = {lead:['inspection'],inspection:['quoted'],quoted:['approved','lead'],approved:['deposit_paid'],deposit_paid:['in_progress'],in_progress:['progress_claim','completed'],progress_claim:['completed'],completed:['retention_released'],retention_released:[]};
+const STAGE_INVOICE_TRIGGERS = {approved:{type:'deposit',label:'Deposit Invoice (10%)',pct:0.10},in_progress:{type:'materials',label:'Materials Invoice (40%)',pct:0.40},progress_claim:{type:'progress',label:'Progress Invoice (30%)',pct:0.30},completed:{type:'retention',label:'Retention Invoice (20%)',pct:0.20}};
+const TEAM = {'ronny@roofingdownunder.com':{name:'Ronny',role:'Owner'},'harry@roofingdownunder.com':{name:'Harry',role:'Site Lead'},'pauly@roofingdownunder.com':{name:'Pauly',role:'Crew'},'josh@roofingdownunder.com':{name:'Josh',role:'Crew'},'myla@roofingdownunder.com':{name:'Myla',role:'Operations'},'toneth@roofingdownunder.com':{name:'Toneth',role:'Admin'}};
+const TEAM_NAMES = Object.values(TEAM).map(t=>t.name);
+const INV_LABELS = {deposit:'Deposit (10%)',materials:'Materials (40%)',progress:'Progress (30%)',retention:'Retention (20%)',other:'Other'};
+const TYPE_LABELS = {supplier:'Supplier',po:'Purchase Order',wages:'Wages',subscription:'Subscription',other:'Other'};
 
-// Auto-invoice triggers
-const STAGE_INVOICE_TRIGGERS = {
-  approved: { type:'deposit', label:'Deposit Invoice (10%)', pct:0.10 },
-  in_progress: { type:'materials', label:'Materials Invoice (40%)', pct:0.40 },
-  progress_claim: { type:'progress', label:'Progress Invoice (30%)', pct:0.30 },
-  completed: { type:'retention', label:'Retention Invoice (20%)', pct:0.20 }
-};
+let currentUser=null,currentUserInfo=null,isAdmin=false,allJobs=[],currentJobId=null,commentsUnsubscribe=null;
 
-// ─── TEAM ────────────────────────────────────────────────────────────────────
-const TEAM = {
-  'ronny@roofingdownunder.com':{name:'Ronny',role:'Owner'},
-  'harry@roofingdownunder.com':{name:'Harry',role:'Site Lead'},
-  'pauly@roofingdownunder.com':{name:'Pauly',role:'Crew'},
-  'josh@roofingdownunder.com':{name:'Josh',role:'Crew'},
-  'myla@roofingdownunder.com':{name:'Myla',role:'Operations'},
-  'toneth@roofingdownunder.com':{name:'Toneth',role:'Admin'},
-};
-
-let currentUser = null;
-let allJobs = [];
-let currentJobId = null;
-
-// ─── AUTH ────────────────────────────────────────────────────────────────────
+// AUTH
 onAuthStateChanged(auth, user => {
   if(user){
-    currentUser = user;
+    currentUser=user;
+    currentUserInfo=TEAM[user.email]||{name:user.email.split('@')[0],role:'Team Member'};
+    isAdmin=user.email===ADMIN_EMAIL;
     document.getElementById('authScreen').style.display='none';
     document.getElementById('app').style.display='block';
-    const info = TEAM[user.email]||{name:user.email.split('@')[0],role:'Team Member'};
-    document.getElementById('sidebarUser').textContent=info.name;
-    document.getElementById('sidebarRole').textContent=info.role;
-    document.getElementById('firstName').textContent=info.name;
+    document.getElementById('sidebarUser').textContent=currentUserInfo.name;
+    document.getElementById('sidebarRole').textContent=currentUserInfo.role;
+    document.getElementById('firstName').textContent=currentUserInfo.name;
+    document.querySelectorAll('.admin-only').forEach(el=>el.style.display=isAdmin?'':'none');
+    if(isAdmin) document.getElementById('navAdmin').style.display='';
     loadAll();
   } else {
-    currentUser = null;
     document.getElementById('authScreen').style.display='flex';
     document.getElementById('app').style.display='none';
   }
 });
 
-window.signIn = async () => {
-  const email = document.getElementById('authEmail').value;
-  const pass = document.getElementById('authPass').value;
-  const err = document.getElementById('authErr');
-  err.style.display='none';
-  try { await signInWithEmailAndPassword(auth,email,pass); }
-  catch(e){ err.textContent='Wrong email or password.'; err.style.display='block'; }
+window.signIn = async()=>{
+  const email=document.getElementById('authEmail').value,pass=document.getElementById('authPass').value;
+  const err=document.getElementById('authErr');err.style.display='none';
+  try{await signInWithEmailAndPassword(auth,email,pass);}
+  catch(e){err.textContent='Wrong email or password.';err.style.display='block';}
 };
-window.doSignOut = () => fbSignOut(auth);
+window.doSignOut=()=>fbSignOut(auth);
 document.getElementById('authPass').addEventListener('keydown',e=>{if(e.key==='Enter')window.signIn();});
 
-// ─── UI HELPERS ──────────────────────────────────────────────────────────────
-function showToast(msg,type='success'){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.className=`toast ${type} show`;
-  setTimeout(()=>t.className='toast',3000);
-}
+// HELPERS
+function showToast(msg,type='success'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast ${type} show`;setTimeout(()=>t.className='toast',3000);}
+function badge(s){if(!s)return '';const k=s.toLowerCase().replace(/ /g,'_');return `<span class="badge badge-${k}">${STAGE_LABELS[k]||s}</span>`;}
+function notArchived(d){return !d.archived;}
+function row(label,val){if(!val)return '';return `<div style="display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--border)"><span style="font-size:.75rem;text-transform:uppercase;letter-spacing:.07em;color:var(--text-2)">${label}</span><span style="font-size:.85rem;font-weight:500">${val}</span></div>`;}
+function fmt$(n){return '$'+Number(n||0).toLocaleString();}
 
-function badge(s){
-  if(!s) return '';
-  const key = s.toLowerCase().replace(/ /g,'_');
-  return `<span class="badge badge-${key}">${STAGE_LABELS[key]||s}</span>`;
-}
-
-window.openModal = id => document.getElementById(id).classList.add('open');
-window.closeModal = id => document.getElementById(id).classList.remove('open');
-
-window.showPage = id => {
+window.openModal=id=>document.getElementById(id).classList.add('open');
+window.closeModal=id=>document.getElementById(id).classList.remove('open');
+window.showPage=id=>{
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   document.getElementById(`page-${id}`).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n=>{
-    if(n.getAttribute('onclick')?.includes(`'${id}'`)) n.classList.add('active');
-  });
+  document.querySelectorAll('.nav-item').forEach(n=>{if(n.getAttribute('onclick')?.includes(`'${id}'`))n.classList.add('active');});
+  if(id!=='jobdetail'&&commentsUnsubscribe){commentsUnsubscribe();commentsUnsubscribe=null;}
 };
-
-window.switchTab = id => {
+window.switchTab=(id,btn)=>{
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  event.target.classList.add('active');
+  if(btn)btn.classList.add('active');
 };
 
-// ─── LOAD ALL ────────────────────────────────────────────────────────────────
-async function loadAll(){
-  await Promise.all([loadJobs(), loadLeads(), loadSchedule(), loadInspections(), loadInvoices(), loadReports(), loadAds()]);
-}
+async function loadAll(){await Promise.all([loadJobs(),loadLeads(),loadSchedule(),loadInspections(),loadInvoices(),loadReports(),loadAds(),loadReminders(),loadTasks(),loadQuickLinks()]);}
 
-// ─── JOBS ────────────────────────────────────────────────────────────────────
-async function loadJobs(){
-  const snap = await getDocs(collection(db,'jobs'));
-  allJobs = [];
-  snap.forEach(d => allJobs.push({id:d.id,...d.data()}));
-
-  const active = allJobs.filter(j=>j.stage==='in_progress'||j.stage==='progress_claim').length;
-  document.getElementById('jobsBadge').textContent = active;
-  document.getElementById('statActiveJobs').textContent = active;
-
-  const tb = document.getElementById('jobsTable');
-  tb.innerHTML = allJobs.length ? allJobs.map(j=>`<tr>
-    <td style="font-family:var(--font-head);color:var(--rust-lt);font-size:0.8rem">#${j.id.slice(-4).toUpperCase()}</td>
-    <td><div style="font-weight:500">${j.client||''}</div><div style="font-size:0.75rem;color:var(--text-2)">${j.phone||''}</div></td>
-    <td>${j.type||''}</td>
-    <td style="font-size:0.82rem">${j.location||'—'}</td>
-    <td><span style="background:var(--surface);padding:2px 8px;border-radius:4px;font-size:0.78rem">${j.assigned||'—'}</span></td>
-    <td>${badge(j.stage||'lead')}</td>
-    <td style="color:var(--rust-lt);font-weight:500">${j.value?'$'+Number(j.value).toLocaleString():'—'}</td>
-    <td><div style="display:flex;gap:0.5rem">
-      <button class="btn btn-sm btn-secondary" onclick="openJobDetail('${j.id}')">View</button>
-      <button class="btn btn-sm btn-danger" onclick="delItem('jobs','${j.id}',loadJobs)">Del</button>
-    </div></td>
-  </tr>`).join('') : '<tr><td colspan="8" style="text-align:center;color:var(--text-2);padding:2rem">No jobs yet</td></tr>';
-
-  const recent = allJobs.slice(0,4);
-  const el = document.getElementById('dashRecentJobs');
-  el.innerHTML = recent.length ? recent.map(j=>`
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="openJobDetail('${j.id}')">
-      <div><div style="font-weight:500;font-size:0.85rem">${j.client||''}</div><div style="font-size:0.75rem;color:var(--text-2)">${j.type||''}</div></div>
-      ${badge(j.stage||'lead')}
-    </div>`).join('') : '<div class="empty-state"><div class="empty-icon">🔨</div><p>No jobs yet</p></div>';
-}
-
-window.openJobModal = () => {
-  document.getElementById('jobId').value='';
-  document.getElementById('jobModalTitle').textContent='New Job';
-  ['jobClient','jobPhone','jobLocation','jobDate','jobValue','jobNotes'].forEach(i=>document.getElementById(i).value='');
-  document.getElementById('jobStage').value='lead';
-  openModal('jobModal');
+// SOFT DELETE
+window.archiveItem=async(col,id,reload)=>{
+  if(!confirm('Archive this item? It will be hidden but not permanently deleted.'))return;
+  try{await updateDoc(doc(db,col,id),{archived:true,archivedAt:new Date().toISOString()});await reload();showToast('Archived');}
+  catch(e){showToast('Error archiving','error');}
 };
 
-window.openEditJobModal = async () => {
-  if(!currentJobId) return;
-  const snap = await getDoc(doc(db,'jobs',currentJobId));
-  if(!snap.exists()) return;
-  const j = snap.data();
-  document.getElementById('jobId').value = currentJobId;
-  document.getElementById('jobClient').value = j.client||'';
-  document.getElementById('jobPhone').value = j.phone||'';
-  document.getElementById('jobType').value = j.type||'Roof Repairs';
-  document.getElementById('jobStage').value = j.stage||'lead';
-  document.getElementById('jobLocation').value = j.location||'';
-  document.getElementById('jobAssigned').value = j.assigned||'Harry';
-  document.getElementById('jobDate').value = j.date||'';
-  document.getElementById('jobValue').value = j.value||'';
-  document.getElementById('jobNotes').value = j.notes||'';
-  document.getElementById('jobModalTitle').textContent = 'Edit Job';
-  openModal('jobModal');
-};
-
-window.saveJob = async () => {
-  const id = document.getElementById('jobId').value;
-  const data = {
-    client: document.getElementById('jobClient').value,
-    phone: document.getElementById('jobPhone').value,
-    type: document.getElementById('jobType').value,
-    stage: document.getElementById('jobStage').value,
-    location: document.getElementById('jobLocation').value,
-    assigned: document.getElementById('jobAssigned').value,
-    date: document.getElementById('jobDate').value,
-    value: document.getElementById('jobValue').value,
-    notes: document.getElementById('jobNotes').value,
-    updated: new Date().toISOString()
-  };
-  try {
-    if(id) await updateDoc(doc(db,'jobs',id), data);
-    else await addDoc(collection(db,'jobs'),{...data, created: new Date().toISOString()});
-    closeModal('jobModal');
-    await loadJobs();
-    showToast(id?'Job updated':'Job added');
-    if(currentJobId === id) openJobDetail(id);
-  } catch(e){ showToast('Error saving job','error'); }
-};
-
-// ─── JOB DETAIL ──────────────────────────────────────────────────────────────
-window.openJobDetail = async (id) => {
-  currentJobId = id;
-  const snap = await getDoc(doc(db,'jobs',id));
-  if(!snap.exists()) return;
-  const j = snap.data();
-
-  document.getElementById('detailJobTitle').textContent = j.client||'Job Detail';
-  document.getElementById('detailJobSub').textContent = `${j.type||''} · ${j.location||''}`;
-  document.getElementById('detailStageBadge').innerHTML = badge(j.stage||'lead');
-
-  // Stage tracker
-  const stage = j.stage||'lead';
-  const stageIdx = STAGES.indexOf(stage);
-  let trackHtml = '';
-  STAGES.forEach((s,i)=>{
-    const isDone = i < stageIdx;
-    const isCurrent = i === stageIdx;
-    if(i>0) trackHtml += `<div class="stage-line ${isDone?'done':''}"></div>`;
-    trackHtml += `<div class="stage-dot">
-      <div class="stage-dot-circle ${isDone?'done':''} ${isCurrent?'current':''}"></div>
-      <div class="stage-dot-label ${isDone?'done':''} ${isCurrent?'current':''}">${STAGE_LABELS[s]}</div>
-    </div>`;
+// LEAD NUMBERING
+async function getNextLeadNumber(){
+  const metaRef=doc(db,'settings','metadata');let num=1;
+  await runTransaction(db,async tx=>{
+    const snap=await tx.get(metaRef);
+    if(snap.exists()){num=(snap.data().leadCounter||0)+1;tx.update(metaRef,{leadCounter:num});}
+    else{num=1;tx.set(metaRef,{leadCounter:1});}
   });
-  document.getElementById('stageTrack').innerHTML = trackHtml;
+  return String(num).padStart(5,'0');
+}
 
-  // Stage action buttons
-  const transitions = VALID_TRANSITIONS[stage]||[];
-  const actHtml = transitions.map(t=>`
-    <button class="btn btn-stage" onclick="advanceStage('${id}','${t}')">→ ${STAGE_LABELS[t]}</button>
-  `).join('');
-  document.getElementById('stageActions').innerHTML = actHtml || `<span style="font-size:0.8rem;color:var(--text-3)">No further transitions</span>`;
+// JOBS
+async function loadJobs(){
+  const snap=await getDocs(collection(db,'jobs'));
+  allJobs=[];snap.forEach(d=>{const data=d.data();if(notArchived(data))allJobs.push({id:d.id,...data});});
+  const active=allJobs.filter(j=>j.stage==='in_progress'||j.stage==='progress_claim').length;
+  document.getElementById('jobsBadge').textContent=active;
+  document.getElementById('statActiveJobs').textContent=active;
+  const tb=document.getElementById('jobsTable');
+  tb.innerHTML=allJobs.length?allJobs.map(j=>`<tr>
+    <td style="font-family:var(--font-head);color:var(--rust-lt);font-size:.8rem">#${j.id.slice(-4).toUpperCase()}</td>
+    <td><div style="font-weight:500">${j.client||''}</div><div style="font-size:.75rem;color:var(--text-2)">${j.phone||''}</div></td>
+    <td>${j.type||''}</td><td style="font-size:.82rem">${j.location||'—'}</td>
+    <td><span style="background:var(--surface);padding:2px 8px;border-radius:4px;font-size:.78rem">${j.assigned||'—'}</span></td>
+    <td>${badge(j.stage||'lead')}</td>
+    <td style="color:var(--rust-lt);font-weight:500">${j.value?fmt$(j.value):'—'}</td>
+    <td><div style="display:flex;gap:.5rem">
+      <button class="btn btn-sm btn-secondary" onclick="openJobDetail('${j.id}')">View</button>
+      <button class="btn btn-sm btn-danger" onclick="archiveItem('jobs','${j.id}',loadJobs)">Archive</button>
+    </div></td></tr>`).join(''):`<tr><td colspan="8" style="text-align:center;color:var(--text-2);padding:2rem">No jobs yet</td></tr>`;
+  const el=document.getElementById('dashRecentJobs');
+  el.innerHTML=allJobs.slice(0,4).map(j=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="openJobDetail('${j.id}')"><div><div style="font-weight:500;font-size:.85rem">${j.client||''}</div><div style="font-size:.75rem;color:var(--text-2)">${j.type||''}</div></div>${badge(j.stage||'lead')}</div>`).join('')||'<div class="empty-state"><div class="empty-icon">🔨</div><p>No jobs yet</p></div>';
+}
 
-  // Detail info
-  document.getElementById('detailInfo').innerHTML = `
-    <div style="display:grid;gap:0.75rem">
-      ${row('Phone', j.phone)}
-      ${row('Service', j.type)}
-      ${row('Location', j.location)}
-      ${row('Assigned', j.assigned)}
-      ${row('Start Date', j.date)}
-      ${row('Contract Value', j.value?'$'+Number(j.value).toLocaleString():'')}
-    </div>`;
-  document.getElementById('detailNotes').textContent = j.notes||'No notes recorded.';
+window.openJobModal=()=>{
+  document.getElementById('jobId').value='';document.getElementById('jobModalTitle').textContent='New Job';
+  ['jobClient','jobPhone','jobLocation','jobDate','jobValue','jobNotes'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('jobStage').value='lead';openModal('jobModal');
+};
 
-  // Load sub-data
-  await Promise.all([loadJobInvoices(id), loadJobReports(id)]);
+window.openEditJobModal=async()=>{
+  if(!currentJobId)return;
+  const snap=await getDoc(doc(db,'jobs',currentJobId));if(!snap.exists())return;
+  const j=snap.data();
+  document.getElementById('jobId').value=currentJobId;
+  document.getElementById('jobClient').value=j.client||'';document.getElementById('jobPhone').value=j.phone||'';
+  document.getElementById('jobType').value=j.type||'Roof Repairs';document.getElementById('jobStage').value=j.stage||'lead';
+  document.getElementById('jobLocation').value=j.location||'';document.getElementById('jobAssigned').value=j.assigned||'Harry';
+  document.getElementById('jobDate').value=j.date||'';document.getElementById('jobValue').value=j.value||'';
+  document.getElementById('jobNotes').value=j.notes||'';document.getElementById('jobModalTitle').textContent='Edit Job';
+  openModal('jobModal');
+};
 
-  // Reset tabs
+window.saveJob=async()=>{
+  const id=document.getElementById('jobId').value;
+  const data={client:document.getElementById('jobClient').value,phone:document.getElementById('jobPhone').value,type:document.getElementById('jobType').value,stage:document.getElementById('jobStage').value,location:document.getElementById('jobLocation').value,assigned:document.getElementById('jobAssigned').value,date:document.getElementById('jobDate').value,value:document.getElementById('jobValue').value,notes:document.getElementById('jobNotes').value,updated:new Date().toISOString()};
+  try{
+    if(id)await updateDoc(doc(db,'jobs',id),data);else await addDoc(collection(db,'jobs'),{...data,created:new Date().toISOString()});
+    closeModal('jobModal');await loadJobs();showToast(id?'Job updated':'Job added');if(currentJobId===id)openJobDetail(id);
+  }catch(e){showToast('Error saving job','error');}
+};
+
+// JOB DETAIL
+window.openJobDetail=async(id)=>{
+  currentJobId=id;
+  const snap=await getDoc(doc(db,'jobs',id));if(!snap.exists())return;
+  const j=snap.data();
+  document.getElementById('detailJobTitle').textContent=j.client||'Job Detail';
+  document.getElementById('detailJobSub').textContent=`${j.type||''} · ${j.location||''}`;
+  document.getElementById('detailStageBadge').innerHTML=badge(j.stage||'lead');
+  const stage=j.stage||'lead',stageIdx=STAGES.indexOf(stage);
+  let th='';
+  STAGES.forEach((s,i)=>{
+    const isDone=i<stageIdx,isCur=i===stageIdx;
+    if(i>0)th+=`<div class="stage-line ${isDone?'done':''}"></div>`;
+    th+=`<div class="stage-dot"><div class="stage-dot-circle ${isDone?'done':''} ${isCur?'current':''}"></div><div class="stage-dot-label ${isDone?'done':''} ${isCur?'current':''}">${STAGE_LABELS[s]}</div></div>`;
+  });
+  document.getElementById('stageTrack').innerHTML=th;
+  const transitions=VALID_TRANSITIONS[stage]||[];
+  document.getElementById('stageActions').innerHTML=transitions.map(t=>`<button class="btn btn-stage" onclick="advanceStage('${id}','${t}')">→ ${STAGE_LABELS[t]}</button>`).join('')||`<span style="font-size:.8rem;color:var(--text-3)">No further transitions</span>`;
+  document.getElementById('detailInfo').innerHTML=`<div style="display:grid;gap:.75rem">${row('Phone',j.phone)}${row('Service',j.type)}${row('Location',j.location)}${row('Assigned',j.assigned)}${row('Start Date',j.date)}${row('Contract Value',j.value?fmt$(j.value):'')}</div>`;
+  document.getElementById('detailNotes').textContent=j.notes||'No notes recorded.';
+  await Promise.all([loadJobInvoices(id),loadJobReports(id),loadJobPOs(id),loadJobQuotes(id)]);
+  subscribeToComments(id);
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-overview').classList.add('active');
   document.querySelectorAll('.tab-btn')[0].classList.add('active');
-
   showPage('jobdetail');
 };
 
-function row(label,val){
-  if(!val) return '';
-  return `<div style="display:flex;justify-content:space-between;padding:0.5rem 0;border-bottom:1px solid var(--border)">
-    <span style="font-size:0.75rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-2)">${label}</span>
-    <span style="font-size:0.85rem;font-weight:500">${val}</span>
-  </div>`;
-}
-
-window.advanceStage = async (jobId, newStage) => {
-  if(!confirm(`Move job to "${STAGE_LABELS[newStage]}"?`)) return;
-  try {
-    const jobRef = doc(db,'jobs',jobId);
-    const snap = await getDoc(jobRef);
-    const j = snap.data();
-    const oldStage = j.stage||'lead';
-
-    if(!VALID_TRANSITIONS[oldStage]?.includes(newStage)){
-      showToast('Invalid stage transition','error'); return;
-    }
-
-    await updateDoc(jobRef, {stage: newStage, updated: new Date().toISOString()});
-
-    // Auto-create invoice if trigger exists
-    const trigger = STAGE_INVOICE_TRIGGERS[newStage];
-    if(trigger && j.value){
-      const amount = Math.round(Number(j.value) * trigger.pct);
-      await addDoc(collection(db,'invoices'),{
-        jobId, jobClient: j.client||'', type: trigger.type,
-        amount, status:'pending', issuedAt: new Date().toISOString(),
-        notes: trigger.label, created: new Date().toISOString()
-      });
-      showToast(`Stage updated · ${trigger.label} created ($${amount.toLocaleString()})`);
-    } else {
-      showToast(`Job moved to ${STAGE_LABELS[newStage]}`);
-    }
-
-    await loadJobs();
-    await loadInvoices();
-    await openJobDetail(jobId);
-  } catch(e){ showToast('Error updating stage','error'); console.error(e); }
+window.advanceStage=async(jobId,newStage)=>{
+  if(!confirm(`Move job to "${STAGE_LABELS[newStage]}"?`))return;
+  try{
+    const jobRef=doc(db,'jobs',jobId);const snap=await getDoc(jobRef);const j=snap.data();
+    if(!VALID_TRANSITIONS[j.stage||'lead']?.includes(newStage)){showToast('Invalid stage transition','error');return;}
+    await updateDoc(jobRef,{stage:newStage,updated:new Date().toISOString()});
+    const trigger=STAGE_INVOICE_TRIGGERS[newStage];
+    if(trigger&&j.value){
+      const amount=Math.round(Number(j.value)*trigger.pct);
+      await addDoc(collection(db,'invoices'),{jobId,jobClient:j.client||'',type:trigger.type,amount,status:'pending',issuedAt:new Date().toISOString(),notes:trigger.label,created:new Date().toISOString()});
+      showToast(`Stage updated · ${trigger.label} created (${fmt$(amount)})`);
+    }else showToast(`Job moved to ${STAGE_LABELS[newStage]}`);
+    await loadJobs();await loadInvoices();await openJobDetail(jobId);
+  }catch(e){showToast('Error updating stage','error');}
 };
 
-// ─── LEADS ───────────────────────────────────────────────────────────────────
+// INTERNAL NOTES
+function subscribeToComments(jobId){
+  if(commentsUnsubscribe){commentsUnsubscribe();commentsUnsubscribe=null;}
+  const q=query(collection(db,'job_comments'),where('jobId','==',jobId),orderBy('createdAt','asc'));
+  commentsUnsubscribe=onSnapshot(q,snap=>{
+    const list=document.getElementById('commentsList');if(!list)return;
+    if(snap.empty){list.innerHTML=`<div style="text-align:center;padding:2rem;color:var(--text-3);font-size:.82rem">No notes yet — start the conversation</div>`;return;}
+    list.innerHTML='';
+    snap.forEach(d=>{
+      const c=d.data(),isMine=c.userId===currentUser?.uid;
+      const initials=(c.userName||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+      const ts=c.createdAt?.toDate?c.createdAt.toDate().toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'}):'';
+      const ds=c.createdAt?.toDate?c.createdAt.toDate().toLocaleDateString('en-AU',{day:'numeric',month:'short'}):'';
+      const msgHtml=(c.message||'').replace(/@(\w+)/g,'<span class="comment-mention">@$1</span>');
+      list.innerHTML+=`<div class="comment-item"><div class="comment-avatar">${initials}</div><div class="comment-bubble ${isMine?'mine':''}"><div class="comment-meta"><strong>${c.userName||'Unknown'}</strong> · ${ds} ${ts}</div><div class="comment-text">${msgHtml}</div></div></div>`;
+    });
+    list.scrollTop=list.scrollHeight;
+  });
+}
+
+window.sendComment=async()=>{
+  const input=document.getElementById('commentInput');const msg=input.value.trim();
+  if(!msg||!currentJobId||!currentUser)return;
+  const mentions=[];TEAM_NAMES.forEach(name=>{if(msg.includes('@'+name))mentions.push(name);});
+  try{await addDoc(collection(db,'job_comments'),{jobId:currentJobId,userId:currentUser.uid,userName:currentUserInfo?.name||currentUser.email,message:msg,mentions,createdAt:serverTimestamp()});input.value='';}
+  catch(e){showToast('Error sending note','error');}
+};
+
+// LEADS
 async function loadLeads(){
-  const snap = await getDocs(collection(db,'leads'));
-  const leads = [];
-  snap.forEach(d=>leads.push({id:d.id,...d.data()}));
-  const open = leads.filter(l=>l.status==='new'||l.status==='contacted').length;
-  document.getElementById('leadsBadge').textContent = open;
-  document.getElementById('statLeads').textContent = open;
-
-  const tb = document.getElementById('leadsTable');
-  tb.innerHTML = leads.length ? leads.map(l=>`<tr>
+  const snap=await getDocs(collection(db,'leads'));const leads=[];
+  snap.forEach(d=>{const data=d.data();if(notArchived(data))leads.push({id:d.id,...data});});
+  const open=leads.filter(l=>l.status==='new'||l.status==='contacted').length;
+  document.getElementById('leadsBadge').textContent=open;document.getElementById('statLeads').textContent=open;
+  const tb=document.getElementById('leadsTable');
+  tb.innerHTML=leads.length?leads.map(l=>`<tr>
+    <td style="font-family:var(--font-head);color:var(--rust-lt);font-size:.78rem">${l.leadNumber||'—'}</td>
     <td><div style="font-weight:500">${l.name||''}</div></td>
-    <td style="font-size:0.82rem">${l.service||''}</td>
-    <td style="font-size:0.82rem">${l.location||'—'}</td>
-    <td><div style="font-size:0.82rem">${l.phone||''}</div><div style="font-size:0.75rem;color:var(--text-2)">${l.email||''}</div></td>
-    <td><span style="background:var(--surface);padding:2px 8px;border-radius:4px;font-size:0.78rem">${l.source||''}</span></td>
+    <td style="font-size:.82rem">${l.service||''}</td><td style="font-size:.82rem">${l.location||'—'}</td>
+    <td><div style="font-size:.82rem">${l.phone||''}</div><div style="font-size:.75rem;color:var(--text-2)">${l.email||''}</div></td>
+    <td><span style="background:var(--surface);padding:2px 8px;border-radius:4px;font-size:.78rem">${l.source||''}</span></td>
     <td>${badge(l.status)}</td>
-    <td><div style="display:flex;gap:0.5rem">
-      <button class="btn btn-sm btn-secondary" onclick="editLead('${l.id}')">Edit</button>
-      <button class="btn btn-sm btn-danger" onclick="delItem('leads','${l.id}',loadLeads)">Del</button>
-    </div></td>
-  </tr>`).join('') : '<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No leads yet</td></tr>';
-
-  const el = document.getElementById('dashRecentLeads');
-  const recent = leads.slice(0,4);
-  el.innerHTML = recent.length ? recent.map(l=>`
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:0.6rem 0;border-bottom:1px solid var(--border)">
-      <div><div style="font-weight:500;font-size:0.85rem">${l.name||''}</div><div style="font-size:0.75rem;color:var(--text-2)">${l.service||''} · ${l.source||''}</div></div>
-      ${badge(l.status)}
-    </div>`).join('') : '<div class="empty-state"><div class="empty-icon">📋</div><p>No leads yet</p></div>';
+    <td><div style="display:flex;gap:.5rem"><button class="btn btn-sm btn-secondary" onclick="editLead('${l.id}')">Edit</button><button class="btn btn-sm btn-danger" onclick="archiveItem('leads','${l.id}',loadLeads)">Archive</button></div></td>
+  </tr>`).join(''):`<tr><td colspan="8" style="text-align:center;color:var(--text-2);padding:2rem">No leads yet</td></tr>`;
+  const el=document.getElementById('dashRecentLeads');
+  el.innerHTML=leads.slice(0,4).map(l=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--border)"><div><div style="font-weight:500;font-size:.85rem">${l.leadNumber?`<span style="color:var(--rust-lt);font-size:.75rem">${l.leadNumber}</span> `:''}${l.name||''}</div><div style="font-size:.75rem;color:var(--text-2)">${l.service||''} · ${l.source||''}</div></div>${badge(l.status)}</div>`).join('')||'<div class="empty-state"><div class="empty-icon">📋</div><p>No leads yet</p></div>';
 }
 
-window.saveLead = async () => {
-  const id = document.getElementById('leadId').value;
-  const data = {
-    name: document.getElementById('leadName').value,
-    phone: document.getElementById('leadPhone').value,
-    email: document.getElementById('leadEmail').value,
-    service: document.getElementById('leadService').value,
-    location: document.getElementById('leadLocation').value,
-    source: document.getElementById('leadSource').value,
-    status: document.getElementById('leadStatus').value,
-    notes: document.getElementById('leadNotes').value,
-    updated: new Date().toISOString()
-  };
-  try {
-    if(id) await updateDoc(doc(db,'leads',id),data);
-    else await addDoc(collection(db,'leads'),{...data, created: new Date().toISOString()});
-    closeModal('leadModal');
-    ['leadId','leadName','leadPhone','leadEmail','leadLocation','leadNotes'].forEach(i=>document.getElementById(i).value='');
-    await loadLeads();
-    showToast(id?'Lead updated':'Lead added');
-  } catch(e){ showToast('Error saving lead','error'); }
+window.saveLead=async()=>{
+  const id=document.getElementById('leadId').value;
+  const data={name:document.getElementById('leadName').value,phone:document.getElementById('leadPhone').value,email:document.getElementById('leadEmail').value,service:document.getElementById('leadService').value,location:document.getElementById('leadLocation').value,source:document.getElementById('leadSource').value,status:document.getElementById('leadStatus').value,notes:document.getElementById('leadNotes').value,updated:new Date().toISOString()};
+  try{
+    if(id){await updateDoc(doc(db,'leads',id),data);}
+    else{const leadNumber=await getNextLeadNumber();await addDoc(collection(db,'leads'),{...data,leadNumber,created:new Date().toISOString()});}
+    closeModal('leadModal');['leadId','leadName','leadPhone','leadEmail','leadLocation','leadNotes'].forEach(i=>document.getElementById(i).value='');
+    document.getElementById('leadModalTitle').textContent='New Lead';
+    await loadLeads();showToast(id?'Lead updated':'Lead added');
+  }catch(e){showToast('Error saving lead','error');console.error(e);}
 };
 
-window.editLead = async (id) => {
-  const snap = await getDoc(doc(db,'leads',id));
-  if(!snap.exists()) return;
-  const l = snap.data();
-  document.getElementById('leadId').value=id;
-  document.getElementById('leadName').value=l.name||'';
-  document.getElementById('leadPhone').value=l.phone||'';
-  document.getElementById('leadEmail').value=l.email||'';
-  document.getElementById('leadService').value=l.service||'';
-  document.getElementById('leadLocation').value=l.location||'';
-  document.getElementById('leadSource').value=l.source||'Website';
-  document.getElementById('leadStatus').value=l.status||'new';
-  document.getElementById('leadNotes').value=l.notes||'';
-  openModal('leadModal');
+window.editLead=async(id)=>{
+  const snap=await getDoc(doc(db,'leads',id));if(!snap.exists())return;const l=snap.data();
+  document.getElementById('leadId').value=id;document.getElementById('leadName').value=l.name||'';document.getElementById('leadPhone').value=l.phone||'';
+  document.getElementById('leadEmail').value=l.email||'';document.getElementById('leadService').value=l.service||'';
+  document.getElementById('leadLocation').value=l.location||'';document.getElementById('leadSource').value=l.source||'Website';
+  document.getElementById('leadStatus').value=l.status||'new';document.getElementById('leadNotes').value=l.notes||'';
+  document.getElementById('leadModalTitle').textContent=`Edit Lead ${l.leadNumber||''}`;openModal('leadModal');
 };
 
-// ─── SCHEDULE ────────────────────────────────────────────────────────────────
+// SCHEDULE
 async function loadSchedule(){
-  const snap = await getDocs(collection(db,'schedule'));
-  const events = [];
-  snap.forEach(d=>events.push({id:d.id,...d.data()}));
+  const snap=await getDocs(collection(db,'schedule'));const events=[];
+  snap.forEach(d=>{const data=d.data();if(notArchived(data))events.push({id:d.id,...data});});
   events.sort((a,b)=>a.date>b.date?1:-1);
-  const now = new Date();
-  const week = new Date(now.getTime()+7*24*60*60*1000);
-  document.getElementById('statWeek').textContent = events.filter(e=>{
-    const d=new Date(e.date+'T00:00:00'); return d>=now&&d<=week;
-  }).length;
-  const el = document.getElementById('scheduleList');
-  el.innerHTML = events.length ? `<div class="card-title">Upcoming Events</div>`+events.map(e=>`
-    <div style="display:flex;align-items:center;gap:1rem;padding:0.85rem 0;border-bottom:1px solid var(--border)">
-      <div style="background:var(--surface);border-radius:8px;padding:0.5rem 0.75rem;text-align:center;min-width:52px">
+  const now=new Date(),week=new Date(now.getTime()+7*24*60*60*1000);
+  document.getElementById('statWeek').textContent=events.filter(e=>{const d=new Date(e.date+'T00:00:00');return d>=now&&d<=week;}).length;
+  const el=document.getElementById('scheduleList');
+  el.innerHTML=events.length?`<div class="card-title">Upcoming Events</div>`+events.map(e=>`
+    <div style="display:flex;align-items:center;gap:1rem;padding:.85rem 0;border-bottom:1px solid var(--border)">
+      <div style="background:var(--surface);border-radius:8px;padding:.5rem .75rem;text-align:center;min-width:52px">
         <div style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;color:var(--rust-lt)">${e.date?e.date.slice(8):''}</div>
-        <div style="font-size:0.65rem;color:var(--text-2);text-transform:uppercase">${e.date?new Date(e.date+'T00:00:00').toLocaleString('en',{month:'short'}):''}</div>
+        <div style="font-size:.65rem;color:var(--text-2);text-transform:uppercase">${e.date?new Date(e.date+'T00:00:00').toLocaleString('en',{month:'short'}):''}</div>
       </div>
-      <div style="flex:1">
-        <div style="font-weight:500;font-size:0.9rem">${e.title||''}</div>
-        <div style="font-size:0.78rem;color:var(--text-2)">${e.time||''} · ${e.crew||''} · ${e.type||''}</div>
-        ${e.notes?`<div style="font-size:0.78rem;color:var(--text-3);margin-top:2px">${e.notes}</div>`:''}
+      <div style="flex:1"><div style="font-weight:500;font-size:.9rem">${e.title||''}</div>
+        <div style="font-size:.78rem;color:var(--text-2)">${e.time||''} · ${e.crew||''} · ${e.type||''}</div>
+        ${e.notes?`<div style="font-size:.78rem;color:var(--text-3);margin-top:2px">${e.notes}</div>`:''}
       </div>
-      <button class="btn btn-sm btn-danger" onclick="delItem('schedule','${e.id}',loadSchedule)">✕</button>
-    </div>`).join('') : '<div class="empty-state"><div class="empty-icon">📅</div><p>No events scheduled</p></div>';
+      <button class="btn btn-sm btn-danger" onclick="archiveItem('schedule','${e.id}',loadSchedule)">✕</button>
+    </div>`).join(''):'<div class="empty-state"><div class="empty-icon">📅</div><p>No events scheduled</p></div>';
 }
 
-window.saveSchedule = async () => {
-  const data = {
-    title: document.getElementById('schedTitle').value,
-    date: document.getElementById('schedDate').value,
-    time: document.getElementById('schedTime').value,
-    crew: document.getElementById('schedCrew').value,
-    type: document.getElementById('schedType').value,
-    notes: document.getElementById('schedNotes').value,
-    created: new Date().toISOString()
-  };
-  try {
-    await addDoc(collection(db,'schedule'),data);
-    closeModal('scheduleModal');
-    ['schedTitle','schedDate','schedTime','schedNotes'].forEach(i=>document.getElementById(i).value='');
-    await loadSchedule();
-    showToast('Event added');
-  } catch(e){ showToast('Error saving event','error'); }
+window.saveSchedule=async()=>{
+  const data={title:document.getElementById('schedTitle').value,date:document.getElementById('schedDate').value,time:document.getElementById('schedTime').value,crew:document.getElementById('schedCrew').value,type:document.getElementById('schedType').value,notes:document.getElementById('schedNotes').value,created:new Date().toISOString()};
+  try{await addDoc(collection(db,'schedule'),data);closeModal('scheduleModal');['schedTitle','schedDate','schedTime','schedNotes'].forEach(i=>document.getElementById(i).value='');await loadSchedule();showToast('Event added');}
+  catch(e){showToast('Error saving event','error');}
 };
 
-// ─── INSPECTIONS ─────────────────────────────────────────────────────────────
+// INSPECTIONS
 async function loadInspections(){
-  const snap = await getDocs(collection(db,'inspections'));
-  const items = [];
-  snap.forEach(d=>items.push({id:d.id,...d.data()}));
-  const el = document.getElementById('inspectionsList');
-  el.innerHTML = items.length ? items.map(i=>`
+  const snap=await getDocs(collection(db,'inspections'));const items=[];
+  snap.forEach(d=>{const data=d.data();if(notArchived(data))items.push({id:d.id,...data});});
+  const el=document.getElementById('inspectionsList');
+  el.innerHTML=items.length?items.map(i=>`
     <div class="card mb-1">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem">
-        <div>
-          <div style="font-family:var(--font-head);font-size:1rem;font-weight:600">${i.client||''}</div>
-          <div style="font-size:0.8rem;color:var(--text-2)">${i.address||''} · ${i.date||''} · By ${i.inspBy||''}</div>
-        </div>
-        <div style="display:flex;gap:0.5rem;align-items:center">
-          ${badge(i.quoteStatus?.toLowerCase()||'pending')}
-          <button class="btn btn-sm btn-danger" onclick="delItem('inspections','${i.id}',loadInspections)">✕</button>
-        </div>
+        <div><div style="font-family:var(--font-head);font-size:1rem;font-weight:600">${i.client||''}</div>
+          <div style="font-size:.8rem;color:var(--text-2)">${i.address||''} · ${i.date||''} · By ${i.inspBy||''}</div></div>
+        <div style="display:flex;gap:.5rem;align-items:center">${badge(i.quoteStatus?.toLowerCase()||'pending')}
+          <button class="btn btn-sm btn-danger" onclick="archiveItem('inspections','${i.id}',loadInspections)">✕</button></div>
       </div>
       <div class="grid-3">
-        <div><div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-2);margin-bottom:4px">Roof Type</div><div style="font-size:0.85rem">${i.roofType||'—'}</div></div>
-        <div><div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-2);margin-bottom:4px">Age</div><div style="font-size:0.85rem">${i.age||'—'}</div></div>
-        <div><div style="font-size:0.68rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-2);margin-bottom:4px">Quote</div><div style="font-size:0.85rem;color:var(--rust-lt);font-weight:500">${i.quote?'$'+Number(i.quote).toLocaleString():'TBC'}</div></div>
+        <div><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Roof Type</div><div style="font-size:.85rem">${i.roofType||'—'}</div></div>
+        <div><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Age</div><div style="font-size:.85rem">${i.age||'—'}</div></div>
+        <div><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Quote</div><div style="font-size:.85rem;color:var(--rust-lt);font-weight:500">${i.quote?fmt$(i.quote):'TBC'}</div></div>
       </div>
-      ${i.condition?`<div style="margin-top:0.75rem;padding:0.75rem;background:var(--surface);border-radius:6px;font-size:0.82rem;color:var(--text-2)">${i.condition}</div>`:''}
-      ${i.cutList?`<div style="margin-top:0.5rem"><div style="font-size:0.68rem;text-transform:uppercase;color:var(--text-2);margin-bottom:4px">Cut List</div><div style="font-size:0.82rem;white-space:pre-wrap;background:var(--surface);padding:0.75rem;border-radius:6px">${i.cutList}</div></div>`:''}
-      ${i.mudMap?`<div style="margin-top:0.5rem"><div style="font-size:0.68rem;text-transform:uppercase;color:var(--text-2);margin-bottom:4px">Mud Map</div><div style="font-size:0.82rem;background:var(--surface);padding:0.75rem;border-radius:6px">${i.mudMap}</div></div>`:''}
-    </div>`).join('') : '<div class="empty-state card"><div class="empty-icon">🔍</div><p>No inspections recorded yet</p></div>';
+      ${i.condition?`<div style="margin-top:.75rem;padding:.75rem;background:var(--surface);border-radius:6px;font-size:.82rem;color:var(--text-2)">${i.condition}</div>`:''}
+      ${i.cutList?`<div style="margin-top:.5rem"><div style="font-size:.68rem;text-transform:uppercase;color:var(--text-2);margin-bottom:4px">Cut List</div><div style="font-size:.82rem;white-space:pre-wrap;background:var(--surface);padding:.75rem;border-radius:6px">${i.cutList}</div></div>`:''}
+      ${i.mudMap?`<div style="margin-top:.5rem"><div style="font-size:.68rem;text-transform:uppercase;color:var(--text-2);margin-bottom:4px">Mud Map</div><div style="font-size:.82rem;background:var(--surface);padding:.75rem;border-radius:6px">${i.mudMap}</div></div>`:''}
+    </div>`).join(''):'<div class="empty-state card"><div class="empty-icon">🔍</div><p>No inspections recorded yet</p></div>';
 }
 
-window.saveInspection = async () => {
-  const data = {
-    client: document.getElementById('inspClient').value,
-    phone: document.getElementById('inspPhone').value,
-    address: document.getElementById('inspAddress').value,
-    date: document.getElementById('inspDate').value,
-    inspBy: document.getElementById('inspBy').value,
-    roofType: document.getElementById('inspRoofType').value,
-    age: document.getElementById('inspAge').value,
-    condition: document.getElementById('inspCondition').value,
-    quote: document.getElementById('inspQuote').value,
-    quoteStatus: document.getElementById('inspQuoteStatus').value,
-    cutList: document.getElementById('inspCutList').value,
-    mudMap: document.getElementById('inspMudMap').value,
-    created: new Date().toISOString()
-  };
-  try {
-    await addDoc(collection(db,'inspections'),data);
-    closeModal('inspectionModal');
-    ['inspClient','inspPhone','inspAddress','inspDate','inspAge','inspCondition','inspQuote','inspCutList','inspMudMap'].forEach(i=>document.getElementById(i).value='');
-    await loadInspections();
-    showToast('Inspection saved');
-  } catch(e){ showToast('Error saving inspection','error'); }
+window.saveInspection=async()=>{
+  const data={client:document.getElementById('inspClient').value,phone:document.getElementById('inspPhone').value,address:document.getElementById('inspAddress').value,date:document.getElementById('inspDate').value,inspBy:document.getElementById('inspBy').value,roofType:document.getElementById('inspRoofType').value,age:document.getElementById('inspAge').value,condition:document.getElementById('inspCondition').value,quote:document.getElementById('inspQuote').value,quoteStatus:document.getElementById('inspQuoteStatus').value,cutList:document.getElementById('inspCutList').value,mudMap:document.getElementById('inspMudMap').value,created:new Date().toISOString()};
+  try{await addDoc(collection(db,'inspections'),data);closeModal('inspectionModal');['inspClient','inspPhone','inspAddress','inspDate','inspAge','inspCondition','inspQuote','inspCutList','inspMudMap'].forEach(i=>document.getElementById(i).value='');await loadInspections();showToast('Inspection saved');}
+  catch(e){showToast('Error saving inspection','error');}
 };
 
-// ─── INVOICES ────────────────────────────────────────────────────────────────
+// INVOICES
 async function loadInvoices(){
-  const snap = await getDocs(collection(db,'invoices'));
-  const invs = [];
-  snap.forEach(d=>invs.push({id:d.id,...d.data()}));
-
-  const unpaid = invs.filter(i=>i.status!=='paid').length;
-  document.getElementById('invoicesBadge').textContent = unpaid;
-  document.getElementById('statUnpaid').textContent = unpaid;
-
-  let outstanding=0, paidMonth=0, total=0;
-  const now = new Date();
-  invs.forEach(i=>{
-    const amt = Number(i.amount||0);
-    total += amt;
-    if(i.status!=='paid') outstanding += amt;
-    else if(i.paidAt){
-      const p = new Date(i.paidAt);
-      if(p.getMonth()===now.getMonth()&&p.getFullYear()===now.getFullYear()) paidMonth+=amt;
-    }
-  });
-  document.getElementById('invOutstanding').textContent='$'+outstanding.toLocaleString();
-  document.getElementById('invPaidMonth').textContent='$'+paidMonth.toLocaleString();
-  document.getElementById('invTotal').textContent='$'+total.toLocaleString();
-
-  const INV_LABELS = {deposit:'Deposit (10%)',materials:'Materials (40%)',progress:'Progress (30%)',retention:'Retention (20%)',other:'Other'};
-  const tb = document.getElementById('invoicesTable');
-  tb.innerHTML = invs.length ? invs.map(i=>`<tr>
-    <td style="font-family:var(--font-head);color:var(--rust-lt);font-size:0.8rem">#INV-${i.id.slice(-4).toUpperCase()}</td>
-    <td>${i.jobClient||'—'}</td>
-    <td style="font-size:0.82rem">${INV_LABELS[i.type]||i.type||'—'}</td>
-    <td style="font-weight:500;color:var(--rust-lt)">$${Number(i.amount||0).toLocaleString()}</td>
-    <td style="font-size:0.82rem;color:var(--text-2)">${i.issuedAt?new Date(i.issuedAt).toLocaleDateString('en-AU'):'—'}</td>
+  const snap=await getDocs(collection(db,'invoices'));const invs=[];
+  snap.forEach(d=>{const data=d.data();if(notArchived(data))invs.push({id:d.id,...data});});
+  const unpaid=invs.filter(i=>i.status!=='paid').length;
+  document.getElementById('invoicesBadge').textContent=unpaid;document.getElementById('statUnpaid').textContent=unpaid;
+  let outstanding=0,paidMonth=0,total=0;const now=new Date();
+  invs.forEach(i=>{const amt=Number(i.amount||0);total+=amt;if(i.status!=='paid')outstanding+=amt;else if(i.paidAt){const p=new Date(i.paidAt);if(p.getMonth()===now.getMonth()&&p.getFullYear()===now.getFullYear())paidMonth+=amt;}});
+  document.getElementById('invOutstanding').textContent=fmt$(outstanding);
+  document.getElementById('invPaidMonth').textContent=fmt$(paidMonth);
+  document.getElementById('invTotal').textContent=fmt$(total);
+  const tb=document.getElementById('invoicesTable');
+  tb.innerHTML=invs.length?invs.map(i=>`<tr>
+    <td style="font-family:var(--font-head);color:var(--rust-lt);font-size:.8rem">#INV-${i.id.slice(-4).toUpperCase()}</td>
+    <td>${i.jobClient||'—'}</td><td style="font-size:.82rem">${INV_LABELS[i.type]||i.type||'—'}</td>
+    <td style="font-weight:500;color:var(--rust-lt)">${fmt$(i.amount)}</td>
+    <td style="font-size:.82rem;color:var(--text-2)">${i.issuedAt?new Date(i.issuedAt).toLocaleDateString('en-AU'):'—'}</td>
     <td>${badge(i.status||'pending')}</td>
-    <td><div style="display:flex;gap:0.5rem">
-      ${i.status!=='paid'?`<button class="btn btn-xs btn-success" onclick="markInvoicePaid('${i.id}')">Mark Paid</button>`:''}
-      <button class="btn btn-xs btn-danger" onclick="delItem('invoices','${i.id}',loadInvoices)">Del</button>
-    </div></td>
-  </tr>`).join('') : '<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No invoices yet</td></tr>';
+    <td><div style="display:flex;gap:.5rem">${i.status!=='paid'?`<button class="btn btn-xs btn-success" onclick="markInvoicePaid('${i.id}')">Mark Paid</button>`:''}<button class="btn btn-xs btn-danger" onclick="archiveItem('invoices','${i.id}',loadInvoices)">Archive</button></div></td>
+  </tr>`).join(''):`<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No invoices yet</td></tr>`;
 }
 
 async function loadJobInvoices(jobId){
-  const snap = await getDocs(collection(db,'invoices'));
-  const invs = [];
-  snap.forEach(d=>{ const d2=d.data(); if(d2.jobId===jobId) invs.push({id:d.id,...d2}); });
-  const INV_LABELS = {deposit:'Deposit (10%)',materials:'Materials (40%)',progress:'Progress (30%)',retention:'Retention (20%)',other:'Other'};
-  const el = document.getElementById('jobInvoicesList');
-  el.innerHTML = invs.length ? invs.map(i=>`
+  const snap=await getDocs(collection(db,'invoices'));const invs=[];
+  snap.forEach(d=>{const data=d.data();if(data.jobId===jobId&&notArchived(data))invs.push({id:d.id,...data});});
+  const el=document.getElementById('jobInvoicesList');
+  el.innerHTML=invs.length?invs.map(i=>`
     <div class="invoice-card ${i.status==='paid'?'paid':''}">
-      <div class="invoice-info">
-        <div class="inv-type">${INV_LABELS[i.type]||i.type||'Invoice'}</div>
-        <div class="inv-meta">#INV-${i.id.slice(-4).toUpperCase()} · ${i.issuedAt?new Date(i.issuedAt).toLocaleDateString('en-AU'):'—'} · ${badge(i.status)}</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:0.75rem">
-        <div class="invoice-amount ${i.status==='paid'?'paid':''}">$${Number(i.amount||0).toLocaleString()}</div>
+      <div class="invoice-info"><div class="inv-type">${INV_LABELS[i.type]||i.type||'Invoice'}</div>
+        <div class="inv-meta">#INV-${i.id.slice(-4).toUpperCase()} · ${i.issuedAt?new Date(i.issuedAt).toLocaleDateString('en-AU'):'—'} · ${badge(i.status)}</div></div>
+      <div style="display:flex;align-items:center;gap:.75rem">
+        <div class="invoice-amount ${i.status==='paid'?'paid':''}">${fmt$(i.amount)}</div>
         ${i.status!=='paid'?`<button class="btn btn-xs btn-success" onclick="markInvoicePaid('${i.id}')">Paid</button>`:''}
-        <button class="btn btn-xs btn-danger" onclick="delItem('invoices','${i.id}',()=>{loadInvoices();loadJobInvoices('${jobId}');})">✕</button>
+        <button class="btn btn-xs btn-danger" onclick="archiveItem('invoices','${i.id}',()=>{loadInvoices();loadJobInvoices('${jobId}');})">✕</button>
       </div>
-    </div>`).join('') : '<div class="empty-state"><div class="empty-icon">💰</div><p>No invoices yet</p></div>';
+    </div>`).join(''):'<div class="empty-state"><div class="empty-icon">💰</div><p>No invoices yet</p></div>';
 }
 
-window.markInvoicePaid = async (id) => {
-  try {
-    await updateDoc(doc(db,'invoices',id),{status:'paid',paidAt:new Date().toISOString()});
-    await loadInvoices();
-    if(currentJobId) await loadJobInvoices(currentJobId);
-    showToast('Invoice marked as paid');
-  } catch(e){ showToast('Error','error'); }
+window.markInvoicePaid=async(id)=>{
+  try{await updateDoc(doc(db,'invoices',id),{status:'paid',paidAt:new Date().toISOString()});await loadInvoices();if(currentJobId)await loadJobInvoices(currentJobId);showToast('Invoice marked as paid');}
+  catch(e){showToast('Error','error');}
 };
 
-window.openInvoiceModal = () => {
-  document.getElementById('invId').value='';
-  document.getElementById('invJobId').value=currentJobId||'';
+window.openInvoiceModal=()=>{
+  document.getElementById('invId').value='';document.getElementById('invJobId').value=currentJobId||'';
   document.getElementById('invJobFieldWrap').style.display='none';
-  document.getElementById('invAmount').value='';
-  document.getElementById('invNotes').value='';
+  document.getElementById('invAmount').value='';document.getElementById('invNotes').value='';
   document.getElementById('invIssued').value=new Date().toISOString().slice(0,10);
-  document.getElementById('invoiceModalTitle').textContent='New Invoice';
-  openModal('invoiceModal');
+  document.getElementById('invoiceModalTitle').textContent='New Invoice';openModal('invoiceModal');
 };
 
-window.openInvoiceModalStandalone = async () => {
-  document.getElementById('invId').value='';
-  document.getElementById('invJobId').value='';
+window.openInvoiceModalStandalone=async()=>{
+  document.getElementById('invId').value='';document.getElementById('invJobId').value='';
   document.getElementById('invJobFieldWrap').style.display='flex';
-  document.getElementById('invAmount').value='';
-  document.getElementById('invNotes').value='';
+  document.getElementById('invAmount').value='';document.getElementById('invNotes').value='';
   document.getElementById('invIssued').value=new Date().toISOString().slice(0,10);
   document.getElementById('invoiceModalTitle').textContent='New Invoice';
-  // Populate job select
-  const sel = document.getElementById('invJobSelect');
-  sel.innerHTML = allJobs.map(j=>`<option value="${j.id}" data-client="${j.client||''}">${j.client||'Unnamed'} — #${j.id.slice(-4).toUpperCase()}</option>`).join('');
+  document.getElementById('invJobSelect').innerHTML=allJobs.map(j=>`<option value="${j.id}" data-client="${j.client||''}">${j.client||'Unnamed'} — #${j.id.slice(-4).toUpperCase()}</option>`).join('');
   openModal('invoiceModal');
 };
 
-window.saveInvoice = async () => {
-  let jobId = document.getElementById('invJobId').value;
-  let jobClient = '';
-  if(!jobId){
-    const sel = document.getElementById('invJobSelect');
-    jobId = sel.value;
-    jobClient = sel.options[sel.selectedIndex]?.dataset.client||'';
-  } else {
-    const j = allJobs.find(j=>j.id===jobId);
-    jobClient = j?.client||'';
-  }
-  const data = {
-    jobId, jobClient,
-    type: document.getElementById('invType').value,
-    amount: document.getElementById('invAmount').value,
-    status: document.getElementById('invStatus').value,
-    issuedAt: document.getElementById('invIssued').value ? new Date(document.getElementById('invIssued').value).toISOString() : new Date().toISOString(),
-    notes: document.getElementById('invNotes').value,
-    created: new Date().toISOString()
-  };
-  try {
-    await addDoc(collection(db,'invoices'),data);
-    closeModal('invoiceModal');
-    await loadInvoices();
-    if(currentJobId) await loadJobInvoices(currentJobId);
-    showToast('Invoice saved');
-  } catch(e){ showToast('Error saving invoice','error'); }
+window.saveInvoice=async()=>{
+  let jobId=document.getElementById('invJobId').value,jobClient='';
+  if(!jobId){const sel=document.getElementById('invJobSelect');jobId=sel.value;jobClient=sel.options[sel.selectedIndex]?.dataset.client||'';}
+  else{jobClient=allJobs.find(j=>j.id===jobId)?.client||'';}
+  const data={jobId,jobClient,type:document.getElementById('invType').value,amount:document.getElementById('invAmount').value,status:document.getElementById('invStatus').value,issuedAt:new Date(document.getElementById('invIssued').value||Date.now()).toISOString(),notes:document.getElementById('invNotes').value,created:new Date().toISOString()};
+  try{await addDoc(collection(db,'invoices'),data);closeModal('invoiceModal');await loadInvoices();if(currentJobId)await loadJobInvoices(currentJobId);showToast('Invoice saved');}
+  catch(e){showToast('Error saving invoice','error');}
 };
 
-// ─── DAILY REPORTS ───────────────────────────────────────────────────────────
+// PURCHASE ORDERS
+async function loadJobPOs(jobId){
+  const snap=await getDocs(collection(db,'purchase_orders'));const pos=[];
+  snap.forEach(d=>{const data=d.data();if(data.jobId===jobId&&notArchived(data))pos.push({id:d.id,...data});});
+  const el=document.getElementById('jobPOsList');
+  el.innerHTML=pos.length?pos.map(p=>`
+    <div class="invoice-card">
+      <div class="invoice-info"><div class="inv-type">${p.poNumber||'—'} · ${p.supplier||''}</div>
+        <div class="inv-meta">${badge(p.status)}${p.notes?' · '+p.notes:''}</div></div>
+      <div style="display:flex;align-items:center;gap:.75rem">
+        <div class="invoice-amount">${fmt$(p.amount)}</div>
+        <button class="btn btn-xs btn-danger" onclick="archiveItem('purchase_orders','${p.id}',()=>loadJobPOs('${jobId}'))">✕</button>
+      </div>
+    </div>`).join(''):'<div class="empty-state"><div class="empty-icon">📦</div><p>No purchase orders yet</p></div>';
+}
+
+window.openPOModal=()=>{
+  document.getElementById('poJobId').value=currentJobId||'';
+  ['poNumber','poSupplier','poAmount','poNotes'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('poStatus').value='raised';openModal('poModal');
+};
+
+window.savePO=async()=>{
+  const jobId=document.getElementById('poJobId').value;
+  const data={jobId,poNumber:document.getElementById('poNumber').value,supplier:document.getElementById('poSupplier').value,amount:document.getElementById('poAmount').value,status:document.getElementById('poStatus').value,notes:document.getElementById('poNotes').value,created:new Date().toISOString()};
+  try{await addDoc(collection(db,'purchase_orders'),data);closeModal('poModal');await loadJobPOs(jobId);showToast('PO saved');}
+  catch(e){showToast('Error saving PO','error');}
+};
+
+// QUOTES
+async function loadJobQuotes(jobId){
+  const snap=await getDocs(collection(db,'quotes'));const quotes=[];
+  snap.forEach(d=>{const data=d.data();if(data.jobId===jobId&&notArchived(data))quotes.push({id:d.id,...data});});
+  const el=document.getElementById('jobQuotesList');
+  el.innerHTML=quotes.length?quotes.map(q=>`
+    <div class="invoice-card">
+      <div class="invoice-info"><div class="inv-type">${q.qtNumber||'—'}</div>
+        <div class="inv-meta">${q.date?new Date(q.date+'T00:00:00').toLocaleDateString('en-AU'):''} · ${badge(q.status)}</div></div>
+      <div style="display:flex;align-items:center;gap:.75rem">
+        <div class="invoice-amount ${q.status==='accepted'?'paid':''}">${fmt$(q.amount)}</div>
+        <button class="btn btn-xs btn-danger" onclick="archiveItem('quotes','${q.id}',()=>loadJobQuotes('${jobId}'))">✕</button>
+      </div>
+    </div>`).join(''):'<div class="empty-state"><div class="empty-icon">📄</div><p>No quotes yet</p></div>';
+}
+
+window.openQuoteModal=()=>{
+  document.getElementById('qtJobId').value=currentJobId||'';
+  ['qtNumber','qtAmount','qtNotes'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('qtDate').value=new Date().toISOString().slice(0,10);
+  document.getElementById('qtStatus').value='draft';openModal('quoteModal');
+};
+
+window.saveQuote=async()=>{
+  const jobId=document.getElementById('qtJobId').value;
+  const data={jobId,qtNumber:document.getElementById('qtNumber').value,amount:document.getElementById('qtAmount').value,status:document.getElementById('qtStatus').value,date:document.getElementById('qtDate').value,notes:document.getElementById('qtNotes').value,created:new Date().toISOString()};
+  try{await addDoc(collection(db,'quotes'),data);closeModal('quoteModal');await loadJobQuotes(jobId);showToast('Quote saved');}
+  catch(e){showToast('Error saving quote','error');}
+};
+
+// DAILY REPORTS
 async function loadReports(){
-  const snap = await getDocs(collection(db,'daily_reports'));
-  const reports = [];
-  snap.forEach(d=>reports.push({id:d.id,...d.data()}));
+  const snap=await getDocs(collection(db,'daily_reports'));const reports=[];
+  snap.forEach(d=>{const data=d.data();if(notArchived(data))reports.push({id:d.id,...data});});
   reports.sort((a,b)=>b.date>a.date?1:-1);
-  const el = document.getElementById('allReportsList');
-  el.innerHTML = reports.length ? reports.map(r=>renderReport(r)).join('') : '<div class="empty-state card"><div class="empty-icon">📊</div><p>No reports yet</p></div>';
+  const el=document.getElementById('allReportsList');
+  el.innerHTML=reports.length?reports.map(r=>renderReport(r)).join(''):'<div class="empty-state card"><div class="empty-icon">📊</div><p>No reports yet</p></div>';
 }
 
 async function loadJobReports(jobId){
-  const snap = await getDocs(collection(db,'daily_reports'));
-  const reports = [];
-  snap.forEach(d=>{ const d2=d.data(); if(d2.jobId===jobId) reports.push({id:d.id,...d2}); });
+  const snap=await getDocs(collection(db,'daily_reports'));const reports=[];
+  snap.forEach(d=>{const data=d.data();if(data.jobId===jobId&&notArchived(data))reports.push({id:d.id,...data});});
   reports.sort((a,b)=>b.date>a.date?1:-1);
-  const el = document.getElementById('jobReportsList');
-  el.innerHTML = reports.length ? reports.map(r=>renderReport(r)).join('') : '<div class="empty-state"><div class="empty-icon">📊</div><p>No reports yet</p></div>';
+  const el=document.getElementById('jobReportsList');
+  el.innerHTML=reports.length?reports.map(r=>renderReport(r)).join(''):'<div class="empty-state"><div class="empty-icon">📊</div><p>No reports yet</p></div>';
 }
 
 function renderReport(r){
   return `<div class="report-card">
-    <div class="report-card-header">
-      <div><span class="report-date">${r.date?new Date(r.date+'T00:00:00').toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'}):'—'}</span></div>
-      <span class="report-crew">${r.crew||'—'}</span>
-    </div>
+    <div class="report-card-header"><span class="report-date">${r.date?new Date(r.date+'T00:00:00').toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'}):'—'}</span><span class="report-crew">${r.crew||'—'}</span></div>
     <div class="report-work">${r.workDone||''}</div>
     ${r.issues?`<div class="report-issue">⚠️ ${r.issues}</div>`:''}
-    <div style="text-align:right;margin-top:0.5rem">
-      <button class="btn btn-xs btn-danger" onclick="delItem('daily_reports','${r.id}',loadReports)">✕</button>
-    </div>
+    <div style="text-align:right;margin-top:.5rem"><button class="btn btn-xs btn-danger" onclick="archiveItem('daily_reports','${r.id}',loadReports)">✕</button></div>
   </div>`;
 }
 
-window.openReportModal = () => {
-  document.getElementById('rptJobId').value = currentJobId||'';
-  document.getElementById('rptJobFieldWrap').style.display='none';
-  document.getElementById('rptDate').value = new Date().toISOString().slice(0,10);
-  document.getElementById('rptWork').value='';
-  document.getElementById('rptIssues').value='';
-  openModal('reportModal');
+window.openReportModal=()=>{
+  document.getElementById('rptJobId').value=currentJobId||'';document.getElementById('rptJobFieldWrap').style.display='none';
+  document.getElementById('rptDate').value=new Date().toISOString().slice(0,10);
+  document.getElementById('rptWork').value='';document.getElementById('rptIssues').value='';openModal('reportModal');
 };
 
-window.openReportModalStandalone = () => {
-  document.getElementById('rptJobId').value='';
-  document.getElementById('rptJobFieldWrap').style.display='flex';
-  const sel = document.getElementById('rptJobSelect');
-  sel.innerHTML = allJobs.map(j=>`<option value="${j.id}">${j.client||'Unnamed'} — #${j.id.slice(-4).toUpperCase()}</option>`).join('');
-  document.getElementById('rptDate').value = new Date().toISOString().slice(0,10);
-  document.getElementById('rptWork').value='';
-  document.getElementById('rptIssues').value='';
-  openModal('reportModal');
+window.openReportModalStandalone=()=>{
+  document.getElementById('rptJobId').value='';document.getElementById('rptJobFieldWrap').style.display='flex';
+  document.getElementById('rptJobSelect').innerHTML=allJobs.map(j=>`<option value="${j.id}">${j.client||'Unnamed'} — #${j.id.slice(-4).toUpperCase()}</option>`).join('');
+  document.getElementById('rptDate').value=new Date().toISOString().slice(0,10);
+  document.getElementById('rptWork').value='';document.getElementById('rptIssues').value='';openModal('reportModal');
 };
 
-window.saveReport = async () => {
-  let jobId = document.getElementById('rptJobId').value;
-  if(!jobId) jobId = document.getElementById('rptJobSelect').value;
-  const data = {
-    jobId,
-    date: document.getElementById('rptDate').value,
-    crew: document.getElementById('rptCrew').value,
-    workDone: document.getElementById('rptWork').value,
-    issues: document.getElementById('rptIssues').value,
-    created: new Date().toISOString()
-  };
-  try {
-    await addDoc(collection(db,'daily_reports'),data);
-    closeModal('reportModal');
-    await loadReports();
-    if(currentJobId) await loadJobReports(currentJobId);
-    showToast('Report saved');
-  } catch(e){ showToast('Error saving report','error'); }
+window.saveReport=async()=>{
+  let jobId=document.getElementById('rptJobId').value;if(!jobId)jobId=document.getElementById('rptJobSelect').value;
+  const data={jobId,date:document.getElementById('rptDate').value,crew:document.getElementById('rptCrew').value,workDone:document.getElementById('rptWork').value,issues:document.getElementById('rptIssues').value,created:new Date().toISOString()};
+  try{await addDoc(collection(db,'daily_reports'),data);closeModal('reportModal');await loadReports();if(currentJobId)await loadJobReports(currentJobId);showToast('Report saved');}
+  catch(e){showToast('Error saving report','error');}
 };
 
-// ─── ADVERTISING ─────────────────────────────────────────────────────────────
-async function loadAds(){
-  const snap = await getDocs(collection(db,'ads'));
-  const ads = [];
-  snap.forEach(d=>ads.push({id:d.id,...d.data()}));
-  let ts=0,tl=0;
-  ads.forEach(a=>{ts+=Number(a.budget||0);tl+=Number(a.leads||0);});
-  document.getElementById('adSpend').textContent='$'+ts.toLocaleString();
-  document.getElementById('adLeadsTotal').textContent=tl;
-  document.getElementById('adCPL').textContent=tl>0?'$'+Math.round(ts/tl):'$0';
-  const tb = document.getElementById('adsTable');
-  tb.innerHTML = ads.length ? ads.map(a=>`<tr>
-    <td style="font-weight:500">${a.name||''}</td>
-    <td><span style="background:var(--surface);padding:2px 8px;border-radius:4px;font-size:0.78rem">${a.platform||''}</span></td>
-    <td>$${Number(a.budget||0).toLocaleString()}/mo</td>
-    <td>${a.leads||0}</td>
-    <td style="color:var(--rust-lt)">${a.leads>0?'$'+Math.round(a.budget/a.leads):'$0'}</td>
-    <td>${badge(a.status)}</td>
-    <td><button class="btn btn-sm btn-danger" onclick="delItem('ads','${a.id}',loadAds)">Del</button></td>
-  </tr>`).join('') : '<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No campaigns yet</td></tr>';
+// REMINDERS
+async function loadReminders(){
+  const snap=await getDocs(collection(db,'reminders'));const items=[];
+  snap.forEach(d=>{const data=d.data();if(notArchived(data))items.push({id:d.id,...data});});
+  items.sort((a,b)=>a.dueDate>b.dueDate?1:-1);
+  const today=new Date().toISOString().slice(0,10);
+  const overdue=items.filter(r=>r.dueDate<today&&r.status==='due').length;
+  document.getElementById('remindersBadge').textContent=overdue||items.filter(r=>r.status==='due').length;
+  const el=document.getElementById('remindersList');
+  el.innerHTML=items.length?items.map(r=>{
+    const isOverdue=r.dueDate<today&&r.status==='due';
+    return `<div class="reminder-item ${isOverdue?'overdue':''}">
+      <div class="reminder-left"><div class="reminder-title">${r.title||''}</div>
+        <div class="reminder-meta">${TYPE_LABELS[r.type]||r.type||''} · Due: ${r.dueDate?new Date(r.dueDate+'T00:00:00').toLocaleDateString('en-AU'):'—'}${isOverdue?' · <span style="color:var(--red)">OVERDUE</span>':''}</div></div>
+      <div class="reminder-right">${badge(r.status)}${r.status==='due'?`<button class="btn btn-xs btn-success" onclick="markReminderPaid('${r.id}')">Mark Paid</button>`:''}<button class="btn btn-xs btn-danger" onclick="archiveItem('reminders','${r.id}',loadReminders)">✕</button></div>
+    </div>`;
+  }).join(''):'<div class="empty-state card"><div class="empty-icon">🔔</div><p>No reminders yet</p></div>';
 }
 
-window.saveAd = async () => {
-  const data = {
-    name: document.getElementById('adName').value,
-    platform: document.getElementById('adPlatform').value,
-    budget: document.getElementById('adBudget').value,
-    leads: document.getElementById('adLeadsNum').value,
-    status: document.getElementById('adStatus').value,
-    start: document.getElementById('adStart').value,
-    notes: document.getElementById('adNotes').value,
-    created: new Date().toISOString()
-  };
-  try {
-    await addDoc(collection(db,'ads'),data);
-    closeModal('adModal');
-    ['adName','adBudget','adLeadsNum','adStart','adNotes'].forEach(i=>document.getElementById(i).value='');
-    await loadAds();
-    showToast('Campaign added');
-  } catch(e){ showToast('Error saving campaign','error'); }
+window.markReminderPaid=async(id)=>{await updateDoc(doc(db,'reminders',id),{status:'paid',paidAt:new Date().toISOString()});await loadReminders();showToast('Marked as paid');};
+
+window.saveReminder=async()=>{
+  const data={title:document.getElementById('remTitle').value,type:document.getElementById('remType').value,dueDate:document.getElementById('remDue').value,status:document.getElementById('remStatus').value,notes:document.getElementById('remNotes').value,created:new Date().toISOString()};
+  try{await addDoc(collection(db,'reminders'),data);closeModal('reminderModal');['remTitle','remDue','remNotes'].forEach(i=>document.getElementById(i).value='');await loadReminders();showToast('Reminder saved');}
+  catch(e){showToast('Error saving reminder','error');}
 };
 
-// ─── DELETE ──────────────────────────────────────────────────────────────────
-window.delItem = async (col,id,reload) => {
-  if(!confirm('Delete this item?')) return;
-  try {
-    await deleteDoc(doc(db,col,id));
-    await reload();
-    showToast('Deleted');
-  } catch(e){ showToast('Error deleting','error'); }
+// TASKS
+async function loadTasks(){
+  const groupsSnap=await getDocs(collection(db,'tasks'));const groups=[];
+  groupsSnap.forEach(d=>{const data=d.data();if(notArchived(data))groups.push({id:d.id,...data});});
+  const itemsSnap=await getDocs(collection(db,'task_items'));const allItems={};
+  itemsSnap.forEach(d=>{const data=d.data();if(notArchived(data)&&(!data.userId||data.userId===currentUser?.uid)){if(!allItems[data.taskId])allItems[data.taskId]=[];allItems[data.taskId].push({id:d.id,...data});}});
+  const el=document.getElementById('tasksList');
+  if(!groups.length){el.innerHTML='<div class="empty-state card"><div class="empty-icon">✅</div><p>No tasks yet</p></div>';return;}
+  el.innerHTML=groups.map(g=>{
+    const items=allItems[g.id]||[];
+    const itemsHtml=items.map(i=>`<div class="task-item"><input type="checkbox" class="task-check" ${i.completed?'checked':''} onchange="toggleTaskItem('${i.id}',this.checked)"><span class="task-text ${i.completed?'done':''}">${i.text||''}</span><button class="btn btn-xs btn-danger" onclick="archiveItem('task_items','${i.id}',loadTasks)" style="margin-left:auto">✕</button></div>`).join('');
+    return `<div class="task-group"><div class="task-group-title"><span>${g.title||'Task Group'}</span>${isAdmin?`<button class="btn btn-xs btn-danger" onclick="archiveItem('tasks','${g.id}',loadTasks)">Archive Group</button>`:''}</div>${g.description?`<div style="font-size:.8rem;color:var(--text-2);margin-bottom:.75rem">${g.description}</div>`:''}${itemsHtml}<div class="task-add-row"><input id="taskInput-${g.id}" placeholder="Add a task item..." onkeydown="if(event.key==='Enter')addTaskItem('${g.id}')"><button onclick="addTaskItem('${g.id}')">Add</button></div></div>`;
+  }).join('');
+}
+
+window.toggleTaskItem=async(id,completed)=>{await updateDoc(doc(db,'task_items',id),{completed});};
+
+window.addTaskItem=async(taskId)=>{
+  const input=document.getElementById(`taskInput-${taskId}`);const text=input.value.trim();if(!text)return;
+  await addDoc(collection(db,'task_items'),{taskId,userId:currentUser?.uid,text,completed:false,created:new Date().toISOString()});
+  input.value='';await loadTasks();
 };
 
-// Expose load functions globally
+window.saveTaskGroup=async()=>{
+  if(!isAdmin){showToast('Admin only','error');return;}
+  const data={title:document.getElementById('taskGroupTitle').value,description:document.getElementById('taskGroupDesc').value,createdBy:currentUser?.uid,created:new Date().toISOString()};
+  try{await addDoc(collection(db,'tasks'),data);closeModal('taskGroupModal');['taskGroupTitle','taskGroupDesc'].forEach(i=>document.getElementById(i).value='');await loadTasks();showToast('Task group created');}
+  catch(e){showToast('Error','error');}
+};
+
+// QUICK LINKS
+async function loadQuickLinks(){
+  const snap=await getDocs(collection(db,'quick_links'));const links=[];
+  snap.forEach(d=>{const data=d.data();if(notArchived(data))links.push({id:d.id,...data});});
+  const grid=document.getElementById('quickLinksGrid');const launcher=document.getElementById('dashQuickLauncher');
+  if(!links.length){launcher.style.display='none';return;}
+  launcher.style.display='';
+  grid.innerHTML=links.map(l=>`<a class="quick-link-tile" href="${l.url||'#'}" target="_blank" rel="noopener"><div class="quick-link-icon">${l.icon||'🔗'}</div><div class="quick-link-label">${l.title||'Link'}</div></a>`).join('');
+  const adminGrid=document.getElementById('adminQuickLinks');
+  if(adminGrid)adminGrid.innerHTML=links.map(l=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--border)"><div>${l.icon||'🔗'} <strong>${l.title}</strong> — <span style="color:var(--text-2);font-size:.8rem">${l.url}</span></div><button class="btn btn-xs btn-danger" onclick="archiveItem('quick_links','${l.id}',loadQuickLinks)">Remove</button></div>`).join('');
+}
+
+window.saveQuickLink=async()=>{
+  if(!isAdmin){showToast('Admin only','error');return;}
+  const data={title:document.getElementById('qlTitle').value,url:document.getElementById('qlUrl').value,icon:document.getElementById('qlIcon').value||'🔗',created:new Date().toISOString()};
+  try{await addDoc(collection(db,'quick_links'),data);closeModal('quickLinkModal');['qlTitle','qlUrl','qlIcon'].forEach(i=>document.getElementById(i).value='');await loadQuickLinks();showToast('Link added');}
+  catch(e){showToast('Error saving link','error');}
+};
+
+// ADVERTISING
+async function loadAds(){
+  const snap=await getDocs(collection(db,'ads'));const ads=[];
+  snap.forEach(d=>{const data=d.data();if(notArchived(data))ads.push({id:d.id,...data});});
+  let ts=0,tl=0;ads.forEach(a=>{ts+=Number(a.budget||0);tl+=Number(a.leads||0);});
+  document.getElementById('adSpend').textContent=fmt$(ts);document.getElementById('adLeadsTotal').textContent=tl;document.getElementById('adCPL').textContent=tl>0?'$'+Math.round(ts/tl):'$0';
+  const tb=document.getElementById('adsTable');
+  tb.innerHTML=ads.length?ads.map(a=>`<tr><td style="font-weight:500">${a.name||''}</td><td><span style="background:var(--surface);padding:2px 8px;border-radius:4px;font-size:.78rem">${a.platform||''}</span></td><td>${fmt$(a.budget)}/mo</td><td>${a.leads||0}</td><td style="color:var(--rust-lt)">${a.leads>0?'$'+Math.round(a.budget/a.leads):'$0'}</td><td>${badge(a.status)}</td><td><button class="btn btn-sm btn-danger" onclick="archiveItem('ads','${a.id}',loadAds)">Archive</button></td></tr>`).join(''):`<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No campaigns yet</td></tr>`;
+}
+
+window.saveAd=async()=>{
+  const data={name:document.getElementById('adName').value,platform:document.getElementById('adPlatform').value,budget:document.getElementById('adBudget').value,leads:document.getElementById('adLeadsNum').value,status:document.getElementById('adStatus').value,start:document.getElementById('adStart').value,notes:document.getElementById('adNotes').value,created:new Date().toISOString()};
+  try{await addDoc(collection(db,'ads'),data);closeModal('adModal');['adName','adBudget','adLeadsNum','adStart','adNotes'].forEach(i=>document.getElementById(i).value='');await loadAds();showToast('Campaign added');}
+  catch(e){showToast('Error saving campaign','error');}
+};
+
 window.loadJobs=loadJobs;window.loadLeads=loadLeads;window.loadSchedule=loadSchedule;
-window.loadInspections=loadInspections;window.loadInvoices=loadInvoices;
-window.loadReports=loadReports;window.loadAds=loadAds;
+window.loadInspections=loadInspections;window.loadInvoices=loadInvoices;window.loadReports=loadReports;
+window.loadAds=loadAds;window.loadReminders=loadReminders;window.loadTasks=loadTasks;
+window.loadQuickLinks=loadQuickLinks;window.loadJobPOs=loadJobPOs;window.loadJobQuotes=loadJobQuotes;
 </script>
 </body>
 </html>
