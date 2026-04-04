@@ -8,18 +8,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#0F0D0B;--surface:#1A1714;--card:#221F1B;--border:#2E2A25;
-  --rust:#C05A2E;--rust-lt:#D4703F;--rust-dk:#8A3B1C;
-  --amber:#E8A234;--green:#4CAF7D;--red:#E05252;--blue:#5B9BD5;--purple:#9B72CF;
-  --text:#F5F0E8;--text-2:#9A8E82;--text-3:#5C544C;
-  --font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;
-}
+:root{--bg:#0F0D0B;--surface:#1A1714;--card:#221F1B;--border:#2E2A25;--rust:#C05A2E;--rust-lt:#D4703F;--rust-dk:#8A3B1C;--amber:#E8A234;--green:#4CAF7D;--red:#E05252;--blue:#5B9BD5;--purple:#9B72CF;--text:#F5F0E8;--text-2:#9A8E82;--text-3:#5C544C;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;}
 body{font-family:var(--font-body);background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;min-height:100vh;overflow-x:hidden}
 #authScreen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:1000}
 .auth-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:2.5rem;width:380px;text-align:center}
-.auth-logo{font-family:var(--font-head);font-size:1.5rem;font-weight:700;color:var(--text);margin-bottom:.25rem}
-.auth-logo span{color:var(--rust)}
+.auth-logo{font-family:var(--font-head);font-size:1.5rem;font-weight:700;color:var(--text);margin-bottom:.25rem}.auth-logo span{color:var(--rust)}
 .auth-sub{font-size:.8rem;color:var(--text-2);margin-bottom:.25rem;letter-spacing:.08em;text-transform:uppercase}
 .auth-tagline{font-size:.75rem;color:var(--text-3);margin-bottom:2rem;font-style:italic}
 .auth-field{display:flex;flex-direction:column;gap:.4rem;margin-bottom:1rem;text-align:left}
@@ -27,31 +20,24 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);font-si
 .auth-field input{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:.7rem 1rem;color:var(--text);font-family:var(--font-body);font-size:.9rem;outline:none;transition:border-color .2s}
 .auth-field input:focus{border-color:var(--rust)}
 .auth-btn{width:100%;background:var(--rust);color:var(--text);border:none;border-radius:6px;padding:.8rem;font-family:var(--font-head);font-size:.9rem;font-weight:600;cursor:pointer;transition:background .2s;margin-top:.5rem}
-.auth-btn:hover{background:var(--rust-lt)}
-.auth-err{font-size:.8rem;color:var(--red);margin-top:.75rem;display:none}
-.auth-paw{font-size:2.5rem;margin-bottom:1rem}
+.auth-btn:hover{background:var(--rust-lt)}.auth-err{font-size:.8rem;color:var(--red);margin-top:.75rem;display:none}.auth-paw{font-size:2.5rem;margin-bottom:1rem}
 #app{display:none;min-height:100vh}
 .layout{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
 .sidebar{background:var(--surface);border-right:1px solid var(--border);padding:1.5rem 0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
 .sidebar-logo{padding:0 1.25rem 1.5rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
-.sidebar-logo .brand{font-family:var(--font-head);font-size:1.1rem;font-weight:700;color:var(--text)}
-.sidebar-logo .brand span{color:var(--rust)}
+.sidebar-logo .brand{font-family:var(--font-head);font-size:1.1rem;font-weight:700;color:var(--text)}.sidebar-logo .brand span{color:var(--rust)}
 .sidebar-logo .tagline{font-size:.65rem;color:var(--text-3);letter-spacing:.06em;margin-top:4px;font-style:italic;line-height:1.4}
 .sidebar-user{padding:.75rem 1.25rem;margin-bottom:.5rem}
-.sidebar-user .user-name{font-size:.82rem;font-weight:500;color:var(--text)}
-.sidebar-user .user-role{font-size:.7rem;color:var(--text-2);text-transform:uppercase;letter-spacing:.08em}
+.sidebar-user .user-name{font-size:.82rem;font-weight:500;color:var(--text)}.sidebar-user .user-role{font-size:.7rem;color:var(--text-2);text-transform:uppercase;letter-spacing:.08em}
 .nav-section{padding:0 .75rem;margin-bottom:.5rem}
 .nav-label{font-size:.65rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);padding:.5rem .75rem;display:block}
 .nav-item{display:flex;align-items:center;gap:.65rem;padding:.6rem .75rem;border-radius:6px;cursor:pointer;transition:background .15s,color .15s;color:var(--text-2);font-size:.85rem;font-weight:400;border:none;background:none;width:100%;text-align:left}
-.nav-item:hover{background:var(--card);color:var(--text)}
-.nav-item.active{background:rgba(192,90,46,.15);color:var(--rust)}
+.nav-item:hover{background:var(--card);color:var(--text)}.nav-item.active{background:rgba(192,90,46,.15);color:var(--rust)}
 .nav-icon{font-size:1rem;width:18px;text-align:center;flex-shrink:0}
 .nav-badge{margin-left:auto;background:var(--rust);color:white;font-size:.65rem;font-weight:600;padding:1px 6px;border-radius:10px}
 .sidebar-bottom{margin-top:auto;padding:1rem .75rem 0;border-top:1px solid var(--border)}
-.logout-btn{display:flex;align-items:center;gap:.65rem;padding:.6rem .75rem;border-radius:6px;cursor:pointer;color:var(--text-3);font-size:.82rem;border:none;background:none;width:100%;transition:color .15s}
-.logout-btn:hover{color:var(--red)}
-.main{padding:2rem;overflow-y:auto}
-.page{display:none}.page.active{display:block}
+.logout-btn{display:flex;align-items:center;gap:.65rem;padding:.6rem .75rem;border-radius:6px;cursor:pointer;color:var(--text-3);font-size:.82rem;border:none;background:none;width:100%;transition:color .15s}.logout-btn:hover{color:var(--red)}
+.main{padding:2rem;overflow-y:auto}.page{display:none}.page.active{display:block}
 .page-header{margin-bottom:2rem}
 .page-header h1{font-family:var(--font-head);font-size:1.6rem;font-weight:700;color:var(--text);line-height:1}
 .page-header p{font-size:.85rem;color:var(--text-2);margin-top:.4rem}
@@ -63,8 +49,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);font-si
 .stat-label{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2);margin-bottom:.4rem}
 .stat-value{font-family:var(--font-head);font-size:2rem;font-weight:700;color:var(--text);line-height:1}
 .stat-sub{font-size:.75rem;color:var(--text-3);margin-top:.3rem}
-.stat-card.highlight{border-color:var(--rust);background:rgba(192,90,46,.08)}
-.stat-card.highlight .stat-value{color:var(--rust-lt)}
+.stat-card.highlight{border-color:var(--rust);background:rgba(192,90,46,.08)}.stat-card.highlight .stat-value{color:var(--rust-lt)}
 .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1.1rem;border-radius:6px;font-family:var(--font-body);font-size:.82rem;font-weight:500;cursor:pointer;border:none;transition:all .15s}
 .btn-primary{background:var(--rust);color:white}.btn-primary:hover{background:var(--rust-lt)}
 .btn-secondary{background:var(--card);border:1px solid var(--border);color:var(--text)}.btn-secondary:hover{border-color:var(--rust);color:var(--rust)}
@@ -77,159 +62,157 @@ table{width:100%;border-collapse:collapse}
 thead tr{background:var(--surface);border-bottom:1px solid var(--border)}
 th{padding:.75rem 1rem;text-align:left;font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-2)}
 td{padding:.85rem 1rem;font-size:.85rem;color:var(--text);border-bottom:1px solid var(--border)}
-tr:last-child td{border-bottom:none}
-tr:hover td{background:rgba(255,255,255,.02)}
-.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:500}
-.badge::before{content:'';width:5px;height:5px;border-radius:50%}
+tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:500}.badge::before{content:'';width:5px;height:5px;border-radius:50%}
 .badge-active{background:rgba(76,175,125,.15);color:var(--green)}.badge-active::before{background:var(--green)}
 .badge-pending{background:rgba(232,162,52,.15);color:var(--amber)}.badge-pending::before{background:var(--amber)}
 .badge-complete,.badge-completed{background:rgba(91,155,213,.15);color:var(--blue)}.badge-complete::before,.badge-completed::before{background:var(--blue)}
 .badge-quoted{background:rgba(192,90,46,.15);color:var(--rust-lt)}.badge-quoted::before{background:var(--rust-lt)}
-.badge-cancelled{background:rgba(92,84,76,.15);color:var(--text-2)}.badge-cancelled::before{background:var(--text-2)}
+.badge-cancelled,.badge-lost,.badge-paused{background:rgba(92,84,76,.15);color:var(--text-2)}.badge-cancelled::before,.badge-lost::before,.badge-paused::before{background:var(--text-2)}
 .badge-new{background:rgba(232,162,52,.15);color:var(--amber)}.badge-new::before{background:var(--amber)}
-.badge-converted{background:rgba(76,175,125,.15);color:var(--green)}.badge-converted::before{background:var(--green)}
-.badge-lost{background:rgba(92,84,76,.15);color:var(--text-2)}.badge-lost::before{background:var(--text-2)}
-.badge-contacted{background:rgba(91,155,213,.15);color:var(--blue)}.badge-contacted::before{background:var(--blue)}
-.badge-paused{background:rgba(92,84,76,.15);color:var(--text-2)}.badge-paused::before{background:var(--text-2)}
-.badge-sent{background:rgba(91,155,213,.15);color:var(--blue)}.badge-sent::before{background:var(--blue)}
-.badge-accepted{background:rgba(76,175,125,.15);color:var(--green)}.badge-accepted::before{background:var(--green)}
-.badge-declined{background:rgba(224,82,82,.15);color:var(--red)}.badge-declined::before{background:var(--red)}
-.badge-paid{background:rgba(76,175,125,.15);color:var(--green)}.badge-paid::before{background:var(--green)}
-.badge-overdue{background:rgba(224,82,82,.15);color:var(--red)}.badge-overdue::before{background:var(--red)}
+.badge-converted,.badge-approved,.badge-deposit_paid,.badge-received,.badge-accepted,.badge-paid{background:rgba(76,175,125,.15);color:var(--green)}.badge-converted::before,.badge-approved::before,.badge-deposit_paid::before,.badge-received::before,.badge-accepted::before,.badge-paid::before{background:var(--green)}
+.badge-contacted,.badge-sent,.badge-complete,.badge-retention_released{background:rgba(91,155,213,.15);color:var(--blue)}.badge-contacted::before,.badge-sent::before,.badge-complete::before,.badge-retention_released::before{background:var(--blue)}
+.badge-overdue,.badge-declined{background:rgba(224,82,82,.15);color:var(--red)}.badge-overdue::before,.badge-declined::before{background:var(--red)}
 .badge-lead{background:rgba(155,114,207,.15);color:var(--purple)}.badge-lead::before{background:var(--purple)}
-.badge-inspection{background:rgba(232,162,52,.15);color:var(--amber)}.badge-inspection::before{background:var(--amber)}
-.badge-approved{background:rgba(76,175,125,.15);color:var(--green)}.badge-approved::before{background:var(--green)}
-.badge-deposit_paid{background:rgba(76,175,125,.15);color:var(--green)}.badge-deposit_paid::before{background:var(--green)}
+.badge-inspection,.badge-progress_claim,.badge-due{background:rgba(232,162,52,.15);color:var(--amber)}.badge-inspection::before,.badge-progress_claim::before,.badge-due::before{background:var(--amber)}
 .badge-in_progress{background:rgba(192,90,46,.15);color:var(--rust-lt)}.badge-in_progress::before{background:var(--rust-lt)}
-.badge-progress_claim{background:rgba(232,162,52,.15);color:var(--amber)}.badge-progress_claim::before{background:var(--amber)}
-.badge-retention_released{background:rgba(91,155,213,.15);color:var(--blue)}.badge-retention_released::before{background:var(--blue)}
-.badge-raised{background:rgba(155,114,207,.15);color:var(--purple)}.badge-raised::before{background:var(--purple)}
-.badge-received{background:rgba(76,175,125,.15);color:var(--green)}.badge-received::before{background:var(--green)}
-.badge-due{background:rgba(232,162,52,.15);color:var(--amber)}.badge-due::before{background:var(--amber)}
-.badge-draft{background:rgba(92,84,76,.15);color:var(--text-2)}.badge-draft::before{background:var(--text-2)}
+.badge-raised,.badge-draft{background:rgba(155,114,207,.15);color:var(--purple)}.badge-raised::before,.badge-draft::before{background:var(--purple)}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-.form-field{display:flex;flex-direction:column;gap:.4rem}
-.form-field.full{grid-column:1/-1}
+.form-field{display:flex;flex-direction:column;gap:.4rem}.form-field.full{grid-column:1/-1}
 .form-field label{font-size:.72rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2)}
 .form-field input,.form-field select,.form-field textarea{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.65rem .9rem;color:var(--text);font-family:var(--font-body);font-size:.88rem;outline:none;transition:border-color .2s;width:100%}
 .form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--rust)}
-.form-field select option{background:var(--card)}
-.form-field textarea{resize:vertical;min-height:80px}
+.form-field select option{background:var(--card)}.form-field textarea{resize:vertical;min-height:80px}
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem}
 .modal-overlay.open{display:flex}
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:2rem;width:100%;max-width:600px;max-height:90vh;overflow-y:auto}
 .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
 .modal-title{font-family:var(--font-head);font-size:1.1rem;font-weight:600;color:var(--text)}
-.modal-close{background:none;border:none;color:var(--text-2);font-size:1.2rem;cursor:pointer;padding:4px;line-height:1}
-.modal-close:hover{color:var(--red)}
+.modal-close{background:none;border:none;color:var(--text-2);font-size:1.2rem;cursor:pointer;padding:4px;line-height:1}.modal-close:hover{color:var(--red)}
 .modal-actions{display:flex;gap:.75rem;justify-content:flex-end;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)}
 .toast{position:fixed;bottom:2rem;right:2rem;z-index:999;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.75rem 1.25rem;font-size:.85rem;color:var(--text);transform:translateY(100px);opacity:0;transition:all .3s;pointer-events:none}
-.toast.show{transform:translateY(0);opacity:1}
-.toast.success{border-color:var(--green);color:var(--green)}
-.toast.error{border-color:var(--red);color:var(--red)}
+.toast.show{transform:translateY(0);opacity:1}.toast.success{border-color:var(--green);color:var(--green)}.toast.error{border-color:var(--red);color:var(--red)}
 .workflow-step{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.25rem;margin-bottom:.75rem}
 .workflow-step-header{display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem}
 .workflow-num{width:28px;height:28px;border-radius:50%;background:rgba(192,90,46,.15);color:var(--rust-lt);font-family:var(--font-head);font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.workflow-step-title{font-weight:500;font-size:.9rem;color:var(--text)}
-.workflow-step p{font-size:.82rem;color:var(--text-2);line-height:1.6;padding-left:2.5rem}
+.workflow-step-title{font-weight:500;font-size:.9rem;color:var(--text)}.workflow-step p{font-size:.82rem;color:var(--text-2);line-height:1.6;padding-left:2.5rem}
 .job-detail-header{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:1.5rem}
-.job-stage-track{display:flex;align-items:center;gap:0;margin:1rem 0;overflow-x:auto;padding-bottom:.5rem}
+.job-stage-track{display:flex;align-items:center;margin:1rem 0;overflow-x:auto;padding-bottom:.5rem}
 .stage-dot{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0}
-.stage-dot-circle{width:10px;height:10px;border-radius:50%;background:var(--border)}
-.stage-dot-circle.done{background:var(--green)}
-.stage-dot-circle.current{background:var(--rust-lt);box-shadow:0 0 0 3px rgba(192,90,46,.25)}
-.stage-dot-label{font-size:.6rem;color:var(--text-3);text-align:center;max-width:60px;line-height:1.2;text-transform:uppercase;letter-spacing:.04em}
-.stage-dot-label.current{color:var(--rust-lt)}.stage-dot-label.done{color:var(--text-2)}
-.stage-line{height:2px;flex:1;background:var(--border);min-width:20px;flex-shrink:0}
-.stage-line.done{background:var(--green)}
+.stage-dot-circle{width:10px;height:10px;border-radius:50%;background:var(--border)}.stage-dot-circle.done{background:var(--green)}.stage-dot-circle.current{background:var(--rust-lt);box-shadow:0 0 0 3px rgba(192,90,46,.25)}
+.stage-dot-label{font-size:.6rem;color:var(--text-3);text-align:center;max-width:60px;line-height:1.2;text-transform:uppercase;letter-spacing:.04em}.stage-dot-label.current{color:var(--rust-lt)}.stage-dot-label.done{color:var(--text-2)}
+.stage-line{height:2px;flex:1;background:var(--border);min-width:20px;flex-shrink:0}.stage-line.done{background:var(--green)}
 .stage-actions{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:1rem}
 .invoice-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem;display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
-.invoice-card.paid{border-color:rgba(76,175,125,.3)}
-.invoice-info .inv-type{font-weight:500;font-size:.88rem}
-.invoice-info .inv-meta{font-size:.75rem;color:var(--text-2);margin-top:2px}
-.invoice-amount{font-family:var(--font-head);font-size:1.1rem;font-weight:700;color:var(--rust-lt)}
-.invoice-amount.paid{color:var(--green)}
+.invoice-card.paid{border-color:rgba(76,175,125,.3)}.invoice-info .inv-type{font-weight:500;font-size:.88rem}.invoice-info .inv-meta{font-size:.75rem;color:var(--text-2);margin-top:2px}
+.invoice-amount{font-family:var(--font-head);font-size:1.1rem;font-weight:700;color:var(--rust-lt)}.invoice-amount.paid{color:var(--green)}
 .report-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:.75rem}
 .report-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
-.report-date{font-size:.78rem;color:var(--text-2)}
-.report-crew{font-size:.78rem;background:var(--surface);padding:2px 8px;border-radius:4px}
-.report-work{font-size:.85rem;color:var(--text);margin-bottom:.4rem}
-.report-issue{font-size:.82rem;color:var(--amber);margin-top:.4rem}
+.report-date{font-size:.78rem;color:var(--text-2)}.report-crew{font-size:.78rem;background:var(--surface);padding:2px 8px;border-radius:4px}
+.report-work{font-size:.85rem;color:var(--text);margin-bottom:.4rem}.report-issue{font-size:.82rem;color:var(--amber);margin-top:.4rem}
 .inspection-section{margin-bottom:1.5rem}
 .inspection-section h4{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-2);margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
 .comments-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;height:340px}
 .comments-list{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.75rem}
 .comment-item{display:flex;gap:.65rem;align-items:flex-start}
 .comment-avatar{width:28px;height:28px;border-radius:50%;background:var(--rust-dk);color:white;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-head)}
-.comment-bubble{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.6rem .85rem;flex:1;min-width:0}
-.comment-bubble.mine{background:rgba(192,90,46,.1);border-color:rgba(192,90,46,.25)}
-.comment-meta{font-size:.68rem;color:var(--text-3);margin-bottom:3px}
-.comment-meta strong{color:var(--text-2);font-weight:600}
-.comment-text{font-size:.83rem;color:var(--text);line-height:1.5;word-break:break-word}
-.comment-mention{color:var(--rust-lt);font-weight:500}
+.comment-bubble{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.6rem .85rem;flex:1;min-width:0}.comment-bubble.mine{background:rgba(192,90,46,.1);border-color:rgba(192,90,46,.25)}
+.comment-meta{font-size:.68rem;color:var(--text-3);margin-bottom:3px}.comment-meta strong{color:var(--text-2);font-weight:600}
+.comment-text{font-size:.83rem;color:var(--text);line-height:1.5;word-break:break-word}.comment-mention{color:var(--rust-lt);font-weight:500}
 .comments-input{display:flex;gap:.5rem;padding:.75rem;border-top:1px solid var(--border)}
 .comments-input input{flex:1;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:.55rem .85rem;color:var(--text);font-family:var(--font-body);font-size:.85rem;outline:none;transition:border-color .2s}
-.comments-input input:focus{border-color:var(--rust)}
-.comments-input button{background:var(--rust);color:white;border:none;border-radius:6px;padding:.55rem 1rem;font-size:.82rem;cursor:pointer}
-.comments-input button:hover{background:var(--rust-lt)}
+.comments-input input:focus{border-color:var(--rust)}.comments-input button{background:var(--rust);color:white;border:none;border-radius:6px;padding:.55rem 1rem;font-size:.82rem;cursor:pointer}.comments-input button:hover{background:var(--rust-lt)}
 .quick-links-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.75rem;margin-top:1rem}
-.quick-link-tile{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem;text-align:center;text-decoration:none;color:var(--text);transition:border-color .15s,background .15s;display:flex;flex-direction:column;align-items:center;gap:.4rem}
-.quick-link-tile:hover{border-color:var(--rust);background:rgba(192,90,46,.06)}
-.quick-link-icon{font-size:1.5rem}
-.quick-link-label{font-size:.78rem;font-weight:500;color:var(--text-2)}
+.quick-link-tile{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem;text-align:center;text-decoration:none;color:var(--text);transition:border-color .15s,background .15s;display:flex;flex-direction:column;align-items:center;gap:.4rem}.quick-link-tile:hover{border-color:var(--rust);background:rgba(192,90,46,.06)}
+.quick-link-icon{font-size:1.5rem}.quick-link-label{font-size:.78rem;font-weight:500;color:var(--text-2)}
 .task-group{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.25rem;margin-bottom:1rem}
 .task-group-title{font-weight:600;font-size:.9rem;margin-bottom:.75rem;display:flex;align-items:center;justify-content:space-between}
-.task-item{display:flex;align-items:center;gap:.65rem;padding:.5rem 0;border-bottom:1px solid var(--border)}
-.task-item:last-child{border-bottom:none}
+.task-item{display:flex;align-items:center;gap:.65rem;padding:.5rem 0;border-bottom:1px solid var(--border)}.task-item:last-child{border-bottom:none}
 .task-check{width:16px;height:16px;border-radius:4px;border:1px solid var(--border);cursor:pointer;appearance:none;background:var(--surface);flex-shrink:0;position:relative;transition:all .15s}
-.task-check:checked{background:var(--green);border-color:var(--green)}
-.task-check:checked::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:10px;color:white}
-.task-text{font-size:.85rem;flex:1}
-.task-text.done{text-decoration:line-through;color:var(--text-3)}
+.task-check:checked{background:var(--green);border-color:var(--green)}.task-check:checked::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:10px;color:white}
+.task-text{font-size:.85rem;flex:1}.task-text.done{text-decoration:line-through;color:var(--text-3)}
 .task-add-row{display:flex;gap:.5rem;margin-top:.75rem}
-.task-add-row input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.45rem .75rem;color:var(--text);font-family:var(--font-body);font-size:.82rem;outline:none}
-.task-add-row input:focus{border-color:var(--rust)}
+.task-add-row input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.45rem .75rem;color:var(--text);font-family:var(--font-body);font-size:.82rem;outline:none}.task-add-row input:focus{border-color:var(--rust)}
 .task-add-row button{background:var(--rust);color:white;border:none;border-radius:6px;padding:.45rem .85rem;font-size:.8rem;cursor:pointer}
 .reminder-item{display:flex;justify-content:space-between;align-items:center;padding:.85rem 1rem;background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:.5rem}
 .reminder-item.overdue{border-color:rgba(224,82,82,.35);background:rgba(224,82,82,.04)}
-.reminder-left .reminder-title{font-weight:500;font-size:.88rem}
-.reminder-left .reminder-meta{font-size:.75rem;color:var(--text-2);margin-top:2px}
+.reminder-left .reminder-title{font-weight:500;font-size:.88rem}.reminder-left .reminder-meta{font-size:.75rem;color:var(--text-2);margin-top:2px}
 .reminder-right{display:flex;align-items:center;gap:.75rem}
+/* ATTACHMENTS */
+.attach-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:.75rem;margin-top:1rem}
+.attach-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden;position:relative}
+.attach-thumb{width:100%;height:90px;object-fit:cover;display:block}
+.attach-file{width:100%;height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.35rem;cursor:pointer;text-decoration:none}
+.attach-file-icon{font-size:1.8rem}.attach-file-name{font-size:.68rem;color:var(--text-2);text-align:center;padding:0 .5rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%}
+.attach-del{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.6);color:white;border:none;border-radius:4px;padding:2px 6px;font-size:.7rem;cursor:pointer;opacity:0;transition:opacity .15s}
+.attach-item:hover .attach-del{opacity:1}
+.upload-zone{border:2px dashed var(--border);border-radius:8px;padding:1.5rem;text-align:center;cursor:pointer;transition:border-color .2s;margin-top:.75rem}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--rust)}
+.upload-zone p{font-size:.82rem;color:var(--text-2)}.upload-zone input{display:none}
+.upload-progress{height:4px;background:var(--border);border-radius:2px;margin-top:.5rem;overflow:hidden;display:none}
+.upload-progress-bar{height:100%;background:var(--rust);transition:width .3s}
+/* ROLE BADGE */
+.role-tag{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+.role-tag.admin{background:rgba(192,90,46,.15);color:var(--rust-lt)}.role-tag.staff{background:rgba(92,84,76,.15);color:var(--text-2)}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
 .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
 .mb-1{margin-bottom:1rem}.mb-2{margin-bottom:1.5rem}.mb-3{margin-bottom:2rem}
-.empty-state{text-align:center;padding:3rem;color:var(--text-2)}
-.empty-state .empty-icon{font-size:2.5rem;margin-bottom:1rem}
-.empty-state p{font-size:.88rem}
+.empty-state{text-align:center;padding:3rem;color:var(--text-2)}.empty-state .empty-icon{font-size:2.5rem;margin-bottom:1rem}.empty-state p{font-size:.88rem}
 .section-title{font-family:var(--font-head);font-size:1rem;color:var(--rust-lt);margin-bottom:1rem}
 .tab-bar{display:flex;gap:.25rem;background:var(--surface);border-radius:8px;padding:4px;margin-bottom:1.5rem;border:1px solid var(--border);flex-wrap:wrap}
 .tab-btn{flex:1;padding:.5rem;border:none;background:none;color:var(--text-2);font-family:var(--font-body);font-size:.82rem;border-radius:5px;cursor:pointer;transition:all .15s;white-space:nowrap}
 .tab-btn.active{background:var(--card);color:var(--text);border:1px solid var(--border)}
 .tab-content{display:none}.tab-content.active{display:block}
 .admin-only{display:none}
+/* MOBILE OPTIMISATION */
 @media(max-width:768px){
-  .layout{grid-template-columns:1fr}.sidebar{display:none}
+  .layout{grid-template-columns:1fr}
+  .sidebar{position:fixed;left:-220px;width:220px;height:100vh;z-index:200;transition:left .25s}
+  .sidebar.open{left:0}
+  .mobile-header{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
+  .mobile-menu-btn{background:none;border:none;color:var(--text);font-size:1.4rem;cursor:pointer;padding:.25rem}
+  .mobile-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150}
+  .mobile-overlay.open{display:block}
   .form-grid,.grid-2,.grid-3{grid-template-columns:1fr}
-  .stat-grid{grid-template-columns:1fr 1fr}.main{padding:1rem}
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .main{padding:1rem}
+  .form-field input,.form-field select,.form-field textarea{font-size:16px;padding:.8rem 1rem}
+  .upload-zone{padding:2rem 1rem}
+  .tab-btn{font-size:.75rem;padding:.4rem .3rem}
+  .attach-list{grid-template-columns:repeat(auto-fill,minmax(100px,1fr))}
+  .attach-thumb,.attach-file{height:80px}
+  .btn{padding:.6rem 1rem}
 }
+@media(min-width:769px){.mobile-header{display:none}.mobile-overlay{display:none}}
+
 </style>
 </head>
 <body>
+<!-- MOBILE HEADER -->
+<div class="mobile-header">
+  <div style="font-family:var(--font-head);font-weight:700;font-size:1rem">RDU <span style="color:var(--rust)">Command</span></div>
+  <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+</div>
+<div class="mobile-overlay" id="mobileOverlay" onclick="toggleSidebar()"></div>
+
+<!-- AUTH -->
 <div id="authScreen">
   <div class="auth-box">
     <div class="auth-paw">🐾</div>
     <div class="auth-logo">RDU <span>Command Centre</span></div>
     <div class="auth-sub">Roofing Down Under — Team Portal</div>
     <div class="auth-tagline">"Built tough, done right — with Rocky by your side."</div>
-    <div class="auth-field"><label>Email</label><input type="email" id="authEmail" placeholder="you@roofingdownunder.com"></div>
+    <div class="auth-field"><label>Email</label><input type="email" id="authEmail" placeholder="you@roofingdownunder.com" autocomplete="email"></div>
     <div class="auth-field"><label>Password</label><input type="password" id="authPass" placeholder="••••••••"></div>
     <button class="auth-btn" onclick="signIn()">Sign In</button>
     <div class="auth-err" id="authErr"></div>
   </div>
 </div>
+
+<!-- APP -->
 <div id="app">
   <div class="layout">
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
       <div class="sidebar-logo">
         <div class="brand">RDU <span>Command</span></div>
         <div class="tagline">Built tough, done right —<br>with Rocky by your side.</div>
@@ -240,36 +223,39 @@ tr:hover td{background:rgba(255,255,255,.02)}
       </div>
       <div class="nav-section">
         <span class="nav-label">Overview</span>
-        <button class="nav-item active" onclick="showPage('dashboard')"><span class="nav-icon">🏠</span> Dashboard</button>
+        <button class="nav-item active" onclick="nav('dashboard')"><span class="nav-icon">🏠</span> Dashboard</button>
       </div>
       <div class="nav-section">
         <span class="nav-label">Operations</span>
-        <button class="nav-item" onclick="showPage('jobs')"><span class="nav-icon">🔨</span> Jobs <span class="nav-badge" id="jobsBadge">0</span></button>
-        <button class="nav-item" onclick="showPage('leads')"><span class="nav-icon">📋</span> Leads <span class="nav-badge" id="leadsBadge">0</span></button>
-        <button class="nav-item" onclick="showPage('schedule')"><span class="nav-icon">📅</span> Schedule</button>
-        <button class="nav-item" onclick="showPage('inspections')"><span class="nav-icon">🔍</span> Inspections</button>
+        <button class="nav-item" onclick="nav('jobs')"><span class="nav-icon">🔨</span> Jobs <span class="nav-badge" id="jobsBadge">0</span></button>
+        <button class="nav-item" onclick="nav('leads')"><span class="nav-icon">📋</span> Leads <span class="nav-badge" id="leadsBadge">0</span></button>
+        <button class="nav-item" onclick="nav('schedule')"><span class="nav-icon">📅</span> Schedule</button>
+        <button class="nav-item" onclick="nav('inspections')"><span class="nav-icon">🔍</span> Inspections</button>
       </div>
       <div class="nav-section">
         <span class="nav-label">Finance</span>
-        <button class="nav-item" onclick="showPage('invoices')"><span class="nav-icon">💰</span> Invoices <span class="nav-badge" id="invoicesBadge">0</span></button>
-        <button class="nav-item" onclick="showPage('reports')"><span class="nav-icon">📊</span> Daily Reports</button>
-        <button class="nav-item" onclick="showPage('reminders')"><span class="nav-icon">🔔</span> Reminders <span class="nav-badge" id="remindersBadge">0</span></button>
+        <button class="nav-item" onclick="nav('invoices')"><span class="nav-icon">💰</span> Invoices <span class="nav-badge" id="invoicesBadge">0</span></button>
+        <button class="nav-item" onclick="nav('reports')"><span class="nav-icon">📊</span> Daily Reports</button>
+        <button class="nav-item" onclick="nav('reminders')"><span class="nav-icon">🔔</span> Reminders <span class="nav-badge" id="remindersBadge">0</span></button>
       </div>
       <div class="nav-section">
         <span class="nav-label">Team</span>
-        <button class="nav-item" onclick="showPage('tasks')"><span class="nav-icon">✅</span> Tasks</button>
+        <button class="nav-item" onclick="nav('tasks')"><span class="nav-icon">✅</span> Tasks</button>
       </div>
       <div class="nav-section">
         <span class="nav-label">Business</span>
-        <button class="nav-item" onclick="showPage('advertising')"><span class="nav-icon">📢</span> Advertising</button>
-        <button class="nav-item" onclick="showPage('workflow')"><span class="nav-icon">📌</span> RDU Workflow</button>
-        <button class="nav-item admin-only" id="navAdmin" onclick="showPage('admin')"><span class="nav-icon">⚙️</span> Admin</button>
+        <button class="nav-item" onclick="nav('advertising')"><span class="nav-icon">📢</span> Advertising</button>
+        <button class="nav-item" onclick="nav('workflow')"><span class="nav-icon">📌</span> RDU Workflow</button>
+        <button class="nav-item admin-only" id="navAdmin" onclick="nav('admin')"><span class="nav-icon">⚙️</span> Admin</button>
       </div>
       <div class="sidebar-bottom">
         <button class="logout-btn" onclick="doSignOut()"><span>🚪</span> Sign Out</button>
       </div>
     </aside>
+
     <main class="main">
+
+      <!-- DASHBOARD -->
       <div class="page active" id="page-dashboard">
         <div class="page-header">
           <h1>Good day, <span id="firstName" style="color:var(--rust)">Mate</span> 🐾</h1>
@@ -293,6 +279,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div class="card"><div class="card-title">Latest Leads</div><div id="dashRecentLeads"><div class="empty-state"><div class="empty-icon">📋</div><p>No leads yet</p></div></div></div>
         </div>
       </div>
+
+      <!-- JOBS -->
       <div class="page" id="page-jobs">
         <div class="page-header"><h1>Jobs</h1><p>Track every job through the full workflow.</p>
           <div class="page-actions"><button class="btn btn-primary" onclick="openJobModal()">+ New Job</button></div>
@@ -302,9 +290,11 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <tbody id="jobsTable"><tr><td colspan="8" style="text-align:center;color:var(--text-2);padding:2rem">No jobs yet</td></tr></tbody>
         </table></div>
       </div>
+
+      <!-- JOB DETAIL -->
       <div class="page" id="page-jobdetail">
         <div class="page-header" style="margin-bottom:1rem">
-          <button class="btn btn-secondary btn-sm" onclick="showPage('jobs')" style="margin-bottom:1rem">← Back to Jobs</button>
+          <button class="btn btn-secondary btn-sm" onclick="nav('jobs')" style="margin-bottom:1rem">← Back to Jobs</button>
           <h1 id="detailJobTitle">Job Detail</h1><p id="detailJobSub"></p>
         </div>
         <div class="job-detail-header">
@@ -318,9 +308,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <div class="tab-bar">
           <button class="tab-btn active" onclick="switchTab('tab-overview',this)">Overview</button>
           <button class="tab-btn" onclick="switchTab('tab-invoices',this)">Invoices</button>
-          <button class="tab-btn" onclick="switchTab('tab-pos',this)">Purchase Orders</button>
+          <button class="tab-btn" onclick="switchTab('tab-pos',this)">POs</button>
           <button class="tab-btn" onclick="switchTab('tab-quotes',this)">Quotes</button>
-          <button class="tab-btn" onclick="switchTab('tab-dailyreports',this)">Daily Reports</button>
+          <button class="tab-btn" onclick="switchTab('tab-files',this)">Files</button>
+          <button class="tab-btn" onclick="switchTab('tab-dailyreports',this)">Reports</button>
         </div>
         <div class="tab-content active" id="tab-overview">
           <div class="grid-2 mb-2">
@@ -359,6 +350,17 @@ tr:hover td{background:rgba(255,255,255,.02)}
           </div>
           <div id="jobQuotesList"></div>
         </div>
+        <div class="tab-content" id="tab-files">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
+            <div class="section-title" style="margin-bottom:0">Files & Photos</div>
+          </div>
+          <div class="upload-zone" onclick="document.getElementById('fileUploadJob').click()" ondrop="handleDrop(event,'job')" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')">
+            <p>📎 Tap to upload photos or files<br><span style="font-size:.75rem;color:var(--text-3)">JPG, PNG, PDF, DOCX — max 10MB each</span></p>
+            <div class="upload-progress" id="uploadProgressJob"><div class="upload-progress-bar" id="uploadProgressBarJob"></div></div>
+            <input type="file" id="fileUploadJob" multiple accept="image/*,.pdf,.doc,.docx" onchange="uploadFiles(this.files,'job')">
+          </div>
+          <div class="attach-list" id="jobFilesList" style="margin-top:1rem"></div>
+        </div>
         <div class="tab-content" id="tab-dailyreports">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
             <div class="section-title" style="margin-bottom:0">Daily Reports</div>
@@ -367,6 +369,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div id="jobReportsList"></div>
         </div>
       </div>
+
+      <!-- LEADS -->
       <div class="page" id="page-leads">
         <div class="page-header"><h1>Leads</h1><p>Manage enquiries and convert them to jobs.</p>
           <div class="page-actions"><button class="btn btn-primary" onclick="openModal('leadModal')">+ New Lead</button></div>
@@ -376,18 +380,24 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <tbody id="leadsTable"><tr><td colspan="8" style="text-align:center;color:var(--text-2);padding:2rem">No leads yet</td></tr></tbody>
         </table></div>
       </div>
+
+      <!-- SCHEDULE -->
       <div class="page" id="page-schedule">
         <div class="page-header"><h1>Schedule</h1><p>Team scheduling and job calendar.</p>
           <div class="page-actions"><button class="btn btn-primary" onclick="openModal('scheduleModal')">+ Add Event</button></div>
         </div>
         <div id="scheduleList" class="card"><div class="empty-state"><div class="empty-icon">📅</div><p>No events scheduled</p></div></div>
       </div>
+
+      <!-- INSPECTIONS -->
       <div class="page" id="page-inspections">
         <div class="page-header"><h1>Inspections</h1><p>Job inspections, quotes, cut lists and mud maps.</p>
           <div class="page-actions"><button class="btn btn-primary" onclick="openModal('inspectionModal')">+ New Inspection</button></div>
         </div>
         <div id="inspectionsList"><div class="empty-state card"><div class="empty-icon">🔍</div><p>No inspections recorded yet</p></div></div>
       </div>
+
+      <!-- INVOICES -->
       <div class="page" id="page-invoices">
         <div class="page-header"><h1>Invoices</h1><p>All invoices across every job.</p>
           <div class="page-actions"><button class="btn btn-primary" onclick="openInvoiceModalStandalone()">+ New Invoice</button></div>
@@ -402,24 +412,32 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <tbody id="invoicesTable"><tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No invoices yet</td></tr></tbody>
         </table></div>
       </div>
+
+      <!-- DAILY REPORTS -->
       <div class="page" id="page-reports">
         <div class="page-header"><h1>Daily Reports</h1><p>All crew activity reports across jobs.</p>
           <div class="page-actions"><button class="btn btn-primary" onclick="openReportModalStandalone()">+ New Report</button></div>
         </div>
         <div id="allReportsList"><div class="empty-state card"><div class="empty-icon">📊</div><p>No reports yet</p></div></div>
       </div>
+
+      <!-- REMINDERS -->
       <div class="page" id="page-reminders">
         <div class="page-header"><h1>Reminders</h1><p>Supplier payments, wages, POs and subscriptions.</p>
           <div class="page-actions"><button class="btn btn-primary" onclick="openModal('reminderModal')">+ New Reminder</button></div>
         </div>
         <div id="remindersList"><div class="empty-state card"><div class="empty-icon">🔔</div><p>No reminders yet</p></div></div>
       </div>
+
+      <!-- TASKS -->
       <div class="page" id="page-tasks">
         <div class="page-header"><h1>Tasks</h1><p>Team task lists. Admin creates groups, team adds items.</p>
           <div class="page-actions admin-only"><button class="btn btn-primary" onclick="openModal('taskGroupModal')">+ New Task Group</button></div>
         </div>
         <div id="tasksList"><div class="empty-state card"><div class="empty-icon">✅</div><p>No tasks yet</p></div></div>
       </div>
+
+      <!-- ADVERTISING -->
       <div class="page" id="page-advertising">
         <div class="page-header"><h1>Advertising</h1><p>All active campaigns and performance in one place.</p>
           <div class="page-actions"><button class="btn btn-primary" onclick="openModal('adModal')">+ Add Campaign</button></div>
@@ -434,22 +452,24 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <tbody id="adsTable"><tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No campaigns yet</td></tr></tbody>
         </table></div>
       </div>
+
+      <!-- WORKFLOW -->
       <div class="page" id="page-workflow">
         <div class="page-header"><h1>RDU Workflow</h1><p>Standard operating process for every job.</p></div>
         <div class="grid-2">
           <div>
             <h3 class="section-title">Direct Client Jobs</h3>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">01</div><div class="workflow-step-title">Initial Enquiry</div></div><p>Client contacts via website, Rocky chatbot, or referral. Log as lead immediately with source tagged.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">02</div><div class="workflow-step-title">Site Inspection</div></div><p>Book within 48hrs. Harry or Ronny attends. Record all findings in Inspections module.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">03</div><div class="workflow-step-title">Quote Preparation</div></div><p>Itemised quote within 24hrs of inspection. Payment terms: 10% deposit, 40% materials, 30% progress, 20% retention.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">04</div><div class="workflow-step-title">Quote Acceptance</div></div><p>Client signs off. Deposit invoice generated automatically. Job added to schedule. Lead updated to Converted.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">05</div><div class="workflow-step-title">Works on Site</div></div><p>Harry leads crew. Daily Activity Reports filed. Progress photos at each milestone.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">01</div><div class="workflow-step-title">Initial Enquiry</div></div><p>Log as lead immediately with source tagged — website, Rocky chatbot, or referral.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">02</div><div class="workflow-step-title">Site Inspection</div></div><p>Book within 48hrs. Harry or Ronny attends. Record findings in Inspections module with photos.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">03</div><div class="workflow-step-title">Quote Preparation</div></div><p>Itemised quote within 24hrs. Payment terms: 10% deposit, 40% materials, 30% progress, 20% retention.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">04</div><div class="workflow-step-title">Quote Acceptance</div></div><p>Client signs off. Deposit invoice auto-generated. Job added to schedule. Lead updated to Converted.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">05</div><div class="workflow-step-title">Works on Site</div></div><p>Harry leads crew. Daily Activity Reports filed. Progress photos uploaded at each milestone.</p></div>
             <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">06</div><div class="workflow-step-title">Completion and Sign-Off</div></div><p>Walkthrough before final invoice. Site left clean. Job set to Completed. Request Google review.</p></div>
           </div>
           <div>
             <h3 class="section-title">Builder-Referred Jobs</h3>
             <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">01</div><div class="workflow-step-title">Builder Referral</div></div><p>Builder contacts Ronny directly. Log in leads with source "Builder Referral" and builder name in notes.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">02</div><div class="workflow-step-title">Plans and Scope Review</div></div><p>Obtain plans from builder. Confirm inclusions and exclusions in writing before quoting.</p></div>
+            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">02</div><div class="workflow-step-title">Plans and Scope Review</div></div><p>Obtain plans from builder. Confirm inclusions/exclusions in writing before quoting.</p></div>
             <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">03</div><div class="workflow-step-title">Quote to Builder</div></div><p>Quote to builder, not end client. Include provisional sums if plans incomplete.</p></div>
             <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">04</div><div class="workflow-step-title">Scheduling</div></div><p>Coordinate with builder's program. Confirm slab/frame readiness before committing crew.</p></div>
             <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">05</div><div class="workflow-step-title">Works and Variations</div></div><p>All variations approved in writing. Harry to notify Ronny of scope changes same day.</p></div>
@@ -457,8 +477,14 @@ tr:hover td{background:rgba(255,255,255,.02)}
           </div>
         </div>
       </div>
+
+      <!-- ADMIN -->
       <div class="page" id="page-admin">
         <div class="page-header"><h1>Admin Settings</h1><p>System configuration — admin access only.</p></div>
+        <div class="card mb-2">
+          <div class="card-title">Team Members</div>
+          <div id="adminTeamList"></div>
+        </div>
         <div class="card mb-2">
           <div class="card-title">Quick Launcher Links</div>
           <div id="adminQuickLinks"></div>
@@ -469,24 +495,26 @@ tr:hover td{background:rgba(255,255,255,.02)}
           <div style="font-size:.85rem;color:var(--text-2);line-height:2">
             <div>Firebase Project: <span style="color:var(--text)">rdu-dashboard</span></div>
             <div>Admin: <span style="color:var(--text)">toneth@roofingdownunder.com</span></div>
-            <div>Version: <span style="color:var(--text)">Commit 1 — Core Systems</span></div>
+            <div>Version: <span style="color:var(--text)">Commit 2 — Files, Roles, Mobile</span></div>
           </div>
         </div>
       </div>
+
     </main>
   </div>
 </div>
+
 <!-- MODALS -->
 <div class="modal-overlay" id="jobModal">
   <div class="modal">
     <div class="modal-header"><div class="modal-title" id="jobModalTitle">New Job</div><button class="modal-close" onclick="closeModal('jobModal')">✕</button></div>
     <input type="hidden" id="jobId">
     <div class="form-grid">
-      <div class="form-field"><label>Client Name</label><input id="jobClient" placeholder="e.g. John Smith"></div>
-      <div class="form-field"><label>Phone</label><input id="jobPhone" placeholder="04XX XXX XXX"></div>
-      <div class="form-field"><label>Service Type</label><select id="jobType"><option>Roof Repairs</option><option>New Roof Installation</option><option>Re-Roofing</option><option>Gutters & Downpipes</option><option>Commercial Roofing</option><option>Roof Inspection</option></select></div>
+      <div class="form-field"><label>Client Name</label><input id="jobClient" placeholder="e.g. John Smith" autocomplete="off"></div>
+      <div class="form-field"><label>Phone</label><input id="jobPhone" placeholder="04XX XXX XXX" type="tel"></div>
+      <div class="form-field"><label>Service Type</label><select id="jobType"><option>Roof Repairs</option><option>New Roof Installation</option><option>Re-Roofing</option><option>Gutters &amp; Downpipes</option><option>Commercial Roofing</option><option>Roof Inspection</option></select></div>
       <div class="form-field"><label>Stage</label><select id="jobStage"><option value="lead">Lead</option><option value="inspection">Inspection</option><option value="quoted">Quoted</option><option value="approved">Approved</option><option value="deposit_paid">Deposit Paid</option><option value="in_progress">In Progress</option><option value="progress_claim">Progress Claim</option><option value="completed">Completed</option><option value="retention_released">Retention Released</option></select></div>
-      <div class="form-field full"><label>Location</label><input id="jobLocation" placeholder="Full address"></div>
+      <div class="form-field full"><label>Location</label><input id="jobLocation" placeholder="Full address" autocomplete="off"></div>
       <div class="form-field"><label>Assigned To</label><select id="jobAssigned"><option>Harry</option><option>Pauly</option><option>Josh</option><option>Ronny</option></select></div>
       <div class="form-field"><label>Start Date</label><input type="date" id="jobDate"></div>
       <div class="form-field"><label>Contract Value ($)</label><input type="number" id="jobValue" placeholder="0"></div>
@@ -500,11 +528,11 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="modal-header"><div class="modal-title" id="leadModalTitle">New Lead</div><button class="modal-close" onclick="closeModal('leadModal')">✕</button></div>
     <input type="hidden" id="leadId">
     <div class="form-grid">
-      <div class="form-field"><label>Name</label><input id="leadName" placeholder="Client name"></div>
-      <div class="form-field"><label>Phone</label><input id="leadPhone" placeholder="04XX XXX XXX"></div>
-      <div class="form-field"><label>Email</label><input id="leadEmail" placeholder="email@example.com"></div>
-      <div class="form-field"><label>Service Needed</label><select id="leadService"><option>Roof Repairs</option><option>New Roof Installation</option><option>Re-Roofing</option><option>Gutters & Downpipes</option><option>Commercial Roofing</option><option>Roof Inspection</option><option>Not Sure</option></select></div>
-      <div class="form-field"><label>Location</label><input id="leadLocation" placeholder="Suburb / State"></div>
+      <div class="form-field"><label>Name</label><input id="leadName" placeholder="Client name" autocomplete="off"></div>
+      <div class="form-field"><label>Phone</label><input id="leadPhone" placeholder="04XX XXX XXX" type="tel"></div>
+      <div class="form-field"><label>Email</label><input id="leadEmail" placeholder="email@example.com" type="email"></div>
+      <div class="form-field"><label>Service Needed</label><select id="leadService"><option>Roof Repairs</option><option>New Roof Installation</option><option>Re-Roofing</option><option>Gutters &amp; Downpipes</option><option>Commercial Roofing</option><option>Roof Inspection</option><option>Not Sure</option></select></div>
+      <div class="form-field"><label>Location</label><input id="leadLocation" placeholder="Suburb / State" autocomplete="off"></div>
       <div class="form-field"><label>Source</label><select id="leadSource"><option>Website</option><option>Rocky Chatbot</option><option>Google</option><option>Facebook</option><option>Instagram</option><option>Referral</option><option>BNI</option><option>Builder Referral</option><option>Other</option></select></div>
       <div class="form-field"><label>Status</label><select id="leadStatus"><option value="new">New</option><option value="contacted">Contacted</option><option value="quoted">Quoted</option><option value="converted">Converted</option><option value="lost">Lost</option></select></div>
       <div class="form-field full"><label>Notes</label><textarea id="leadNotes" placeholder="Details, urgency, what they said..."></textarea></div>
@@ -531,9 +559,9 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="modal-header"><div class="modal-title">New Inspection</div><button class="modal-close" onclick="closeModal('inspectionModal')">✕</button></div>
     <div class="inspection-section"><h4>Client and Site Details</h4>
       <div class="form-grid">
-        <div class="form-field"><label>Client Name</label><input id="inspClient" placeholder="Client name"></div>
-        <div class="form-field"><label>Phone</label><input id="inspPhone" placeholder="04XX XXX XXX"></div>
-        <div class="form-field full"><label>Address</label><input id="inspAddress" placeholder="Full site address"></div>
+        <div class="form-field"><label>Client Name</label><input id="inspClient" placeholder="Client name" autocomplete="off"></div>
+        <div class="form-field"><label>Phone</label><input id="inspPhone" placeholder="04XX XXX XXX" type="tel"></div>
+        <div class="form-field full"><label>Address</label><input id="inspAddress" placeholder="Full site address" autocomplete="off"></div>
         <div class="form-field"><label>Inspection Date</label><input type="date" id="inspDate"></div>
         <div class="form-field"><label>Inspected By</label><select id="inspBy"><option>Ronny</option><option>Harry</option></select></div>
       </div>
@@ -667,34 +695,36 @@ tr:hover td{background:rgba(255,255,255,.02)}
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, signOut as fbSignOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, collection, addDoc, getDocs, getDoc, updateDoc, doc, query, where, orderBy, onSnapshot, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC1ur8rYfmjYzdAeU7h7sAM3AAA3mte-LE",
-  authDomain: "rdu-dashboard.firebaseapp.com",
-  projectId: "rdu-dashboard",
-  storageBucket: "rdu-dashboard.firebasestorage.app",
-  messagingSenderId: "806124078648",
-  appId: "1:806124078648:web:4b9463aaf99fa5c00848cd"
+  apiKey:"AIzaSyC1ur8rYfmjYzdAeU7h7sAM3AAA3mte-LE",
+  authDomain:"rdu-dashboard.firebaseapp.com",
+  projectId:"rdu-dashboard",
+  storageBucket:"rdu-dashboard.firebasestorage.app",
+  messagingSenderId:"806124078648",
+  appId:"1:806124078648:web:4b9463aaf99fa5c00848cd"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+const storage=getStorage(app);
 
-const ADMIN_EMAIL = 'toneth@roofingdownunder.com';
-const STAGES = ['lead','inspection','quoted','approved','deposit_paid','in_progress','progress_claim','completed','retention_released'];
-const STAGE_LABELS = {lead:'Lead',inspection:'Inspection',quoted:'Quoted',approved:'Approved',deposit_paid:'Deposit Paid',in_progress:'In Progress',progress_claim:'Progress Claim',completed:'Completed',retention_released:'Retention Released'};
-const VALID_TRANSITIONS = {lead:['inspection'],inspection:['quoted'],quoted:['approved','lead'],approved:['deposit_paid'],deposit_paid:['in_progress'],in_progress:['progress_claim','completed'],progress_claim:['completed'],completed:['retention_released'],retention_released:[]};
-const STAGE_INVOICE_TRIGGERS = {approved:{type:'deposit',label:'Deposit Invoice (10%)',pct:0.10},in_progress:{type:'materials',label:'Materials Invoice (40%)',pct:0.40},progress_claim:{type:'progress',label:'Progress Invoice (30%)',pct:0.30},completed:{type:'retention',label:'Retention Invoice (20%)',pct:0.20}};
-const TEAM = {'ronny@roofingdownunder.com':{name:'Ronny',role:'Owner'},'harry@roofingdownunder.com':{name:'Harry',role:'Site Lead'},'pauly@roofingdownunder.com':{name:'Pauly',role:'Crew'},'josh@roofingdownunder.com':{name:'Josh',role:'Crew'},'myla@roofingdownunder.com':{name:'Myla',role:'Operations'},'toneth@roofingdownunder.com':{name:'Toneth',role:'Admin'}};
-const TEAM_NAMES = Object.values(TEAM).map(t=>t.name);
-const INV_LABELS = {deposit:'Deposit (10%)',materials:'Materials (40%)',progress:'Progress (30%)',retention:'Retention (20%)',other:'Other'};
-const TYPE_LABELS = {supplier:'Supplier',po:'Purchase Order',wages:'Wages',subscription:'Subscription',other:'Other'};
+const ADMIN_EMAIL='toneth@roofingdownunder.com';
+const STAGES=['lead','inspection','quoted','approved','deposit_paid','in_progress','progress_claim','completed','retention_released'];
+const STAGE_LABELS={lead:'Lead',inspection:'Inspection',quoted:'Quoted',approved:'Approved',deposit_paid:'Deposit Paid',in_progress:'In Progress',progress_claim:'Progress Claim',completed:'Completed',retention_released:'Retention Released'};
+const VALID_TRANSITIONS={lead:['inspection'],inspection:['quoted'],quoted:['approved','lead'],approved:['deposit_paid'],deposit_paid:['in_progress'],in_progress:['progress_claim','completed'],progress_claim:['completed'],completed:['retention_released'],retention_released:[]};
+const STAGE_INVOICE_TRIGGERS={approved:{type:'deposit',label:'Deposit Invoice (10%)',pct:0.10},in_progress:{type:'materials',label:'Materials Invoice (40%)',pct:0.40},progress_claim:{type:'progress',label:'Progress Invoice (30%)',pct:0.30},completed:{type:'retention',label:'Retention Invoice (20%)',pct:0.20}};
+const TEAM={'ronny@roofingdownunder.com':{name:'Ronny',role:'Owner'},'harry@roofingdownunder.com':{name:'Harry',role:'Site Lead'},'pauly@roofingdownunder.com':{name:'Pauly',role:'Crew'},'josh@roofingdownunder.com':{name:'Josh',role:'Crew'},'myla@roofingdownunder.com':{name:'Myla',role:'Operations'},'toneth@roofingdownunder.com':{name:'Toneth',role:'Admin'}};
+const TEAM_NAMES=Object.values(TEAM).map(t=>t.name);
+const INV_LABELS={deposit:'Deposit (10%)',materials:'Materials (40%)',progress:'Progress (30%)',retention:'Retention (20%)',other:'Other'};
+const TYPE_LABELS={supplier:'Supplier',po:'Purchase Order',wages:'Wages',subscription:'Subscription',other:'Other'};
 
 let currentUser=null,currentUserInfo=null,isAdmin=false,allJobs=[],currentJobId=null,commentsUnsubscribe=null;
 
-// AUTH
-onAuthStateChanged(auth, user => {
+// ── AUTH ──────────────────────────────────────────────────────────────────────
+onAuthStateChanged(auth,user=>{
   if(user){
     currentUser=user;
     currentUserInfo=TEAM[user.email]||{name:user.email.split('@')[0],role:'Team Member'};
@@ -705,15 +735,16 @@ onAuthStateChanged(auth, user => {
     document.getElementById('sidebarRole').textContent=currentUserInfo.role;
     document.getElementById('firstName').textContent=currentUserInfo.name;
     document.querySelectorAll('.admin-only').forEach(el=>el.style.display=isAdmin?'':'none');
-    if(isAdmin) document.getElementById('navAdmin').style.display='';
+    if(isAdmin)document.getElementById('navAdmin').style.display='';
     loadAll();
-  } else {
+    renderAdminTeam();
+  }else{
     document.getElementById('authScreen').style.display='flex';
     document.getElementById('app').style.display='none';
   }
 });
 
-window.signIn = async()=>{
+window.signIn=async()=>{
   const email=document.getElementById('authEmail').value,pass=document.getElementById('authPass').value;
   const err=document.getElementById('authErr');err.style.display='none';
   try{await signInWithEmailAndPassword(auth,email,pass);}
@@ -722,15 +753,24 @@ window.signIn = async()=>{
 window.doSignOut=()=>fbSignOut(auth);
 document.getElementById('authPass').addEventListener('keydown',e=>{if(e.key==='Enter')window.signIn();});
 
-// HELPERS
+// ── HELPERS ───────────────────────────────────────────────────────────────────
 function showToast(msg,type='success'){const t=document.getElementById('toast');t.textContent=msg;t.className=`toast ${type} show`;setTimeout(()=>t.className='toast',3000);}
 function badge(s){if(!s)return '';const k=s.toLowerCase().replace(/ /g,'_');return `<span class="badge badge-${k}">${STAGE_LABELS[k]||s}</span>`;}
 function notArchived(d){return !d.archived;}
 function row(label,val){if(!val)return '';return `<div style="display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid var(--border)"><span style="font-size:.75rem;text-transform:uppercase;letter-spacing:.07em;color:var(--text-2)">${label}</span><span style="font-size:.85rem;font-weight:500">${val}</span></div>`;}
 function fmt$(n){return '$'+Number(n||0).toLocaleString();}
+function isImage(name){return /\.(jpg|jpeg|png|gif|webp|heic)$/i.test(name);}
 
 window.openModal=id=>document.getElementById(id).classList.add('open');
 window.closeModal=id=>document.getElementById(id).classList.remove('open');
+
+window.nav=id=>{
+  showPage(id);
+  // close mobile sidebar if open
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('mobileOverlay').classList.remove('open');
+};
+
 window.showPage=id=>{
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -738,6 +778,7 @@ window.showPage=id=>{
   document.querySelectorAll('.nav-item').forEach(n=>{if(n.getAttribute('onclick')?.includes(`'${id}'`))n.classList.add('active');});
   if(id!=='jobdetail'&&commentsUnsubscribe){commentsUnsubscribe();commentsUnsubscribe=null;}
 };
+
 window.switchTab=(id,btn)=>{
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));
@@ -745,16 +786,21 @@ window.switchTab=(id,btn)=>{
   if(btn)btn.classList.add('active');
 };
 
+window.toggleSidebar=()=>{
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('mobileOverlay').classList.toggle('open');
+};
+
 async function loadAll(){await Promise.all([loadJobs(),loadLeads(),loadSchedule(),loadInspections(),loadInvoices(),loadReports(),loadAds(),loadReminders(),loadTasks(),loadQuickLinks()]);}
 
-// SOFT DELETE
+// ── SOFT DELETE ───────────────────────────────────────────────────────────────
 window.archiveItem=async(col,id,reload)=>{
-  if(!confirm('Archive this item? It will be hidden but not permanently deleted.'))return;
+  if(!confirm('Archive this item?'))return;
   try{await updateDoc(doc(db,col,id),{archived:true,archivedAt:new Date().toISOString()});await reload();showToast('Archived');}
   catch(e){showToast('Error archiving','error');}
 };
 
-// LEAD NUMBERING
+// ── LEAD NUMBERING ────────────────────────────────────────────────────────────
 async function getNextLeadNumber(){
   const metaRef=doc(db,'settings','metadata');let num=1;
   await runTransaction(db,async tx=>{
@@ -765,13 +811,85 @@ async function getNextLeadNumber(){
   return String(num).padStart(5,'0');
 }
 
-// JOBS
+// ── ADMIN ROLE UI ─────────────────────────────────────────────────────────────
+function renderAdminTeam(){
+  const el=document.getElementById('adminTeamList');if(!el)return;
+  el.innerHTML=Object.entries(TEAM).map(([email,info])=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--border)">
+      <div><div style="font-weight:500;font-size:.88rem">${info.name}</div><div style="font-size:.75rem;color:var(--text-2)">${email}</div></div>
+      <span class="role-tag ${info.role==='Admin'?'admin':'staff'}">${info.role}</span>
+    </div>`).join('');
+}
+
+// ── FILE UPLOADS ──────────────────────────────────────────────────────────────
+window.handleDrop=(e,context)=>{
+  e.preventDefault();e.currentTarget.classList.remove('drag');
+  uploadFiles(e.dataTransfer.files,context);
+};
+
+window.uploadFiles=async(files,context)=>{
+  if(!files||!files.length||!currentJobId)return;
+  const progressWrap=document.getElementById(`uploadProgress${context==='job'?'Job':'Insp'}`);
+  const progressBar=document.getElementById(`uploadProgressBar${context==='job'?'Job':'Insp'}`);
+  progressWrap.style.display='block';progressBar.style.width='0%';
+
+  for(const file of files){
+    if(file.size>10*1024*1024){showToast(`${file.name} is over 10MB — skipped`,'error');continue;}
+    const path=`attachments/${currentJobId}/${Date.now()}_${file.name}`;
+    const sRef=storageRef(storage,path);
+    const task=uploadBytesResumable(sRef,file);
+
+    await new Promise((resolve,reject)=>{
+      task.on('state_changed',
+        snap=>{ progressBar.style.width=Math.round(snap.bytesTransferred/snap.totalBytes*100)+'%'; },
+        err=>{ showToast('Upload failed','error'); reject(err); },
+        async()=>{
+          const url=await getDownloadURL(task.snapshot.ref);
+          await addDoc(collection(db,'attachments'),{
+            jobId:currentJobId, type:context, fileUrl:url,
+            fileName:file.name, storagePath:path,
+            uploadedBy:currentUserInfo?.name||currentUser.email,
+            createdAt:new Date().toISOString()
+          });
+          resolve();
+        }
+      );
+    }).catch(()=>{});
+  }
+  progressWrap.style.display='none';
+  await loadJobFiles(currentJobId);
+  showToast('Upload complete');
+};
+
+async function loadJobFiles(jobId){
+  const snap=await getDocs(collection(db,'attachments'));const files=[];
+  snap.forEach(d=>{const data=d.data();if(data.jobId===jobId&&notArchived(data))files.push({id:d.id,...data});});
+  const el=document.getElementById('jobFilesList');if(!el)return;
+  el.innerHTML=files.length?files.map(f=>`
+    <div class="attach-item">
+      ${isImage(f.fileName)
+        ?`<img class="attach-thumb" src="${f.fileUrl}" alt="${f.fileName}" onclick="window.open('${f.fileUrl}','_blank')" style="cursor:pointer">`
+        :`<a class="attach-file" href="${f.fileUrl}" target="_blank" rel="noopener"><div class="attach-file-icon">${f.fileName.endsWith('.pdf')?'📄':'📎'}</div><div class="attach-file-name">${f.fileName}</div></a>`}
+      <button class="attach-del" onclick="deleteAttachment('${f.id}','${f.storagePath}')">✕</button>
+      <div style="padding:4px 6px;font-size:.65rem;color:var(--text-3);border-top:1px solid var(--border);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f.uploadedBy||''}</div>
+    </div>`).join(''):'';
+}
+
+window.deleteAttachment=async(id,path)=>{
+  if(!confirm('Remove this file?'))return;
+  try{
+    if(path){const sRef=storageRef(storage,path);await deleteObject(sRef).catch(()=>{});}
+    await updateDoc(doc(db,'attachments',id),{archived:true,archivedAt:new Date().toISOString()});
+    await loadJobFiles(currentJobId);showToast('File removed');
+  }catch(e){showToast('Error removing file','error');}
+};
+
+// ── JOBS ──────────────────────────────────────────────────────────────────────
 async function loadJobs(){
-  const snap=await getDocs(collection(db,'jobs'));
-  allJobs=[];snap.forEach(d=>{const data=d.data();if(notArchived(data))allJobs.push({id:d.id,...data});});
+  const snap=await getDocs(collection(db,'jobs'));allJobs=[];
+  snap.forEach(d=>{const data=d.data();if(notArchived(data))allJobs.push({id:d.id,...data});});
   const active=allJobs.filter(j=>j.stage==='in_progress'||j.stage==='progress_claim').length;
-  document.getElementById('jobsBadge').textContent=active;
-  document.getElementById('statActiveJobs').textContent=active;
+  document.getElementById('jobsBadge').textContent=active;document.getElementById('statActiveJobs').textContent=active;
   const tb=document.getElementById('jobsTable');
   tb.innerHTML=allJobs.length?allJobs.map(j=>`<tr>
     <td style="font-family:var(--font-head);color:var(--rust-lt);font-size:.8rem">#${j.id.slice(-4).toUpperCase()}</td>
@@ -793,20 +911,14 @@ window.openJobModal=()=>{
   ['jobClient','jobPhone','jobLocation','jobDate','jobValue','jobNotes'].forEach(i=>document.getElementById(i).value='');
   document.getElementById('jobStage').value='lead';openModal('jobModal');
 };
-
 window.openEditJobModal=async()=>{
-  if(!currentJobId)return;
-  const snap=await getDoc(doc(db,'jobs',currentJobId));if(!snap.exists())return;
-  const j=snap.data();
-  document.getElementById('jobId').value=currentJobId;
-  document.getElementById('jobClient').value=j.client||'';document.getElementById('jobPhone').value=j.phone||'';
+  if(!currentJobId)return;const snap=await getDoc(doc(db,'jobs',currentJobId));if(!snap.exists())return;const j=snap.data();
+  document.getElementById('jobId').value=currentJobId;document.getElementById('jobClient').value=j.client||'';document.getElementById('jobPhone').value=j.phone||'';
   document.getElementById('jobType').value=j.type||'Roof Repairs';document.getElementById('jobStage').value=j.stage||'lead';
   document.getElementById('jobLocation').value=j.location||'';document.getElementById('jobAssigned').value=j.assigned||'Harry';
-  document.getElementById('jobDate').value=j.date||'';document.getElementById('jobValue').value=j.value||'';
-  document.getElementById('jobNotes').value=j.notes||'';document.getElementById('jobModalTitle').textContent='Edit Job';
-  openModal('jobModal');
+  document.getElementById('jobDate').value=j.date||'';document.getElementById('jobValue').value=j.value||'';document.getElementById('jobNotes').value=j.notes||'';
+  document.getElementById('jobModalTitle').textContent='Edit Job';openModal('jobModal');
 };
-
 window.saveJob=async()=>{
   const id=document.getElementById('jobId').value;
   const data={client:document.getElementById('jobClient').value,phone:document.getElementById('jobPhone').value,type:document.getElementById('jobType').value,stage:document.getElementById('jobStage').value,location:document.getElementById('jobLocation').value,assigned:document.getElementById('jobAssigned').value,date:document.getElementById('jobDate').value,value:document.getElementById('jobValue').value,notes:document.getElementById('jobNotes').value,updated:new Date().toISOString()};
@@ -816,27 +928,20 @@ window.saveJob=async()=>{
   }catch(e){showToast('Error saving job','error');}
 };
 
-// JOB DETAIL
+// ── JOB DETAIL ────────────────────────────────────────────────────────────────
 window.openJobDetail=async(id)=>{
-  currentJobId=id;
-  const snap=await getDoc(doc(db,'jobs',id));if(!snap.exists())return;
-  const j=snap.data();
+  currentJobId=id;const snap=await getDoc(doc(db,'jobs',id));if(!snap.exists())return;const j=snap.data();
   document.getElementById('detailJobTitle').textContent=j.client||'Job Detail';
   document.getElementById('detailJobSub').textContent=`${j.type||''} · ${j.location||''}`;
   document.getElementById('detailStageBadge').innerHTML=badge(j.stage||'lead');
-  const stage=j.stage||'lead',stageIdx=STAGES.indexOf(stage);
-  let th='';
-  STAGES.forEach((s,i)=>{
-    const isDone=i<stageIdx,isCur=i===stageIdx;
-    if(i>0)th+=`<div class="stage-line ${isDone?'done':''}"></div>`;
-    th+=`<div class="stage-dot"><div class="stage-dot-circle ${isDone?'done':''} ${isCur?'current':''}"></div><div class="stage-dot-label ${isDone?'done':''} ${isCur?'current':''}">${STAGE_LABELS[s]}</div></div>`;
-  });
+  const stage=j.stage||'lead',si=STAGES.indexOf(stage);let th='';
+  STAGES.forEach((s,i)=>{const d=i<si,c=i===si;if(i>0)th+=`<div class="stage-line ${d?'done':''}"></div>`;th+=`<div class="stage-dot"><div class="stage-dot-circle ${d?'done':''} ${c?'current':''}"></div><div class="stage-dot-label ${d?'done':''} ${c?'current':''}">${STAGE_LABELS[s]}</div></div>`;});
   document.getElementById('stageTrack').innerHTML=th;
-  const transitions=VALID_TRANSITIONS[stage]||[];
-  document.getElementById('stageActions').innerHTML=transitions.map(t=>`<button class="btn btn-stage" onclick="advanceStage('${id}','${t}')">→ ${STAGE_LABELS[t]}</button>`).join('')||`<span style="font-size:.8rem;color:var(--text-3)">No further transitions</span>`;
+  const tr=VALID_TRANSITIONS[stage]||[];
+  document.getElementById('stageActions').innerHTML=tr.map(t=>`<button class="btn btn-stage" onclick="advanceStage('${id}','${t}')">→ ${STAGE_LABELS[t]}</button>`).join('')||`<span style="font-size:.8rem;color:var(--text-3)">No further transitions</span>`;
   document.getElementById('detailInfo').innerHTML=`<div style="display:grid;gap:.75rem">${row('Phone',j.phone)}${row('Service',j.type)}${row('Location',j.location)}${row('Assigned',j.assigned)}${row('Start Date',j.date)}${row('Contract Value',j.value?fmt$(j.value):'')}</div>`;
   document.getElementById('detailNotes').textContent=j.notes||'No notes recorded.';
-  await Promise.all([loadJobInvoices(id),loadJobReports(id),loadJobPOs(id),loadJobQuotes(id)]);
+  await Promise.all([loadJobInvoices(id),loadJobReports(id),loadJobPOs(id),loadJobQuotes(id),loadJobFiles(id)]);
   subscribeToComments(id);
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(t=>t.classList.remove('active'));
@@ -852,16 +957,13 @@ window.advanceStage=async(jobId,newStage)=>{
     if(!VALID_TRANSITIONS[j.stage||'lead']?.includes(newStage)){showToast('Invalid stage transition','error');return;}
     await updateDoc(jobRef,{stage:newStage,updated:new Date().toISOString()});
     const trigger=STAGE_INVOICE_TRIGGERS[newStage];
-    if(trigger&&j.value){
-      const amount=Math.round(Number(j.value)*trigger.pct);
-      await addDoc(collection(db,'invoices'),{jobId,jobClient:j.client||'',type:trigger.type,amount,status:'pending',issuedAt:new Date().toISOString(),notes:trigger.label,created:new Date().toISOString()});
-      showToast(`Stage updated · ${trigger.label} created (${fmt$(amount)})`);
-    }else showToast(`Job moved to ${STAGE_LABELS[newStage]}`);
+    if(trigger&&j.value){const amount=Math.round(Number(j.value)*trigger.pct);await addDoc(collection(db,'invoices'),{jobId,jobClient:j.client||'',type:trigger.type,amount,status:'pending',issuedAt:new Date().toISOString(),notes:trigger.label,created:new Date().toISOString()});showToast(`Stage updated · ${trigger.label} created (${fmt$(amount)})`);}
+    else showToast(`Job moved to ${STAGE_LABELS[newStage]}`);
     await loadJobs();await loadInvoices();await openJobDetail(jobId);
   }catch(e){showToast('Error updating stage','error');}
 };
 
-// INTERNAL NOTES
+// ── INTERNAL NOTES ────────────────────────────────────────────────────────────
 function subscribeToComments(jobId){
   if(commentsUnsubscribe){commentsUnsubscribe();commentsUnsubscribe=null;}
   const q=query(collection(db,'job_comments'),where('jobId','==',jobId),orderBy('createdAt','asc'));
@@ -870,26 +972,24 @@ function subscribeToComments(jobId){
     if(snap.empty){list.innerHTML=`<div style="text-align:center;padding:2rem;color:var(--text-3);font-size:.82rem">No notes yet — start the conversation</div>`;return;}
     list.innerHTML='';
     snap.forEach(d=>{
-      const c=d.data(),isMine=c.userId===currentUser?.uid;
-      const initials=(c.userName||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+      const c=d.data(),mine=c.userId===currentUser?.uid;
+      const init=(c.userName||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
       const ts=c.createdAt?.toDate?c.createdAt.toDate().toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'}):'';
       const ds=c.createdAt?.toDate?c.createdAt.toDate().toLocaleDateString('en-AU',{day:'numeric',month:'short'}):'';
-      const msgHtml=(c.message||'').replace(/@(\w+)/g,'<span class="comment-mention">@$1</span>');
-      list.innerHTML+=`<div class="comment-item"><div class="comment-avatar">${initials}</div><div class="comment-bubble ${isMine?'mine':''}"><div class="comment-meta"><strong>${c.userName||'Unknown'}</strong> · ${ds} ${ts}</div><div class="comment-text">${msgHtml}</div></div></div>`;
+      const msg=(c.message||'').replace(/@(\w+)/g,'<span class="comment-mention">@$1</span>');
+      list.innerHTML+=`<div class="comment-item"><div class="comment-avatar">${init}</div><div class="comment-bubble ${mine?'mine':''}"><div class="comment-meta"><strong>${c.userName||'Unknown'}</strong> · ${ds} ${ts}</div><div class="comment-text">${msg}</div></div></div>`;
     });
     list.scrollTop=list.scrollHeight;
   });
 }
-
 window.sendComment=async()=>{
-  const input=document.getElementById('commentInput');const msg=input.value.trim();
-  if(!msg||!currentJobId||!currentUser)return;
+  const input=document.getElementById('commentInput');const msg=input.value.trim();if(!msg||!currentJobId||!currentUser)return;
   const mentions=[];TEAM_NAMES.forEach(name=>{if(msg.includes('@'+name))mentions.push(name);});
   try{await addDoc(collection(db,'job_comments'),{jobId:currentJobId,userId:currentUser.uid,userName:currentUserInfo?.name||currentUser.email,message:msg,mentions,createdAt:serverTimestamp()});input.value='';}
   catch(e){showToast('Error sending note','error');}
 };
 
-// LEADS
+// ── LEADS ─────────────────────────────────────────────────────────────────────
 async function loadLeads(){
   const snap=await getDocs(collection(db,'leads'));const leads=[];
   snap.forEach(d=>{const data=d.data();if(notArchived(data))leads.push({id:d.id,...data});});
@@ -908,7 +1008,6 @@ async function loadLeads(){
   const el=document.getElementById('dashRecentLeads');
   el.innerHTML=leads.slice(0,4).map(l=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--border)"><div><div style="font-weight:500;font-size:.85rem">${l.leadNumber?`<span style="color:var(--rust-lt);font-size:.75rem">${l.leadNumber}</span> `:''}${l.name||''}</div><div style="font-size:.75rem;color:var(--text-2)">${l.service||''} · ${l.source||''}</div></div>${badge(l.status)}</div>`).join('')||'<div class="empty-state"><div class="empty-icon">📋</div><p>No leads yet</p></div>';
 }
-
 window.saveLead=async()=>{
   const id=document.getElementById('leadId').value;
   const data={name:document.getElementById('leadName').value,phone:document.getElementById('leadPhone').value,email:document.getElementById('leadEmail').value,service:document.getElementById('leadService').value,location:document.getElementById('leadLocation').value,source:document.getElementById('leadSource').value,status:document.getElementById('leadStatus').value,notes:document.getElementById('leadNotes').value,updated:new Date().toISOString()};
@@ -916,11 +1015,9 @@ window.saveLead=async()=>{
     if(id){await updateDoc(doc(db,'leads',id),data);}
     else{const leadNumber=await getNextLeadNumber();await addDoc(collection(db,'leads'),{...data,leadNumber,created:new Date().toISOString()});}
     closeModal('leadModal');['leadId','leadName','leadPhone','leadEmail','leadLocation','leadNotes'].forEach(i=>document.getElementById(i).value='');
-    document.getElementById('leadModalTitle').textContent='New Lead';
-    await loadLeads();showToast(id?'Lead updated':'Lead added');
+    document.getElementById('leadModalTitle').textContent='New Lead';await loadLeads();showToast(id?'Lead updated':'Lead added');
   }catch(e){showToast('Error saving lead','error');console.error(e);}
 };
-
 window.editLead=async(id)=>{
   const snap=await getDoc(doc(db,'leads',id));if(!snap.exists())return;const l=snap.data();
   document.getElementById('leadId').value=id;document.getElementById('leadName').value=l.name||'';document.getElementById('leadPhone').value=l.phone||'';
@@ -930,7 +1027,7 @@ window.editLead=async(id)=>{
   document.getElementById('leadModalTitle').textContent=`Edit Lead ${l.leadNumber||''}`;openModal('leadModal');
 };
 
-// SCHEDULE
+// ── SCHEDULE ─────────────────────────────────────────────────────────────────
 async function loadSchedule(){
   const snap=await getDocs(collection(db,'schedule'));const events=[];
   snap.forEach(d=>{const data=d.data();if(notArchived(data))events.push({id:d.id,...data});});
@@ -938,57 +1035,28 @@ async function loadSchedule(){
   const now=new Date(),week=new Date(now.getTime()+7*24*60*60*1000);
   document.getElementById('statWeek').textContent=events.filter(e=>{const d=new Date(e.date+'T00:00:00');return d>=now&&d<=week;}).length;
   const el=document.getElementById('scheduleList');
-  el.innerHTML=events.length?`<div class="card-title">Upcoming Events</div>`+events.map(e=>`
-    <div style="display:flex;align-items:center;gap:1rem;padding:.85rem 0;border-bottom:1px solid var(--border)">
-      <div style="background:var(--surface);border-radius:8px;padding:.5rem .75rem;text-align:center;min-width:52px">
-        <div style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;color:var(--rust-lt)">${e.date?e.date.slice(8):''}</div>
-        <div style="font-size:.65rem;color:var(--text-2);text-transform:uppercase">${e.date?new Date(e.date+'T00:00:00').toLocaleString('en',{month:'short'}):''}</div>
-      </div>
-      <div style="flex:1"><div style="font-weight:500;font-size:.9rem">${e.title||''}</div>
-        <div style="font-size:.78rem;color:var(--text-2)">${e.time||''} · ${e.crew||''} · ${e.type||''}</div>
-        ${e.notes?`<div style="font-size:.78rem;color:var(--text-3);margin-top:2px">${e.notes}</div>`:''}
-      </div>
-      <button class="btn btn-sm btn-danger" onclick="archiveItem('schedule','${e.id}',loadSchedule)">✕</button>
-    </div>`).join(''):'<div class="empty-state"><div class="empty-icon">📅</div><p>No events scheduled</p></div>';
+  el.innerHTML=events.length?`<div class="card-title">Upcoming Events</div>`+events.map(e=>`<div style="display:flex;align-items:center;gap:1rem;padding:.85rem 0;border-bottom:1px solid var(--border)"><div style="background:var(--surface);border-radius:8px;padding:.5rem .75rem;text-align:center;min-width:52px"><div style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;color:var(--rust-lt)">${e.date?e.date.slice(8):''}</div><div style="font-size:.65rem;color:var(--text-2);text-transform:uppercase">${e.date?new Date(e.date+'T00:00:00').toLocaleString('en',{month:'short'}):''}</div></div><div style="flex:1"><div style="font-weight:500;font-size:.9rem">${e.title||''}</div><div style="font-size:.78rem;color:var(--text-2)">${e.time||''} · ${e.crew||''} · ${e.type||''}</div>${e.notes?`<div style="font-size:.78rem;color:var(--text-3);margin-top:2px">${e.notes}</div>`:''}</div><button class="btn btn-sm btn-danger" onclick="archiveItem('schedule','${e.id}',loadSchedule)">✕</button></div>`).join(''):'<div class="empty-state"><div class="empty-icon">📅</div><p>No events scheduled</p></div>';
 }
-
 window.saveSchedule=async()=>{
   const data={title:document.getElementById('schedTitle').value,date:document.getElementById('schedDate').value,time:document.getElementById('schedTime').value,crew:document.getElementById('schedCrew').value,type:document.getElementById('schedType').value,notes:document.getElementById('schedNotes').value,created:new Date().toISOString()};
   try{await addDoc(collection(db,'schedule'),data);closeModal('scheduleModal');['schedTitle','schedDate','schedTime','schedNotes'].forEach(i=>document.getElementById(i).value='');await loadSchedule();showToast('Event added');}
-  catch(e){showToast('Error saving event','error');}
+  catch(e){showToast('Error','error');}
 };
 
-// INSPECTIONS
+// ── INSPECTIONS ───────────────────────────────────────────────────────────────
 async function loadInspections(){
   const snap=await getDocs(collection(db,'inspections'));const items=[];
   snap.forEach(d=>{const data=d.data();if(notArchived(data))items.push({id:d.id,...data});});
   const el=document.getElementById('inspectionsList');
-  el.innerHTML=items.length?items.map(i=>`
-    <div class="card mb-1">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem">
-        <div><div style="font-family:var(--font-head);font-size:1rem;font-weight:600">${i.client||''}</div>
-          <div style="font-size:.8rem;color:var(--text-2)">${i.address||''} · ${i.date||''} · By ${i.inspBy||''}</div></div>
-        <div style="display:flex;gap:.5rem;align-items:center">${badge(i.quoteStatus?.toLowerCase()||'pending')}
-          <button class="btn btn-sm btn-danger" onclick="archiveItem('inspections','${i.id}',loadInspections)">✕</button></div>
-      </div>
-      <div class="grid-3">
-        <div><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Roof Type</div><div style="font-size:.85rem">${i.roofType||'—'}</div></div>
-        <div><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Age</div><div style="font-size:.85rem">${i.age||'—'}</div></div>
-        <div><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Quote</div><div style="font-size:.85rem;color:var(--rust-lt);font-weight:500">${i.quote?fmt$(i.quote):'TBC'}</div></div>
-      </div>
-      ${i.condition?`<div style="margin-top:.75rem;padding:.75rem;background:var(--surface);border-radius:6px;font-size:.82rem;color:var(--text-2)">${i.condition}</div>`:''}
-      ${i.cutList?`<div style="margin-top:.5rem"><div style="font-size:.68rem;text-transform:uppercase;color:var(--text-2);margin-bottom:4px">Cut List</div><div style="font-size:.82rem;white-space:pre-wrap;background:var(--surface);padding:.75rem;border-radius:6px">${i.cutList}</div></div>`:''}
-      ${i.mudMap?`<div style="margin-top:.5rem"><div style="font-size:.68rem;text-transform:uppercase;color:var(--text-2);margin-bottom:4px">Mud Map</div><div style="font-size:.82rem;background:var(--surface);padding:.75rem;border-radius:6px">${i.mudMap}</div></div>`:''}
-    </div>`).join(''):'<div class="empty-state card"><div class="empty-icon">🔍</div><p>No inspections recorded yet</p></div>';
+  el.innerHTML=items.length?items.map(i=>`<div class="card mb-1"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem"><div><div style="font-family:var(--font-head);font-size:1rem;font-weight:600">${i.client||''}</div><div style="font-size:.8rem;color:var(--text-2)">${i.address||''} · ${i.date||''} · By ${i.inspBy||''}</div></div><div style="display:flex;gap:.5rem;align-items:center">${badge(i.quoteStatus?.toLowerCase()||'pending')}<button class="btn btn-sm btn-danger" onclick="archiveItem('inspections','${i.id}',loadInspections)">✕</button></div></div><div class="grid-3"><div><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Roof Type</div><div style="font-size:.85rem">${i.roofType||'—'}</div></div><div><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Age</div><div style="font-size:.85rem">${i.age||'—'}</div></div><div><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Quote</div><div style="font-size:.85rem;color:var(--rust-lt);font-weight:500">${i.quote?fmt$(i.quote):'TBC'}</div></div></div>${i.condition?`<div style="margin-top:.75rem;padding:.75rem;background:var(--surface);border-radius:6px;font-size:.82rem;color:var(--text-2)">${i.condition}</div>`:''}${i.cutList?`<div style="margin-top:.5rem"><div style="font-size:.68rem;text-transform:uppercase;color:var(--text-2);margin-bottom:4px">Cut List</div><div style="font-size:.82rem;white-space:pre-wrap;background:var(--surface);padding:.75rem;border-radius:6px">${i.cutList}</div></div>`:''}${i.mudMap?`<div style="margin-top:.5rem"><div style="font-size:.68rem;text-transform:uppercase;color:var(--text-2);margin-bottom:4px">Mud Map</div><div style="font-size:.82rem;background:var(--surface);padding:.75rem;border-radius:6px">${i.mudMap}</div></div>`:''}</div>`).join(''):'<div class="empty-state card"><div class="empty-icon">🔍</div><p>No inspections recorded yet</p></div>';
 }
-
 window.saveInspection=async()=>{
   const data={client:document.getElementById('inspClient').value,phone:document.getElementById('inspPhone').value,address:document.getElementById('inspAddress').value,date:document.getElementById('inspDate').value,inspBy:document.getElementById('inspBy').value,roofType:document.getElementById('inspRoofType').value,age:document.getElementById('inspAge').value,condition:document.getElementById('inspCondition').value,quote:document.getElementById('inspQuote').value,quoteStatus:document.getElementById('inspQuoteStatus').value,cutList:document.getElementById('inspCutList').value,mudMap:document.getElementById('inspMudMap').value,created:new Date().toISOString()};
   try{await addDoc(collection(db,'inspections'),data);closeModal('inspectionModal');['inspClient','inspPhone','inspAddress','inspDate','inspAge','inspCondition','inspQuote','inspCutList','inspMudMap'].forEach(i=>document.getElementById(i).value='');await loadInspections();showToast('Inspection saved');}
-  catch(e){showToast('Error saving inspection','error');}
+  catch(e){showToast('Error','error');}
 };
 
-// INVOICES
+// ── INVOICES ──────────────────────────────────────────────────────────────────
 async function loadInvoices(){
   const snap=await getDocs(collection(db,'invoices'));const invs=[];
   snap.forEach(d=>{const data=d.data();if(notArchived(data))invs.push({id:d.id,...data});});
@@ -996,128 +1064,68 @@ async function loadInvoices(){
   document.getElementById('invoicesBadge').textContent=unpaid;document.getElementById('statUnpaid').textContent=unpaid;
   let outstanding=0,paidMonth=0,total=0;const now=new Date();
   invs.forEach(i=>{const amt=Number(i.amount||0);total+=amt;if(i.status!=='paid')outstanding+=amt;else if(i.paidAt){const p=new Date(i.paidAt);if(p.getMonth()===now.getMonth()&&p.getFullYear()===now.getFullYear())paidMonth+=amt;}});
-  document.getElementById('invOutstanding').textContent=fmt$(outstanding);
-  document.getElementById('invPaidMonth').textContent=fmt$(paidMonth);
-  document.getElementById('invTotal').textContent=fmt$(total);
+  document.getElementById('invOutstanding').textContent=fmt$(outstanding);document.getElementById('invPaidMonth').textContent=fmt$(paidMonth);document.getElementById('invTotal').textContent=fmt$(total);
   const tb=document.getElementById('invoicesTable');
-  tb.innerHTML=invs.length?invs.map(i=>`<tr>
-    <td style="font-family:var(--font-head);color:var(--rust-lt);font-size:.8rem">#INV-${i.id.slice(-4).toUpperCase()}</td>
-    <td>${i.jobClient||'—'}</td><td style="font-size:.82rem">${INV_LABELS[i.type]||i.type||'—'}</td>
-    <td style="font-weight:500;color:var(--rust-lt)">${fmt$(i.amount)}</td>
-    <td style="font-size:.82rem;color:var(--text-2)">${i.issuedAt?new Date(i.issuedAt).toLocaleDateString('en-AU'):'—'}</td>
-    <td>${badge(i.status||'pending')}</td>
-    <td><div style="display:flex;gap:.5rem">${i.status!=='paid'?`<button class="btn btn-xs btn-success" onclick="markInvoicePaid('${i.id}')">Mark Paid</button>`:''}<button class="btn btn-xs btn-danger" onclick="archiveItem('invoices','${i.id}',loadInvoices)">Archive</button></div></td>
-  </tr>`).join(''):`<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No invoices yet</td></tr>`;
+  tb.innerHTML=invs.length?invs.map(i=>`<tr><td style="font-family:var(--font-head);color:var(--rust-lt);font-size:.8rem">#INV-${i.id.slice(-4).toUpperCase()}</td><td>${i.jobClient||'—'}</td><td style="font-size:.82rem">${INV_LABELS[i.type]||i.type||'—'}</td><td style="font-weight:500;color:var(--rust-lt)">${fmt$(i.amount)}</td><td style="font-size:.82rem;color:var(--text-2)">${i.issuedAt?new Date(i.issuedAt).toLocaleDateString('en-AU'):'—'}</td><td>${badge(i.status||'pending')}</td><td><div style="display:flex;gap:.5rem">${i.status!=='paid'?`<button class="btn btn-xs btn-success" onclick="markInvoicePaid('${i.id}')">Mark Paid</button>`:''}<button class="btn btn-xs btn-danger" onclick="archiveItem('invoices','${i.id}',loadInvoices)">Archive</button></div></td></tr>`).join(''):`<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No invoices yet</td></tr>`;
 }
-
 async function loadJobInvoices(jobId){
   const snap=await getDocs(collection(db,'invoices'));const invs=[];
   snap.forEach(d=>{const data=d.data();if(data.jobId===jobId&&notArchived(data))invs.push({id:d.id,...data});});
   const el=document.getElementById('jobInvoicesList');
-  el.innerHTML=invs.length?invs.map(i=>`
-    <div class="invoice-card ${i.status==='paid'?'paid':''}">
-      <div class="invoice-info"><div class="inv-type">${INV_LABELS[i.type]||i.type||'Invoice'}</div>
-        <div class="inv-meta">#INV-${i.id.slice(-4).toUpperCase()} · ${i.issuedAt?new Date(i.issuedAt).toLocaleDateString('en-AU'):'—'} · ${badge(i.status)}</div></div>
-      <div style="display:flex;align-items:center;gap:.75rem">
-        <div class="invoice-amount ${i.status==='paid'?'paid':''}">${fmt$(i.amount)}</div>
-        ${i.status!=='paid'?`<button class="btn btn-xs btn-success" onclick="markInvoicePaid('${i.id}')">Paid</button>`:''}
-        <button class="btn btn-xs btn-danger" onclick="archiveItem('invoices','${i.id}',()=>{loadInvoices();loadJobInvoices('${jobId}');})">✕</button>
-      </div>
-    </div>`).join(''):'<div class="empty-state"><div class="empty-icon">💰</div><p>No invoices yet</p></div>';
+  el.innerHTML=invs.length?invs.map(i=>`<div class="invoice-card ${i.status==='paid'?'paid':''}"><div class="invoice-info"><div class="inv-type">${INV_LABELS[i.type]||i.type||'Invoice'}</div><div class="inv-meta">#INV-${i.id.slice(-4).toUpperCase()} · ${i.issuedAt?new Date(i.issuedAt).toLocaleDateString('en-AU'):'—'} · ${badge(i.status)}</div></div><div style="display:flex;align-items:center;gap:.75rem"><div class="invoice-amount ${i.status==='paid'?'paid':''}">${fmt$(i.amount)}</div>${i.status!=='paid'?`<button class="btn btn-xs btn-success" onclick="markInvoicePaid('${i.id}')">Paid</button>`:''}<button class="btn btn-xs btn-danger" onclick="archiveItem('invoices','${i.id}',()=>{loadInvoices();loadJobInvoices('${jobId}');})">✕</button></div></div>`).join(''):'<div class="empty-state"><div class="empty-icon">💰</div><p>No invoices yet</p></div>';
 }
-
 window.markInvoicePaid=async(id)=>{
-  try{await updateDoc(doc(db,'invoices',id),{status:'paid',paidAt:new Date().toISOString()});await loadInvoices();if(currentJobId)await loadJobInvoices(currentJobId);showToast('Invoice marked as paid');}
-  catch(e){showToast('Error','error');}
+  try{await updateDoc(doc(db,'invoices',id),{status:'paid',paidAt:new Date().toISOString()});await loadInvoices();if(currentJobId)await loadJobInvoices(currentJobId);showToast('Marked as paid');}catch(e){showToast('Error','error');}
 };
-
 window.openInvoiceModal=()=>{
   document.getElementById('invId').value='';document.getElementById('invJobId').value=currentJobId||'';
-  document.getElementById('invJobFieldWrap').style.display='none';
-  document.getElementById('invAmount').value='';document.getElementById('invNotes').value='';
-  document.getElementById('invIssued').value=new Date().toISOString().slice(0,10);
-  document.getElementById('invoiceModalTitle').textContent='New Invoice';openModal('invoiceModal');
+  document.getElementById('invJobFieldWrap').style.display='none';document.getElementById('invAmount').value='';document.getElementById('invNotes').value='';
+  document.getElementById('invIssued').value=new Date().toISOString().slice(0,10);document.getElementById('invoiceModalTitle').textContent='New Invoice';openModal('invoiceModal');
 };
-
 window.openInvoiceModalStandalone=async()=>{
-  document.getElementById('invId').value='';document.getElementById('invJobId').value='';
-  document.getElementById('invJobFieldWrap').style.display='flex';
-  document.getElementById('invAmount').value='';document.getElementById('invNotes').value='';
-  document.getElementById('invIssued').value=new Date().toISOString().slice(0,10);
+  document.getElementById('invId').value='';document.getElementById('invJobId').value='';document.getElementById('invJobFieldWrap').style.display='flex';
+  document.getElementById('invAmount').value='';document.getElementById('invNotes').value='';document.getElementById('invIssued').value=new Date().toISOString().slice(0,10);
   document.getElementById('invoiceModalTitle').textContent='New Invoice';
   document.getElementById('invJobSelect').innerHTML=allJobs.map(j=>`<option value="${j.id}" data-client="${j.client||''}">${j.client||'Unnamed'} — #${j.id.slice(-4).toUpperCase()}</option>`).join('');
   openModal('invoiceModal');
 };
-
 window.saveInvoice=async()=>{
   let jobId=document.getElementById('invJobId').value,jobClient='';
   if(!jobId){const sel=document.getElementById('invJobSelect');jobId=sel.value;jobClient=sel.options[sel.selectedIndex]?.dataset.client||'';}
   else{jobClient=allJobs.find(j=>j.id===jobId)?.client||'';}
   const data={jobId,jobClient,type:document.getElementById('invType').value,amount:document.getElementById('invAmount').value,status:document.getElementById('invStatus').value,issuedAt:new Date(document.getElementById('invIssued').value||Date.now()).toISOString(),notes:document.getElementById('invNotes').value,created:new Date().toISOString()};
-  try{await addDoc(collection(db,'invoices'),data);closeModal('invoiceModal');await loadInvoices();if(currentJobId)await loadJobInvoices(currentJobId);showToast('Invoice saved');}
-  catch(e){showToast('Error saving invoice','error');}
+  try{await addDoc(collection(db,'invoices'),data);closeModal('invoiceModal');await loadInvoices();if(currentJobId)await loadJobInvoices(currentJobId);showToast('Invoice saved');}catch(e){showToast('Error','error');}
 };
 
-// PURCHASE ORDERS
+// ── PURCHASE ORDERS ───────────────────────────────────────────────────────────
 async function loadJobPOs(jobId){
   const snap=await getDocs(collection(db,'purchase_orders'));const pos=[];
   snap.forEach(d=>{const data=d.data();if(data.jobId===jobId&&notArchived(data))pos.push({id:d.id,...data});});
   const el=document.getElementById('jobPOsList');
-  el.innerHTML=pos.length?pos.map(p=>`
-    <div class="invoice-card">
-      <div class="invoice-info"><div class="inv-type">${p.poNumber||'—'} · ${p.supplier||''}</div>
-        <div class="inv-meta">${badge(p.status)}${p.notes?' · '+p.notes:''}</div></div>
-      <div style="display:flex;align-items:center;gap:.75rem">
-        <div class="invoice-amount">${fmt$(p.amount)}</div>
-        <button class="btn btn-xs btn-danger" onclick="archiveItem('purchase_orders','${p.id}',()=>loadJobPOs('${jobId}'))">✕</button>
-      </div>
-    </div>`).join(''):'<div class="empty-state"><div class="empty-icon">📦</div><p>No purchase orders yet</p></div>';
+  el.innerHTML=pos.length?pos.map(p=>`<div class="invoice-card"><div class="invoice-info"><div class="inv-type">${p.poNumber||'—'} · ${p.supplier||''}</div><div class="inv-meta">${badge(p.status)}${p.notes?' · '+p.notes:''}</div></div><div style="display:flex;align-items:center;gap:.75rem"><div class="invoice-amount">${fmt$(p.amount)}</div><button class="btn btn-xs btn-danger" onclick="archiveItem('purchase_orders','${p.id}',()=>loadJobPOs('${jobId}'))">✕</button></div></div>`).join(''):'<div class="empty-state"><div class="empty-icon">📦</div><p>No purchase orders yet</p></div>';
 }
-
-window.openPOModal=()=>{
-  document.getElementById('poJobId').value=currentJobId||'';
-  ['poNumber','poSupplier','poAmount','poNotes'].forEach(i=>document.getElementById(i).value='');
-  document.getElementById('poStatus').value='raised';openModal('poModal');
-};
-
+window.openPOModal=()=>{document.getElementById('poJobId').value=currentJobId||'';['poNumber','poSupplier','poAmount','poNotes'].forEach(i=>document.getElementById(i).value='');document.getElementById('poStatus').value='raised';openModal('poModal');};
 window.savePO=async()=>{
   const jobId=document.getElementById('poJobId').value;
   const data={jobId,poNumber:document.getElementById('poNumber').value,supplier:document.getElementById('poSupplier').value,amount:document.getElementById('poAmount').value,status:document.getElementById('poStatus').value,notes:document.getElementById('poNotes').value,created:new Date().toISOString()};
-  try{await addDoc(collection(db,'purchase_orders'),data);closeModal('poModal');await loadJobPOs(jobId);showToast('PO saved');}
-  catch(e){showToast('Error saving PO','error');}
+  try{await addDoc(collection(db,'purchase_orders'),data);closeModal('poModal');await loadJobPOs(jobId);showToast('PO saved');}catch(e){showToast('Error','error');}
 };
 
-// QUOTES
+// ── QUOTES ────────────────────────────────────────────────────────────────────
 async function loadJobQuotes(jobId){
   const snap=await getDocs(collection(db,'quotes'));const quotes=[];
   snap.forEach(d=>{const data=d.data();if(data.jobId===jobId&&notArchived(data))quotes.push({id:d.id,...data});});
   const el=document.getElementById('jobQuotesList');
-  el.innerHTML=quotes.length?quotes.map(q=>`
-    <div class="invoice-card">
-      <div class="invoice-info"><div class="inv-type">${q.qtNumber||'—'}</div>
-        <div class="inv-meta">${q.date?new Date(q.date+'T00:00:00').toLocaleDateString('en-AU'):''} · ${badge(q.status)}</div></div>
-      <div style="display:flex;align-items:center;gap:.75rem">
-        <div class="invoice-amount ${q.status==='accepted'?'paid':''}">${fmt$(q.amount)}</div>
-        <button class="btn btn-xs btn-danger" onclick="archiveItem('quotes','${q.id}',()=>loadJobQuotes('${jobId}'))">✕</button>
-      </div>
-    </div>`).join(''):'<div class="empty-state"><div class="empty-icon">📄</div><p>No quotes yet</p></div>';
+  el.innerHTML=quotes.length?quotes.map(q=>`<div class="invoice-card"><div class="invoice-info"><div class="inv-type">${q.qtNumber||'—'}</div><div class="inv-meta">${q.date?new Date(q.date+'T00:00:00').toLocaleDateString('en-AU'):''} · ${badge(q.status)}</div></div><div style="display:flex;align-items:center;gap:.75rem"><div class="invoice-amount ${q.status==='accepted'?'paid':''}">${fmt$(q.amount)}</div><button class="btn btn-xs btn-danger" onclick="archiveItem('quotes','${q.id}',()=>loadJobQuotes('${jobId}'))">✕</button></div></div>`).join(''):'<div class="empty-state"><div class="empty-icon">📄</div><p>No quotes yet</p></div>';
 }
-
-window.openQuoteModal=()=>{
-  document.getElementById('qtJobId').value=currentJobId||'';
-  ['qtNumber','qtAmount','qtNotes'].forEach(i=>document.getElementById(i).value='');
-  document.getElementById('qtDate').value=new Date().toISOString().slice(0,10);
-  document.getElementById('qtStatus').value='draft';openModal('quoteModal');
-};
-
+window.openQuoteModal=()=>{document.getElementById('qtJobId').value=currentJobId||'';['qtNumber','qtAmount','qtNotes'].forEach(i=>document.getElementById(i).value='');document.getElementById('qtDate').value=new Date().toISOString().slice(0,10);document.getElementById('qtStatus').value='draft';openModal('quoteModal');};
 window.saveQuote=async()=>{
   const jobId=document.getElementById('qtJobId').value;
   const data={jobId,qtNumber:document.getElementById('qtNumber').value,amount:document.getElementById('qtAmount').value,status:document.getElementById('qtStatus').value,date:document.getElementById('qtDate').value,notes:document.getElementById('qtNotes').value,created:new Date().toISOString()};
-  try{await addDoc(collection(db,'quotes'),data);closeModal('quoteModal');await loadJobQuotes(jobId);showToast('Quote saved');}
-  catch(e){showToast('Error saving quote','error');}
+  try{await addDoc(collection(db,'quotes'),data);closeModal('quoteModal');await loadJobQuotes(jobId);showToast('Quote saved');}catch(e){showToast('Error','error');}
 };
 
-// DAILY REPORTS
+// ── DAILY REPORTS ─────────────────────────────────────────────────────────────
 async function loadReports(){
   const snap=await getDocs(collection(db,'daily_reports'));const reports=[];
   snap.forEach(d=>{const data=d.data();if(notArchived(data))reports.push({id:d.id,...data});});
@@ -1125,7 +1133,6 @@ async function loadReports(){
   const el=document.getElementById('allReportsList');
   el.innerHTML=reports.length?reports.map(r=>renderReport(r)).join(''):'<div class="empty-state card"><div class="empty-icon">📊</div><p>No reports yet</p></div>';
 }
-
 async function loadJobReports(jobId){
   const snap=await getDocs(collection(db,'daily_reports'));const reports=[];
   snap.forEach(d=>{const data=d.data();if(data.jobId===jobId&&notArchived(data))reports.push({id:d.id,...data});});
@@ -1133,94 +1140,60 @@ async function loadJobReports(jobId){
   const el=document.getElementById('jobReportsList');
   el.innerHTML=reports.length?reports.map(r=>renderReport(r)).join(''):'<div class="empty-state"><div class="empty-icon">📊</div><p>No reports yet</p></div>';
 }
-
-function renderReport(r){
-  return `<div class="report-card">
-    <div class="report-card-header"><span class="report-date">${r.date?new Date(r.date+'T00:00:00').toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'}):'—'}</span><span class="report-crew">${r.crew||'—'}</span></div>
-    <div class="report-work">${r.workDone||''}</div>
-    ${r.issues?`<div class="report-issue">⚠️ ${r.issues}</div>`:''}
-    <div style="text-align:right;margin-top:.5rem"><button class="btn btn-xs btn-danger" onclick="archiveItem('daily_reports','${r.id}',loadReports)">✕</button></div>
-  </div>`;
-}
-
-window.openReportModal=()=>{
-  document.getElementById('rptJobId').value=currentJobId||'';document.getElementById('rptJobFieldWrap').style.display='none';
-  document.getElementById('rptDate').value=new Date().toISOString().slice(0,10);
-  document.getElementById('rptWork').value='';document.getElementById('rptIssues').value='';openModal('reportModal');
-};
-
-window.openReportModalStandalone=()=>{
-  document.getElementById('rptJobId').value='';document.getElementById('rptJobFieldWrap').style.display='flex';
-  document.getElementById('rptJobSelect').innerHTML=allJobs.map(j=>`<option value="${j.id}">${j.client||'Unnamed'} — #${j.id.slice(-4).toUpperCase()}</option>`).join('');
-  document.getElementById('rptDate').value=new Date().toISOString().slice(0,10);
-  document.getElementById('rptWork').value='';document.getElementById('rptIssues').value='';openModal('reportModal');
-};
-
+function renderReport(r){return `<div class="report-card"><div class="report-card-header"><span class="report-date">${r.date?new Date(r.date+'T00:00:00').toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'}):'—'}</span><span class="report-crew">${r.crew||'—'}</span></div><div class="report-work">${r.workDone||''}</div>${r.issues?`<div class="report-issue">⚠️ ${r.issues}</div>`:''}<div style="text-align:right;margin-top:.5rem"><button class="btn btn-xs btn-danger" onclick="archiveItem('daily_reports','${r.id}',loadReports)">✕</button></div></div>`;}
+window.openReportModal=()=>{document.getElementById('rptJobId').value=currentJobId||'';document.getElementById('rptJobFieldWrap').style.display='none';document.getElementById('rptDate').value=new Date().toISOString().slice(0,10);document.getElementById('rptWork').value='';document.getElementById('rptIssues').value='';openModal('reportModal');};
+window.openReportModalStandalone=()=>{document.getElementById('rptJobId').value='';document.getElementById('rptJobFieldWrap').style.display='flex';document.getElementById('rptJobSelect').innerHTML=allJobs.map(j=>`<option value="${j.id}">${j.client||'Unnamed'} — #${j.id.slice(-4).toUpperCase()}</option>`).join('');document.getElementById('rptDate').value=new Date().toISOString().slice(0,10);document.getElementById('rptWork').value='';document.getElementById('rptIssues').value='';openModal('reportModal');};
 window.saveReport=async()=>{
   let jobId=document.getElementById('rptJobId').value;if(!jobId)jobId=document.getElementById('rptJobSelect').value;
   const data={jobId,date:document.getElementById('rptDate').value,crew:document.getElementById('rptCrew').value,workDone:document.getElementById('rptWork').value,issues:document.getElementById('rptIssues').value,created:new Date().toISOString()};
-  try{await addDoc(collection(db,'daily_reports'),data);closeModal('reportModal');await loadReports();if(currentJobId)await loadJobReports(currentJobId);showToast('Report saved');}
-  catch(e){showToast('Error saving report','error');}
+  try{await addDoc(collection(db,'daily_reports'),data);closeModal('reportModal');await loadReports();if(currentJobId)await loadJobReports(currentJobId);showToast('Report saved');}catch(e){showToast('Error','error');}
 };
 
-// REMINDERS
+// ── REMINDERS ─────────────────────────────────────────────────────────────────
 async function loadReminders(){
   const snap=await getDocs(collection(db,'reminders'));const items=[];
   snap.forEach(d=>{const data=d.data();if(notArchived(data))items.push({id:d.id,...data});});
   items.sort((a,b)=>a.dueDate>b.dueDate?1:-1);
   const today=new Date().toISOString().slice(0,10);
-  const overdue=items.filter(r=>r.dueDate<today&&r.status==='due').length;
-  document.getElementById('remindersBadge').textContent=overdue||items.filter(r=>r.status==='due').length;
+  const due=items.filter(r=>r.status==='due');
+  document.getElementById('remindersBadge').textContent=due.filter(r=>r.dueDate<=today).length||due.length;
   const el=document.getElementById('remindersList');
   el.innerHTML=items.length?items.map(r=>{
-    const isOverdue=r.dueDate<today&&r.status==='due';
-    return `<div class="reminder-item ${isOverdue?'overdue':''}">
-      <div class="reminder-left"><div class="reminder-title">${r.title||''}</div>
-        <div class="reminder-meta">${TYPE_LABELS[r.type]||r.type||''} · Due: ${r.dueDate?new Date(r.dueDate+'T00:00:00').toLocaleDateString('en-AU'):'—'}${isOverdue?' · <span style="color:var(--red)">OVERDUE</span>':''}</div></div>
-      <div class="reminder-right">${badge(r.status)}${r.status==='due'?`<button class="btn btn-xs btn-success" onclick="markReminderPaid('${r.id}')">Mark Paid</button>`:''}<button class="btn btn-xs btn-danger" onclick="archiveItem('reminders','${r.id}',loadReminders)">✕</button></div>
-    </div>`;
+    const ov=r.dueDate<today&&r.status==='due';
+    return `<div class="reminder-item ${ov?'overdue':''}"><div class="reminder-left"><div class="reminder-title">${r.title||''}</div><div class="reminder-meta">${TYPE_LABELS[r.type]||r.type||''} · Due: ${r.dueDate?new Date(r.dueDate+'T00:00:00').toLocaleDateString('en-AU'):'—'}${ov?' · <span style="color:var(--red)">OVERDUE</span>':''}</div></div><div class="reminder-right">${badge(r.status)}${r.status==='due'?`<button class="btn btn-xs btn-success" onclick="markReminderPaid('${r.id}')">Mark Paid</button>`:''}<button class="btn btn-xs btn-danger" onclick="archiveItem('reminders','${r.id}',loadReminders)">✕</button></div></div>`;
   }).join(''):'<div class="empty-state card"><div class="empty-icon">🔔</div><p>No reminders yet</p></div>';
 }
-
 window.markReminderPaid=async(id)=>{await updateDoc(doc(db,'reminders',id),{status:'paid',paidAt:new Date().toISOString()});await loadReminders();showToast('Marked as paid');};
-
 window.saveReminder=async()=>{
   const data={title:document.getElementById('remTitle').value,type:document.getElementById('remType').value,dueDate:document.getElementById('remDue').value,status:document.getElementById('remStatus').value,notes:document.getElementById('remNotes').value,created:new Date().toISOString()};
-  try{await addDoc(collection(db,'reminders'),data);closeModal('reminderModal');['remTitle','remDue','remNotes'].forEach(i=>document.getElementById(i).value='');await loadReminders();showToast('Reminder saved');}
-  catch(e){showToast('Error saving reminder','error');}
+  try{await addDoc(collection(db,'reminders'),data);closeModal('reminderModal');['remTitle','remDue','remNotes'].forEach(i=>document.getElementById(i).value='');await loadReminders();showToast('Reminder saved');}catch(e){showToast('Error','error');}
 };
 
-// TASKS
+// ── TASKS ─────────────────────────────────────────────────────────────────────
 async function loadTasks(){
-  const groupsSnap=await getDocs(collection(db,'tasks'));const groups=[];
-  groupsSnap.forEach(d=>{const data=d.data();if(notArchived(data))groups.push({id:d.id,...data});});
-  const itemsSnap=await getDocs(collection(db,'task_items'));const allItems={};
-  itemsSnap.forEach(d=>{const data=d.data();if(notArchived(data)&&(!data.userId||data.userId===currentUser?.uid)){if(!allItems[data.taskId])allItems[data.taskId]=[];allItems[data.taskId].push({id:d.id,...data});}});
+  const gs=await getDocs(collection(db,'tasks'));const groups=[];gs.forEach(d=>{const data=d.data();if(notArchived(data))groups.push({id:d.id,...data});});
+  const is=await getDocs(collection(db,'task_items'));const allItems={};
+  is.forEach(d=>{const data=d.data();if(notArchived(data)&&(!data.userId||data.userId===currentUser?.uid)){if(!allItems[data.taskId])allItems[data.taskId]=[];allItems[data.taskId].push({id:d.id,...data});}});
   const el=document.getElementById('tasksList');
   if(!groups.length){el.innerHTML='<div class="empty-state card"><div class="empty-icon">✅</div><p>No tasks yet</p></div>';return;}
   el.innerHTML=groups.map(g=>{
     const items=allItems[g.id]||[];
-    const itemsHtml=items.map(i=>`<div class="task-item"><input type="checkbox" class="task-check" ${i.completed?'checked':''} onchange="toggleTaskItem('${i.id}',this.checked)"><span class="task-text ${i.completed?'done':''}">${i.text||''}</span><button class="btn btn-xs btn-danger" onclick="archiveItem('task_items','${i.id}',loadTasks)" style="margin-left:auto">✕</button></div>`).join('');
-    return `<div class="task-group"><div class="task-group-title"><span>${g.title||'Task Group'}</span>${isAdmin?`<button class="btn btn-xs btn-danger" onclick="archiveItem('tasks','${g.id}',loadTasks)">Archive Group</button>`:''}</div>${g.description?`<div style="font-size:.8rem;color:var(--text-2);margin-bottom:.75rem">${g.description}</div>`:''}${itemsHtml}<div class="task-add-row"><input id="taskInput-${g.id}" placeholder="Add a task item..." onkeydown="if(event.key==='Enter')addTaskItem('${g.id}')"><button onclick="addTaskItem('${g.id}')">Add</button></div></div>`;
+    return `<div class="task-group"><div class="task-group-title"><span>${g.title||'Task Group'}</span>${isAdmin?`<button class="btn btn-xs btn-danger" onclick="archiveItem('tasks','${g.id}',loadTasks)">Archive Group</button>`:''}</div>${g.description?`<div style="font-size:.8rem;color:var(--text-2);margin-bottom:.75rem">${g.description}</div>`:''}`+items.map(i=>`<div class="task-item"><input type="checkbox" class="task-check" ${i.completed?'checked':''} onchange="toggleTaskItem('${i.id}',this.checked)"><span class="task-text ${i.completed?'done':''}">${i.text||''}</span><button class="btn btn-xs btn-danger" onclick="archiveItem('task_items','${i.id}',loadTasks)" style="margin-left:auto">✕</button></div>`).join('')+`<div class="task-add-row"><input id="taskInput-${g.id}" placeholder="Add a task item..." onkeydown="if(event.key==='Enter')addTaskItem('${g.id}')"><button onclick="addTaskItem('${g.id}')">Add</button></div></div>`;
   }).join('');
 }
-
 window.toggleTaskItem=async(id,completed)=>{await updateDoc(doc(db,'task_items',id),{completed});};
-
 window.addTaskItem=async(taskId)=>{
   const input=document.getElementById(`taskInput-${taskId}`);const text=input.value.trim();if(!text)return;
   await addDoc(collection(db,'task_items'),{taskId,userId:currentUser?.uid,text,completed:false,created:new Date().toISOString()});
   input.value='';await loadTasks();
 };
-
 window.saveTaskGroup=async()=>{
   if(!isAdmin){showToast('Admin only','error');return;}
   const data={title:document.getElementById('taskGroupTitle').value,description:document.getElementById('taskGroupDesc').value,createdBy:currentUser?.uid,created:new Date().toISOString()};
-  try{await addDoc(collection(db,'tasks'),data);closeModal('taskGroupModal');['taskGroupTitle','taskGroupDesc'].forEach(i=>document.getElementById(i).value='');await loadTasks();showToast('Task group created');}
-  catch(e){showToast('Error','error');}
+  try{await addDoc(collection(db,'tasks'),data);closeModal('taskGroupModal');['taskGroupTitle','taskGroupDesc'].forEach(i=>document.getElementById(i).value='');await loadTasks();showToast('Task group created');}catch(e){showToast('Error','error');}
 };
 
-// QUICK LINKS
+// ── QUICK LINKS ───────────────────────────────────────────────────────────────
 async function loadQuickLinks(){
   const snap=await getDocs(collection(db,'quick_links'));const links=[];
   snap.forEach(d=>{const data=d.data();if(notArchived(data))links.push({id:d.id,...data});});
@@ -1228,18 +1201,16 @@ async function loadQuickLinks(){
   if(!links.length){launcher.style.display='none';return;}
   launcher.style.display='';
   grid.innerHTML=links.map(l=>`<a class="quick-link-tile" href="${l.url||'#'}" target="_blank" rel="noopener"><div class="quick-link-icon">${l.icon||'🔗'}</div><div class="quick-link-label">${l.title||'Link'}</div></a>`).join('');
-  const adminGrid=document.getElementById('adminQuickLinks');
-  if(adminGrid)adminGrid.innerHTML=links.map(l=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--border)"><div>${l.icon||'🔗'} <strong>${l.title}</strong> — <span style="color:var(--text-2);font-size:.8rem">${l.url}</span></div><button class="btn btn-xs btn-danger" onclick="archiveItem('quick_links','${l.id}',loadQuickLinks)">Remove</button></div>`).join('');
+  const ag=document.getElementById('adminQuickLinks');
+  if(ag)ag.innerHTML=links.map(l=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--border)"><div>${l.icon||'🔗'} <strong>${l.title}</strong> — <span style="color:var(--text-2);font-size:.8rem">${l.url}</span></div><button class="btn btn-xs btn-danger" onclick="archiveItem('quick_links','${l.id}',loadQuickLinks)">Remove</button></div>`).join('');
 }
-
 window.saveQuickLink=async()=>{
   if(!isAdmin){showToast('Admin only','error');return;}
   const data={title:document.getElementById('qlTitle').value,url:document.getElementById('qlUrl').value,icon:document.getElementById('qlIcon').value||'🔗',created:new Date().toISOString()};
-  try{await addDoc(collection(db,'quick_links'),data);closeModal('quickLinkModal');['qlTitle','qlUrl','qlIcon'].forEach(i=>document.getElementById(i).value='');await loadQuickLinks();showToast('Link added');}
-  catch(e){showToast('Error saving link','error');}
+  try{await addDoc(collection(db,'quick_links'),data);closeModal('quickLinkModal');['qlTitle','qlUrl','qlIcon'].forEach(i=>document.getElementById(i).value='');await loadQuickLinks();showToast('Link added');}catch(e){showToast('Error','error');}
 };
 
-// ADVERTISING
+// ── ADVERTISING ───────────────────────────────────────────────────────────────
 async function loadAds(){
   const snap=await getDocs(collection(db,'ads'));const ads=[];
   snap.forEach(d=>{const data=d.data();if(notArchived(data))ads.push({id:d.id,...data});});
@@ -1248,17 +1219,17 @@ async function loadAds(){
   const tb=document.getElementById('adsTable');
   tb.innerHTML=ads.length?ads.map(a=>`<tr><td style="font-weight:500">${a.name||''}</td><td><span style="background:var(--surface);padding:2px 8px;border-radius:4px;font-size:.78rem">${a.platform||''}</span></td><td>${fmt$(a.budget)}/mo</td><td>${a.leads||0}</td><td style="color:var(--rust-lt)">${a.leads>0?'$'+Math.round(a.budget/a.leads):'$0'}</td><td>${badge(a.status)}</td><td><button class="btn btn-sm btn-danger" onclick="archiveItem('ads','${a.id}',loadAds)">Archive</button></td></tr>`).join(''):`<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No campaigns yet</td></tr>`;
 }
-
 window.saveAd=async()=>{
   const data={name:document.getElementById('adName').value,platform:document.getElementById('adPlatform').value,budget:document.getElementById('adBudget').value,leads:document.getElementById('adLeadsNum').value,status:document.getElementById('adStatus').value,start:document.getElementById('adStart').value,notes:document.getElementById('adNotes').value,created:new Date().toISOString()};
-  try{await addDoc(collection(db,'ads'),data);closeModal('adModal');['adName','adBudget','adLeadsNum','adStart','adNotes'].forEach(i=>document.getElementById(i).value='');await loadAds();showToast('Campaign added');}
-  catch(e){showToast('Error saving campaign','error');}
+  try{await addDoc(collection(db,'ads'),data);closeModal('adModal');['adName','adBudget','adLeadsNum','adStart','adNotes'].forEach(i=>document.getElementById(i).value='');await loadAds();showToast('Campaign added');}catch(e){showToast('Error','error');}
 };
 
+// Expose globals
 window.loadJobs=loadJobs;window.loadLeads=loadLeads;window.loadSchedule=loadSchedule;
 window.loadInspections=loadInspections;window.loadInvoices=loadInvoices;window.loadReports=loadReports;
 window.loadAds=loadAds;window.loadReminders=loadReminders;window.loadTasks=loadTasks;
 window.loadQuickLinks=loadQuickLinks;window.loadJobPOs=loadJobPOs;window.loadJobQuotes=loadJobQuotes;
+window.loadJobFiles=loadJobFiles;
 </script>
 </body>
 </html>
