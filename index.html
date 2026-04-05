@@ -418,15 +418,33 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
           <div id="jobQuotesList"></div>
         </div>
         <div class="tab-content" id="tab-files">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
-            <div class="section-title" style="margin-bottom:0">Files & Photos</div>
+          <div style="margin-bottom:1.25rem">
+            <div class="section-title" style="margin-bottom:.75rem">Google Drive Folder</div>
+            <div id="jobDriveFolderDisplay" style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap">
+              <span style="font-size:.85rem;color:var(--text-3)">No Drive folder linked yet</span>
+            </div>
+            <div style="margin-top:.75rem;display:flex;gap:.5rem;flex-wrap:wrap" id="jobDriveFolderEdit">
+              <input id="jobDriveFolderInput" placeholder="Paste Google Drive folder URL…" style="flex:1;min-width:220px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.55rem .85rem;color:var(--text);font-family:var(--font-body);font-size:.85rem;outline:none" onfocus="this.style.borderColor='var(--rust)'" onblur="this.style.borderColor='var(--border)'">
+              <button class="btn btn-primary btn-sm" onclick="saveDriveFolder()">Save Folder</button>
+            </div>
           </div>
-          <div class="upload-zone" onclick="document.getElementById('fileUploadJob').click()" ondrop="handleDrop(event,'job')" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')">
-            <p>📎 Tap to upload photos or files<br><span style="font-size:.75rem;color:var(--text-3)">JPG, PNG, PDF, DOCX — max 10MB each</span></p>
-            <div class="upload-progress" id="uploadProgressJob"><div class="upload-progress-bar" id="uploadProgressBarJob"></div></div>
-            <input type="file" id="fileUploadJob" multiple accept="image/*,.pdf,.doc,.docx" onchange="uploadFiles(this.files,'job')">
+          <div style="border-top:1px solid var(--border);padding-top:1.25rem">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
+              <div class="section-title" style="margin-bottom:0">Linked Files</div>
+              <button class="btn btn-primary btn-sm" onclick="openAddFileLink()">+ Add Link</button>
+            </div>
+            <div id="jobFileLinksList"></div>
+            <div id="addFileLinkRow" style="display:none;margin-top:.75rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem">
+              <div style="display:flex;flex-direction:column;gap:.6rem">
+                <input id="newFileLinkLabel" placeholder="Label (e.g. Signed Quote, Site Photo 1)" style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:.55rem .85rem;color:var(--text);font-family:var(--font-body);font-size:.85rem;outline:none;width:100%" onfocus="this.style.borderColor='var(--rust)'" onblur="this.style.borderColor='var(--border)'">
+                <input id="newFileLinkUrl" placeholder="Paste Google Drive file URL…" style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:.55rem .85rem;color:var(--text);font-family:var(--font-body);font-size:.85rem;outline:none;width:100%" onfocus="this.style.borderColor='var(--rust)'" onblur="this.style.borderColor='var(--border)'">
+                <div style="display:flex;gap:.5rem">
+                  <button class="btn btn-primary btn-sm" onclick="saveFileLink()">Add Link</button>
+                  <button class="btn btn-secondary btn-sm" onclick="document.getElementById('addFileLinkRow').style.display='none'">Cancel</button>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="attach-list" id="jobFilesList" style="margin-top:1rem"></div>
         </div>
         <div class="tab-content" id="tab-dailyreports">
           <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem">
@@ -542,41 +560,18 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
       <div class="page" id="page-files">
         <div class="page-header">
           <h1>Files &amp; Photos</h1>
-          <p>All uploaded files and photos across every job.</p>
+          <p>All Drive folders and linked files across every job.</p>
           <div class="page-actions">
-            <select id="filesJobFilter" class="btn btn-secondary" onchange="filterFiles()" style="cursor:pointer;padding:.5rem .9rem;font-size:.82rem">
+            <select id="filesJobFilter" class="btn btn-secondary" onchange="filterAllFiles()" style="cursor:pointer;padding:.5rem .9rem;font-size:.82rem">
               <option value="">All Jobs</option>
             </select>
-            <select id="filesTypeFilter" class="btn btn-secondary" onchange="filterFiles()" style="cursor:pointer;padding:.5rem .9rem;font-size:.82rem">
-              <option value="">All Types</option>
-              <option value="image">Photos</option>
-              <option value="pdf">PDFs</option>
-              <option value="doc">Documents</option>
-            </select>
-          </div>
-        </div>
-        <div class="card mb-2">
-          <div class="card-title">Upload Files</div>
-          <div style="margin-bottom:.75rem">
-            <select id="filesUploadJob" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.55rem .9rem;color:var(--text);font-family:var(--font-body);font-size:.85rem;outline:none;width:100%">
-              <option value="">— Select a Job to upload to —</option>
-            </select>
-          </div>
-          <div class="upload-zone" id="filesUploadZone" onclick="document.getElementById('filesUploadInput').click()" ondrop="handleFilesDrop(event)" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')">
-            <p>📎 Tap to upload or drag &amp; drop<br><span style="font-size:.75rem;color:var(--text-3)">JPG, PNG, PDF, DOCX — max 10MB each</span></p>
-            <div class="upload-progress" id="filesUploadProgress"><div class="upload-progress-bar" id="filesUploadProgressBar"></div></div>
-            <input type="file" id="filesUploadInput" multiple accept="image/*,.pdf,.doc,.docx" onchange="uploadFilesGlobal(this.files)" style="display:none">
           </div>
         </div>
         <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1rem;margin-bottom:1.5rem">
-          <div class="stat-card"><div class="stat-label">Total Files</div><div class="stat-value" id="filesTotalCount">0</div></div>
-          <div class="stat-card"><div class="stat-label">Photos</div><div class="stat-value" id="filesPhotoCount">0</div></div>
-          <div class="stat-card"><div class="stat-label">Documents</div><div class="stat-value" id="filesDocCount">0</div></div>
-          <div class="stat-card highlight"><div class="stat-label">Jobs with Files</div><div class="stat-value" id="filesJobCount">0</div></div>
+          <div class="stat-card highlight"><div class="stat-label">Jobs with Folders</div><div class="stat-value" id="filesJobFolderCount">0</div></div>
+          <div class="stat-card"><div class="stat-label">Linked Files</div><div class="stat-value" id="filesLinkCount">0</div></div>
         </div>
-        <div id="filesGrid" class="attach-list" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem">
-          <div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🗂️</div><p>No files uploaded yet</p></div>
-        </div>
+        <div id="filesAllList"></div>
       </div>
 
       <!-- WORKFLOW -->
@@ -707,6 +702,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
       <div class="form-field"><label>Start Date</label><input type="date" id="jobDate"></div>
       <div class="form-field"><label>Contract Value ($)</label><input type="number" id="jobValue" placeholder="0"></div>
       <div class="form-field full"><label>Notes</label><textarea id="jobNotes" placeholder="Job details, special instructions..."></textarea></div>
+      <div class="form-field full"><label>Google Drive Folder URL <span style="color:var(--text-3);font-weight:400;font-size:.7rem">(optional — paste folder link from Drive)</span></label><input id="jobDriveFolder" placeholder="https://drive.google.com/drive/folders/…" type="url"></div>
     </div>
     <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('jobModal')">Cancel</button><button class="btn btn-primary" onclick="saveJob()">Save Job</button></div>
   </div>
@@ -1247,203 +1243,158 @@ window.removeTaskPanel=async(id,name)=>{
   }catch(e){showToast('Error removing panel','error');}
 };
 
-// ── FILE UPLOADS ──────────────────────────────────────────────────────────────
-window.handleDrop=(e,context)=>{
-  e.preventDefault();e.currentTarget.classList.remove('drag');
-  uploadFiles(e.dataTransfer.files,context);
-};
-
-window.uploadFiles=async(files,context)=>{
-  if(!files||!files.length||!currentJobId)return;
-  const progressWrap=document.getElementById(`uploadProgress${context==='job'?'Job':'Insp'}`);
-  const progressBar=document.getElementById(`uploadProgressBar${context==='job'?'Job':'Insp'}`);
-  progressWrap.style.display='block';progressBar.style.width='0%';
-
-  for(const file of files){
-    if(file.size>10*1024*1024){showToast(`${file.name} is over 10MB — skipped`,'error');continue;}
-    const path=`attachments/${currentJobId}/${Date.now()}_${file.name}`;
-    const sRef=storageRef(storage,path);
-    const task=uploadBytesResumable(sRef,file);
-
-    await new Promise((resolve,reject)=>{
-      task.on('state_changed',
-        snap=>{ progressBar.style.width=Math.round(snap.bytesTransferred/snap.totalBytes*100)+'%'; },
-        err=>{ showToast('Upload failed','error'); reject(err); },
-        async()=>{
-          const url=await getDownloadURL(task.snapshot.ref);
-          await addDoc(collection(db,'attachments'),{
-            jobId:currentJobId, type:context, fileUrl:url,
-            fileName:file.name, storagePath:path,
-            uploadedBy:currentUserInfo?.name||currentUser.email,
-            createdAt:new Date().toISOString()
-          });
-          resolve();
-        }
-      );
-    }).catch(()=>{});
-  }
-  progressWrap.style.display='none';
-  await loadJobFiles(currentJobId);
-  showToast('Upload complete');
-};
-
+// ── DRIVE FILE LINKS ──────────────────────────────────────────────────────────
 async function loadJobFiles(jobId){
-  const snap=await getDocs(collection(db,'attachments'));const files=[];
-  snap.forEach(d=>{const data=d.data();if(data.jobId===jobId&&notArchived(data))files.push({id:d.id,...data});});
-  const el=document.getElementById('jobFilesList');if(!el)return;
-  el.innerHTML=files.length?files.map(f=>`
-    <div class="attach-item">
-      ${isImage(f.fileName)
-        ?`<img class="attach-thumb" src="${f.fileUrl}" alt="${f.fileName}" onclick="window.open('${f.fileUrl}','_blank')" style="cursor:pointer">`
-        :`<a class="attach-file" href="${f.fileUrl}" target="_blank" rel="noopener"><div class="attach-file-icon">${f.fileName.endsWith('.pdf')?'📄':'📎'}</div><div class="attach-file-name">${f.fileName}</div></a>`}
-      <button class="attach-del" onclick="deleteAttachment('${f.id}','${f.storagePath}')">✕</button>
-      <div style="padding:4px 6px;font-size:.65rem;color:var(--text-3);border-top:1px solid var(--border);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f.uploadedBy||''}</div>
-    </div>`).join(''):'';
+  // Load drive folder from job doc
+  const jobSnap=await getDoc(doc(db,'jobs',jobId));
+  const driveFolder=jobSnap.exists()?jobSnap.data().driveFolder||'':'';
+  const folderEl=document.getElementById('jobDriveFolderDisplay');
+  const folderInput=document.getElementById('jobDriveFolderInput');
+  if(folderEl){
+    folderEl.innerHTML=driveFolder
+      ?`<a href="${driveFolder}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">📁 Open Job Folder in Drive</a>
+         <button class="btn btn-secondary btn-sm" onclick="document.getElementById('jobDriveFolderInput').value='${driveFolder}';showToast('Edit the URL below and click Save Folder')">✏️ Change</button>`
+      :`<span style="font-size:.85rem;color:var(--text-3)">No Drive folder linked yet</span>`;
+  }
+  if(folderInput&&!driveFolder)folderInput.value='';
+
+  // Load individual file links from Firestore
+  const snap=await getDocs(collection(db,'job_file_links'));
+  const links=[];
+  snap.forEach(d=>{const data=d.data();if(data.jobId===jobId&&notArchived(data))links.push({id:d.id,...data});});
+  links.sort((a,b)=>(a.createdAt||'')>(b.createdAt||'')?1:-1);
+
+  const el=document.getElementById('jobFileLinksList');if(!el)return;
+  el.innerHTML=links.length?links.map(f=>`
+    <div style="display:flex;align-items:center;gap:.75rem;padding:.65rem .85rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:.5rem">
+      <span style="font-size:1.1rem">${getLinkIcon(f.url)}</span>
+      <a href="${f.url}" target="_blank" rel="noopener" style="flex:1;font-size:.85rem;font-weight:500;color:var(--text);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${f.url}">${f.label||f.url}</a>
+      <span style="font-size:.72rem;color:var(--text-3);white-space:nowrap">${f.addedBy||''}</span>
+      <button style="background:none;border:none;color:var(--text-3);cursor:pointer;font-size:.85rem;padding:2px 6px;border-radius:4px;transition:color .15s" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text-3)'" onclick="deleteFileLink('${f.id}')">✕</button>
+    </div>`).join('')
+    :'<div style="font-size:.82rem;color:var(--text-3);padding:.5rem 0">No linked files yet — click + Add Link to link a Drive file.</div>';
 }
 
-window.deleteAttachment=async(id,path)=>{
-  if(!confirm('Remove this file?'))return;
+function getLinkIcon(url=''){
+  if(url.includes('drive.google.com'))return '📄';
+  if(url.includes('docs.google.com'))return '📝';
+  if(url.includes('sheets.google.com'))return '📊';
+  if(url.includes('slides.google.com'))return '📋';
+  return '🔗';
+}
+
+window.saveDriveFolder=async()=>{
+  if(!currentJobId)return;
+  const url=document.getElementById('jobDriveFolderInput')?.value.trim();
+  if(!url){showToast('Paste a Drive folder URL first','error');return;}
   try{
-    if(path){const sRef=storageRef(storage,path);await deleteObject(sRef).catch(()=>{});}
-    await updateDoc(doc(db,'attachments',id),{archived:true,archivedAt:new Date().toISOString()});
-    await loadJobFiles(currentJobId);showToast('File removed');
-  }catch(e){showToast('Error removing file','error');}
+    await updateDoc(doc(db,'jobs',currentJobId),{driveFolder:url,updated:new Date().toISOString()});
+    await loadJobFiles(currentJobId);
+    showToast('Drive folder linked ✅');
+  }catch(e){showToast('Error saving folder','error');}
 };
 
-// ── FILES & PHOTOS PAGE ───────────────────────────────────────────────────────
-let allFilesCache=[];
+window.openAddFileLink=()=>{
+  document.getElementById('newFileLinkLabel').value='';
+  document.getElementById('newFileLinkUrl').value='';
+  document.getElementById('addFileLinkRow').style.display='block';
+  document.getElementById('newFileLinkLabel').focus();
+};
+
+window.saveFileLink=async()=>{
+  if(!currentJobId)return;
+  const label=document.getElementById('newFileLinkLabel').value.trim();
+  const url=document.getElementById('newFileLinkUrl').value.trim();
+  if(!url){showToast('Paste a file URL first','error');return;}
+  try{
+    await addDoc(collection(db,'job_file_links'),{
+      jobId:currentJobId,label:label||url,url,
+      addedBy:currentUserInfo?.name||currentUser.email,
+      createdAt:new Date().toISOString()
+    });
+    document.getElementById('addFileLinkRow').style.display='none';
+    await loadJobFiles(currentJobId);
+    showToast('File link added ✅');
+  }catch(e){showToast('Error adding link','error');}
+};
+
+window.deleteFileLink=async(id)=>{
+  if(!confirm('Remove this link?'))return;
+  try{
+    await updateDoc(doc(db,'job_file_links',id),{archived:true});
+    await loadJobFiles(currentJobId);
+    showToast('Link removed');
+  }catch(e){showToast('Error removing link','error');}
+};
 
 async function loadAllFiles(){
-  const snap=await getDocs(collection(db,'attachments'));
-  allFilesCache=[];
-  snap.forEach(d=>{const data=d.data();if(notArchived(data))allFilesCache.push({id:d.id,...data});});
-  allFilesCache.sort((a,b)=>(b.createdAt||'')>(a.createdAt||'')?1:-1);
+  // Count jobs with drive folders
+  const jobsWithFolders=allJobs.filter(j=>j.driveFolder).length;
+  const jfc=document.getElementById('filesJobFolderCount');
+  if(jfc)jfc.textContent=jobsWithFolders;
 
-  const photos=allFilesCache.filter(f=>isImage(f.fileName));
-  const docs=allFilesCache.filter(f=>!isImage(f.fileName));
-  const jobIds=[...new Set(allFilesCache.map(f=>f.jobId).filter(Boolean))];
+  // Load all file links
+  const snap=await getDocs(collection(db,'job_file_links'));
+  const links=[];
+  snap.forEach(d=>{const data=d.data();if(notArchived(data))links.push({id:d.id,...data});});
+  const lc=document.getElementById('filesLinkCount');
+  if(lc)lc.textContent=links.length;
 
-  const tc=document.getElementById('filesTotalCount');
-  const pc=document.getElementById('filesPhotoCount');
-  const dc=document.getElementById('filesDocCount');
-  const jc=document.getElementById('filesJobCount');
-  if(tc)tc.textContent=allFilesCache.length;
-  if(pc)pc.textContent=photos.length;
-  if(dc)dc.textContent=docs.length;
-  if(jc)jc.textContent=jobIds.length;
-
-  // Populate job filter dropdown
+  // Populate job filter
   const filterSel=document.getElementById('filesJobFilter');
   if(filterSel){
     const cur=filterSel.value;
+    const jobsWithData=allJobs.filter(j=>j.driveFolder||links.find(l=>l.jobId===j.id));
     filterSel.innerHTML='<option value="">All Jobs</option>'+
-      allJobs.filter(j=>jobIds.includes(j.id)).map(j=>
-        `<option value="${j.id}">${j.client||'Unnamed'}${j.jobNumber?' — #'+j.jobNumber:''}</option>`
-      ).join('');
+      jobsWithData.map(j=>`<option value="${j.id}">${j.client||'Unnamed'}${j.jobNumber?' — #'+j.jobNumber:''}</option>`).join('');
     filterSel.value=cur;
   }
 
-  // Populate upload job dropdown
-  const uploadSel=document.getElementById('filesUploadJob');
-  if(uploadSel){
-    const cv=uploadSel.value;
-    uploadSel.innerHTML='<option value="">— Select a Job to upload to —</option>'+
-      allJobs.map(j=>`<option value="${j.id}">${j.client||'Unnamed'}${j.jobNumber?' — #'+j.jobNumber:''}</option>`).join('');
-    uploadSel.value=cv;
-  }
-
-  renderFilesGrid(allFilesCache);
+  renderAllFilesPage(allJobs,links);
 }
 
-window.filterFiles=()=>{
+window.filterAllFiles=()=>{
   const jobFilter=document.getElementById('filesJobFilter')?.value||'';
-  const typeFilter=document.getElementById('filesTypeFilter')?.value||'';
-  let filtered=allFilesCache;
-  if(jobFilter)filtered=filtered.filter(f=>f.jobId===jobFilter);
-  if(typeFilter==='image')filtered=filtered.filter(f=>isImage(f.fileName));
-  else if(typeFilter==='pdf')filtered=filtered.filter(f=>f.fileName?.toLowerCase().endsWith('.pdf'));
-  else if(typeFilter==='doc')filtered=filtered.filter(f=>!isImage(f.fileName)&&!f.fileName?.toLowerCase().endsWith('.pdf'));
-  renderFilesGrid(filtered);
+  getDocs(collection(db,'job_file_links')).then(snap=>{
+    const links=[];
+    snap.forEach(d=>{const data=d.data();if(notArchived(data))links.push({id:d.id,...data});});
+    const jobs=jobFilter?allJobs.filter(j=>j.id===jobFilter):allJobs;
+    renderAllFilesPage(jobs,links);
+  });
 };
 
-function renderFilesGrid(files){
-  const el=document.getElementById('filesGrid');if(!el)return;
-  if(!files.length){
-    el.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🗂️</div><p>No files found</p></div>';
+function renderAllFilesPage(jobs,links){
+  const el=document.getElementById('filesAllList');if(!el)return;
+  const jobsWithData=jobs.filter(j=>j.driveFolder||links.find(l=>l.jobId===j.id));
+  if(!jobsWithData.length){
+    el.innerHTML='<div class="empty-state card"><div class="empty-icon">🗂️</div><p>No files or folders linked yet.<br>Open a job → Files tab to link a Drive folder.</p></div>';
     return;
   }
-  el.innerHTML=files.map(f=>{
-    const job=allJobs.find(j=>j.id===f.jobId);
-    const jobLabel=job?(job.client||'Job')+(job.jobNumber?' #'+job.jobNumber:''):'';
-    const dateStr=f.createdAt?new Date(f.createdAt).toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'}):'';
-    return `<div class="attach-item" style="position:relative">
-      ${isImage(f.fileName)
-        ?`<img class="attach-thumb" src="${f.fileUrl}" alt="${f.fileName}" onclick="window.open('${f.fileUrl}','_blank')" style="cursor:pointer;height:120px;object-fit:cover">`
-        :`<a class="attach-file" href="${f.fileUrl}" target="_blank" rel="noopener" style="height:120px">
-            <div class="attach-file-icon">${f.fileName?.endsWith('.pdf')?'📄':'📎'}</div>
-            <div class="attach-file-name">${f.fileName||'File'}</div>
-          </a>`}
-      <button class="attach-del" onclick="deleteAttachmentGlobal('${f.id}','${f.storagePath}')">✕</button>
-      <div style="padding:5px 7px;border-top:1px solid var(--border)">
-        <div style="font-size:.7rem;color:var(--text);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${f.fileName||''}">${f.fileName||''}</div>
-        ${jobLabel?`<div style="font-size:.65rem;color:var(--rust-lt);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${jobLabel}</div>`:''}
-        <div style="font-size:.62rem;color:var(--text-3);margin-top:1px">${f.uploadedBy||''} · ${dateStr}</div>
+  el.innerHTML=jobsWithData.map(j=>{
+    const jobLinks=links.filter(l=>l.jobId===j.id);
+    return `<div class="card mb-2">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem;margin-bottom:${j.driveFolder||jobLinks.length?'.85rem':'0'}">
+        <div>
+          <span style="font-family:var(--font-head);font-weight:600;font-size:.95rem">${j.client||'Unnamed Job'}</span>
+          ${j.jobNumber?`<span class="job-number-badge" style="margin-left:.5rem;font-size:.7rem">#${j.jobNumber}</span>`:''}
+          <div style="font-size:.75rem;color:var(--text-2);margin-top:2px">${j.type||''} · ${j.location||''}</div>
+        </div>
+        <button class="btn btn-secondary btn-sm" onclick="openJobDetail('${j.id}')">Open Job</button>
       </div>
+      ${j.driveFolder?`
+        <div style="display:flex;align-items:center;gap:.75rem;padding:.65rem .85rem;background:rgba(36,99,160,.06);border:1px solid rgba(36,99,160,.2);border-radius:8px;margin-bottom:.5rem">
+          <span style="font-size:1.1rem">📁</span>
+          <a href="${j.driveFolder}" target="_blank" rel="noopener" style="flex:1;font-size:.85rem;font-weight:500;color:var(--blue);text-decoration:none">Job Folder — Open in Google Drive</a>
+        </div>`:''}
+      ${jobLinks.map(f=>`
+        <div style="display:flex;align-items:center;gap:.75rem;padding:.55rem .85rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:.4rem">
+          <span style="font-size:1rem">${getLinkIcon(f.url)}</span>
+          <a href="${f.url}" target="_blank" rel="noopener" style="flex:1;font-size:.83rem;color:var(--text);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${f.label||f.url}</a>
+          <span style="font-size:.7rem;color:var(--text-3);white-space:nowrap">${f.addedBy||''}</span>
+        </div>`).join('')}
     </div>`;
   }).join('');
 }
-
-window.handleFilesDrop=(e)=>{
-  e.preventDefault();
-  document.getElementById('filesUploadZone')?.classList.remove('drag');
-  uploadFilesGlobal(e.dataTransfer.files);
-};
-
-window.uploadFilesGlobal=async(files)=>{
-  const jobId=document.getElementById('filesUploadJob')?.value;
-  if(!jobId){showToast('Select a job first','error');return;}
-  if(!files||!files.length)return;
-  const progressWrap=document.getElementById('filesUploadProgress');
-  const progressBar=document.getElementById('filesUploadProgressBar');
-  if(progressWrap)progressWrap.style.display='block';
-  if(progressBar)progressBar.style.width='0%';
-  for(const file of files){
-    if(file.size>10*1024*1024){showToast(`${file.name} over 10MB — skipped`,'error');continue;}
-    const path=`attachments/${jobId}/${Date.now()}_${file.name}`;
-    const sRef=storageRef(storage,path);
-    const task=uploadBytesResumable(sRef,file);
-    await new Promise((resolve,reject)=>{
-      task.on('state_changed',
-        snap=>{if(progressBar)progressBar.style.width=Math.round(snap.bytesTransferred/snap.totalBytes*100)+'%';},
-        err=>{showToast('Upload failed','error');reject(err);},
-        async()=>{
-          const url=await getDownloadURL(task.snapshot.ref);
-          await addDoc(collection(db,'attachments'),{
-            jobId,type:'files',fileUrl:url,
-            fileName:file.name,storagePath:path,
-            uploadedBy:currentUserInfo?.name||currentUser.email,
-            createdAt:new Date().toISOString()
-          });
-          resolve();
-        }
-      );
-    }).catch(()=>{});
-  }
-  if(progressWrap)progressWrap.style.display='none';
-  const input=document.getElementById('filesUploadInput');
-  if(input)input.value='';
-  await loadAllFiles();
-  showToast('Upload complete ✅');
-};
-
-window.deleteAttachmentGlobal=async(id,path)=>{
-  if(!confirm('Remove this file?'))return;
-  try{
-    if(path){const sRef=storageRef(storage,path);await deleteObject(sRef).catch(()=>{});}
-    await updateDoc(doc(db,'attachments',id),{archived:true,archivedAt:new Date().toISOString()});
-    await loadAllFiles();showToast('File removed');
-  }catch(e){showToast('Error removing file','error');}
-};
 
 // ── JOBS ──────────────────────────────────────────────────────────────────────
 async function loadJobs(){
@@ -1470,7 +1421,7 @@ async function loadJobs(){
 window.openJobModal=()=>{
   document.getElementById('jobId').value='';
   document.getElementById('jobModalTitle').textContent='New Job';
-  ['jobClient','jobPhone','jobLocation','jobDate','jobValue','jobNotes'].forEach(i=>document.getElementById(i).value='');
+  ['jobClient','jobPhone','jobLocation','jobDate','jobValue','jobNotes','jobDriveFolder'].forEach(i=>document.getElementById(i).value='');
   document.getElementById('jobStage').value='lead';
   document.getElementById('jobNumberFieldWrap').style.display='';
   // Populate lead dropdown — show leads that have a jobNumber
@@ -1486,7 +1437,7 @@ window.openEditJobModal=async()=>{
   document.getElementById('jobClient').value=j.client||'';document.getElementById('jobPhone').value=j.phone||'';
   document.getElementById('jobType').value=j.type||'Roof Repairs';document.getElementById('jobStage').value=j.stage||'lead';
   document.getElementById('jobLocation').value=j.location||'';document.getElementById('jobAssigned').value=j.assigned||'Harry';
-  document.getElementById('jobDate').value=j.date||'';document.getElementById('jobValue').value=j.value||'';document.getElementById('jobNotes').value=j.notes||'';
+  document.getElementById('jobDate').value=j.date||'';document.getElementById('jobValue').value=j.value||'';document.getElementById('jobNotes').value=j.notes||'';document.getElementById('jobDriveFolder').value=j.driveFolder||'';
   // Show job number as read-only when editing
   document.getElementById('jobNumberFieldWrap').style.display=j.jobNumber?'':'none';
   if(j.jobNumber){
@@ -1497,7 +1448,7 @@ window.openEditJobModal=async()=>{
 };
 window.saveJob=async()=>{
   const id=document.getElementById('jobId').value;
-  const data={client:document.getElementById('jobClient').value,phone:document.getElementById('jobPhone').value,type:document.getElementById('jobType').value,stage:document.getElementById('jobStage').value,location:document.getElementById('jobLocation').value,assigned:document.getElementById('jobAssigned').value,date:document.getElementById('jobDate').value,value:document.getElementById('jobValue').value,notes:document.getElementById('jobNotes').value,updated:new Date().toISOString()};
+  const data={client:document.getElementById('jobClient').value,phone:document.getElementById('jobPhone').value,type:document.getElementById('jobType').value,stage:document.getElementById('jobStage').value,location:document.getElementById('jobLocation').value,assigned:document.getElementById('jobAssigned').value,date:document.getElementById('jobDate').value,value:document.getElementById('jobValue').value,notes:document.getElementById('jobNotes').value,driveFolder:document.getElementById('jobDriveFolder').value.trim(),updated:new Date().toISOString()};
   try{
     if(id){
       await updateDoc(doc(db,'jobs',id),data); // jobNumber immutable — never in update
