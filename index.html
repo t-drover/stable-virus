@@ -420,9 +420,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
         <div class="tab-content" id="tab-files">
           <div style="margin-bottom:1.25rem">
             <div class="section-title" style="margin-bottom:.75rem">Google Drive Folder</div>
-            <div id="jobDriveFolderDisplay">
-              <span style="font-size:.85rem;color:var(--text-3)">No Drive folder linked yet</span>
-            </div>
+            <div id="jobDriveFolderDisplay"><span style="font-size:.85rem;color:var(--text-3)">No Drive folder linked yet</span></div>
             <div style="margin-top:.65rem;display:flex;gap:.5rem;flex-wrap:wrap">
               <input id="jobDriveFolderInput" placeholder="Paste Google Drive folder URL…" type="url" style="flex:1;min-width:200px;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.55rem .85rem;color:var(--text);font-family:var(--font-body);font-size:.85rem;outline:none" onfocus="this.style.borderColor='var(--rust)'" onblur="this.style.borderColor='var(--border)'">
               <button class="btn btn-primary btn-sm" onclick="saveDriveFolder()">Save Folder</button>
@@ -436,7 +434,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
             <div id="jobFileLinksList"></div>
             <div id="addFileLinkRow" style="display:none;margin-top:.75rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem">
               <div style="display:flex;flex-direction:column;gap:.6rem">
-                <input id="newFileLinkLabel" placeholder="Label (e.g. Signed Quote, Site Photo 1)" style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:.55rem .85rem;color:var(--text);font-family:var(--font-body);font-size:.85rem;outline:none;width:100%" onfocus="this.style.borderColor='var(--rust)'" onblur="this.style.borderColor='var(--border)'">
+                <input id="newFileLinkLabel" placeholder="Label (e.g. Signed Quote, Site Photos)" style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:.55rem .85rem;color:var(--text);font-family:var(--font-body);font-size:.85rem;outline:none;width:100%" onfocus="this.style.borderColor='var(--rust)'" onblur="this.style.borderColor='var(--border)'">
                 <input id="newFileLinkUrl" placeholder="Paste Google Drive file URL…" type="url" style="background:var(--card);border:1px solid var(--border);border-radius:6px;padding:.55rem .85rem;color:var(--text);font-family:var(--font-body);font-size:.85rem;outline:none;width:100%" onfocus="this.style.borderColor='var(--rust)'" onblur="this.style.borderColor='var(--border)'">
                 <div style="display:flex;gap:.5rem">
                   <button class="btn btn-primary btn-sm" onclick="saveFileLink()">Add Link</button>
@@ -704,7 +702,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
       <div class="form-field"><label>Start Date</label><input type="date" id="jobDate"></div>
       <div class="form-field"><label>Contract Value ($)</label><input type="number" id="jobValue" placeholder="0"></div>
       <div class="form-field full"><label>Notes</label><textarea id="jobNotes" placeholder="Job details, special instructions..."></textarea></div>
-      <div class="form-field full"><label>Google Drive Folder URL <span style="color:var(--text-3);font-weight:400;font-size:.7rem">(optional — paste folder link)</span></label><input id="jobDriveFolder" placeholder="https://drive.google.com/drive/folders/…" type="url"></div>
+      <div class="form-field full"><label>Google Drive Folder URL <span style="color:var(--text-3);font-weight:400;font-size:.7rem">(optional)</span></label><input id="jobDriveFolder" placeholder="https://drive.google.com/drive/folders/…" type="url"></div>
     </div>
     <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('jobModal')">Cancel</button><button class="btn btn-primary" onclick="saveJob()">Save Job</button></div>
   </div>
@@ -744,7 +742,8 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
 </div>
 <div class="modal-overlay" id="inspectionModal">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title">New Inspection</div><button class="modal-close" onclick="closeModal('inspectionModal')">✕</button></div>
+    <div class="modal-header"><div class="modal-title" id="inspModalTitle">New Inspection</div><button class="modal-close" onclick="closeModal('inspectionModal')">✕</button></div>
+    <input type="hidden" id="inspId">
     <div class="inspection-section"><h4>Client and Site Details</h4>
       <div class="form-grid">
         <div class="form-field full"><label>Link Job Number <span style="color:var(--text-3);font-weight:400;font-size:.7rem">(from Lead)</span></label><select id="inspLeadSelect"><option value="">— Select a Lead / Job Number —</option></select></div>
@@ -769,9 +768,11 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
         <div class="form-field full"><label>Cut List / Materials</label><textarea id="inspCutList" placeholder="e.g. Colorbond Surfmist 6m x 24 sheets..."></textarea></div>
         <div class="form-field full"><label>Mud Map Notes</label><textarea id="inspMudMap" placeholder="Roof layout, ridgelines, valleys, dimensions..."></textarea></div>
         <div class="form-field full">
-          <label>Mud Map File <span style="color:var(--text-3);font-weight:400;font-size:.7rem">(upload to Google Drive, paste link here)</span></label>
-          <input id="mudMapDriveUrl" type="url" placeholder="https://drive.google.com/file/d/…" style="width:100%">
-          <div style="font-size:.72rem;color:var(--text-3);margin-top:.35rem">📐 Upload your mud map photo or sketch to Drive first, then paste the share link above.</div>
+          <label>Mud Map / Photos — Google Drive Link <span style="color:var(--text-3);font-weight:400;font-size:.7rem">(upload to Drive or WhatsApp first, paste link here)</span></label>
+          <input id="mudMapDriveUrl" type="url" placeholder="https://drive.google.com/file/d/… or WhatsApp media link">
+          <div style="font-size:.72rem;color:var(--text-3);margin-top:.4rem;line-height:1.5">
+            📐 Inspector can send photos via WhatsApp — admin uploads to Drive and pastes link here when editing.
+          </div>
         </div>
       </div>
     </div>
@@ -881,7 +882,6 @@ import { getAuth, signInWithEmailAndPassword, signOut as fbSignOut, onAuthStateC
 import { getFirestore, collection, addDoc, getDocs, getDoc, setDoc, updateDoc, deleteDoc, doc, query, where, orderBy, onSnapshot, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 
-
 const firebaseConfig = {
   apiKey:"AIzaSyC1ur8rYfmjYzdAeU7h7sAM3AAA3mte-LE",
   authDomain:"rdu-dashboard.firebaseapp.com",
@@ -894,7 +894,6 @@ const firebaseConfig = {
 const app=initializeApp(firebaseConfig);
 const auth=getAuth(app);
 const db=getFirestore(app);
-
 
 
 const ADMIN_EMAIL='toneth@roofingdownunder.com';
@@ -1243,7 +1242,6 @@ window.removeTaskPanel=async(id,name)=>{
   }catch(e){showToast('Error removing panel','error');}
 };
 
-
 // ── DRIVE FILE LINKS ──────────────────────────────────────────────────────────
 function getLinkIcon(url=''){
   if(url.includes('docs.google.com/spreadsheets'))return '📊';
@@ -1254,7 +1252,6 @@ function getLinkIcon(url=''){
 }
 
 async function loadJobFiles(jobId){
-  // Drive folder from job document
   const jobSnap=await getDoc(doc(db,'jobs',jobId));
   const driveFolder=jobSnap.exists()?jobSnap.data().driveFolder||'':'';
   const folderEl=document.getElementById('jobDriveFolderDisplay');
@@ -1269,7 +1266,6 @@ async function loadJobFiles(jobId){
   }
   if(folderInput&&!driveFolder)folderInput.value='';
 
-  // Individual file links from Firestore
   const snap=await getDocs(collection(db,'job_file_links'));
   const links=[];
   snap.forEach(d=>{const data=d.data();if(data.jobId===jobId&&notArchived(data))links.push({id:d.id,...data});});
@@ -1364,7 +1360,7 @@ function renderAllFilesPage(jobs,links){
   const el=document.getElementById('filesAllList');if(!el)return;
   const jobsWithData=jobs.filter(j=>j.driveFolder||links.find(l=>l.jobId===j.id));
   if(!jobsWithData.length){
-    el.innerHTML='<div class="empty-state card"><div class="empty-icon">🗂️</div><p>No files or folders linked yet.<br><span style="font-size:.82rem">Open a job → Files tab to link a Drive folder or add file links.</span></p></div>';
+    el.innerHTML='<div class="empty-state card"><div class="empty-icon">🗂️</div><p>No files or folders linked yet.<br><span style="font-size:.82rem">Open a job → Files tab to link a Drive folder.</span></p></div>';
     return;
   }
   el.innerHTML=jobsWithData.map(j=>{
@@ -1378,17 +1374,15 @@ function renderAllFilesPage(jobs,links){
         </div>
         <button class="btn btn-secondary btn-sm" onclick="openJobDetail('${j.id}')">Open Job</button>
       </div>
-      ${j.driveFolder?`
-        <div style="display:flex;align-items:center;gap:.75rem;padding:.65rem .85rem;background:rgba(36,99,160,.06);border:1px solid rgba(36,99,160,.2);border-radius:8px;margin-bottom:.5rem">
-          <span style="font-size:1.1rem">📁</span>
-          <a href="${j.driveFolder}" target="_blank" rel="noopener" style="flex:1;font-size:.85rem;font-weight:500;color:var(--blue);text-decoration:none">Open Job Folder in Google Drive</a>
-        </div>`:''}
-      ${jobLinks.map(f=>`
-        <div style="display:flex;align-items:center;gap:.75rem;padding:.55rem .85rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:.4rem">
-          <span style="font-size:1rem">${getLinkIcon(f.url)}</span>
-          <a href="${f.url}" target="_blank" rel="noopener" style="flex:1;font-size:.83rem;color:var(--text);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${f.label||f.url}</a>
-          <span style="font-size:.7rem;color:var(--text-3);white-space:nowrap">${f.addedBy||''}</span>
-        </div>`).join('')}
+      ${j.driveFolder?`<div style="display:flex;align-items:center;gap:.75rem;padding:.65rem .85rem;background:rgba(36,99,160,.06);border:1px solid rgba(36,99,160,.2);border-radius:8px;margin-bottom:.5rem">
+        <span style="font-size:1.1rem">📁</span>
+        <a href="${j.driveFolder}" target="_blank" rel="noopener" style="flex:1;font-size:.85rem;font-weight:500;color:var(--blue);text-decoration:none">Open Job Folder in Google Drive</a>
+      </div>`:''}
+      ${jobLinks.map(f=>`<div style="display:flex;align-items:center;gap:.75rem;padding:.55rem .85rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;margin-bottom:.4rem">
+        <span style="font-size:1rem">${getLinkIcon(f.url)}</span>
+        <a href="${f.url}" target="_blank" rel="noopener" style="flex:1;font-size:.83rem;color:var(--text);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${f.label||f.url}</a>
+        <span style="font-size:.7rem;color:var(--text-3);white-space:nowrap">${f.addedBy||''}</span>
+      </div>`).join('')}
     </div>`;
   }).join('');
 }
@@ -1714,6 +1708,7 @@ async function loadSchedule(){
 async function loadInspections(){
   const snap=await getDocs(collection(db,'inspections'));const items=[];
   snap.forEach(d=>{const data=d.data();if(notArchived(data))items.push({id:d.id,...data});});
+  items.sort((a,b)=>(b.created||'')>(a.created||'')?1:-1);
   const el=document.getElementById('inspectionsList');
   el.innerHTML=items.length?items.map(i=>`<div class="card mb-1">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem">
@@ -1721,7 +1716,11 @@ async function loadInspections(){
         <div style="font-family:var(--font-head);font-size:1rem;font-weight:600">${i.jobNumber?`<span class="job-number-badge" style="font-size:.72rem;margin-right:.5rem">#${i.jobNumber}</span>`:''}${i.client||''}</div>
         <div style="font-size:.8rem;color:var(--text-2)">${i.address||''} · ${i.date||''} · By ${i.inspBy||''}</div>
       </div>
-      <div style="display:flex;gap:.5rem;align-items:center">${badge(i.quoteStatus?.toLowerCase()||'pending')}<button class="btn btn-sm btn-danger" onclick="archiveItem('inspections','${i.id}',loadInspections)">✕</button></div>
+      <div style="display:flex;gap:.5rem;align-items:center;flex-wrap:wrap">
+        ${badge(i.quoteStatus?.toLowerCase()||'pending')}
+        <button class="btn btn-sm btn-secondary" onclick="editInspection('${i.id}')">✏️ Edit</button>
+        <button class="btn btn-sm btn-danger" onclick="archiveItem('inspections','${i.id}',loadInspections)">✕</button>
+      </div>
     </div>
     <div class="grid-3">
       <div><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Roof Type</div><div style="font-size:.85rem">${i.roofType||'—'}</div></div>
@@ -1730,28 +1729,80 @@ async function loadInspections(){
     </div>
     ${i.condition?`<div style="margin-top:.75rem;padding:.75rem;background:var(--surface);border-radius:6px;font-size:.82rem;color:var(--text-2)">${i.condition}</div>`:''}
     ${i.cutList?`<div style="margin-top:.5rem"><div style="font-size:.68rem;text-transform:uppercase;color:var(--text-2);margin-bottom:4px">Cut List</div><div style="font-size:.82rem;white-space:pre-wrap;background:var(--surface);padding:.75rem;border-radius:6px">${i.cutList}</div></div>`:''}
-    ${i.mudMap||i.mudMapFileUrl?`<div style="margin-top:.5rem"><div style="font-size:.68rem;text-transform:uppercase;color:var(--text-2);margin-bottom:4px">Mud Map</div>${i.mudMap?`<div style="font-size:.82rem;background:var(--surface);padding:.75rem;border-radius:6px;margin-bottom:.4rem">${i.mudMap}</div>`:''}${i.mudMapFileUrl?`<a href="${i.mudMapFileUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.4rem .85rem;font-size:.8rem;color:var(--blue);text-decoration:none">📎 ${i.mudMapFileName||'Mud Map File'}</a>`:''}` :''}
+    ${i.mudMap||i.mudMapFileUrl?`<div style="margin-top:.5rem"><div style="font-size:.68rem;text-transform:uppercase;color:var(--text-2);margin-bottom:4px">Mud Map</div>${i.mudMap?`<div style="font-size:.82rem;background:var(--surface);padding:.75rem;border-radius:6px;margin-bottom:.4rem">${i.mudMap}</div>`:''}${i.mudMapFileUrl?`<a href="${i.mudMapFileUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.4rem .85rem;font-size:.8rem;color:var(--blue);text-decoration:none">📁 View Mud Map / Photos</a>`:''}` :''}
   </div>`).join(''):'<div class="empty-state card"><div class="empty-icon">🔍</div><p>No inspections recorded yet</p></div>';
 }
 window.openInspectionModal=()=>{
   const leads=allLeadsCache||[];
+  document.getElementById('inspId').value='';
+  document.getElementById('inspModalTitle').textContent='New Inspection';
   document.getElementById('inspLeadSelect').innerHTML=
     '<option value="">— Select a Lead / Job Number —</option>'+
     leads.filter(l=>l.jobNumber).map(l=>`<option value="${l.jobNumber}">#${l.jobNumber} — ${l.name||''}</option>`).join('');
+  document.getElementById('inspLeadSelect').disabled=false;
   ['inspClient','inspPhone','inspAddress','inspDate','inspAge','inspCondition','inspQuote','inspCutList','inspMudMap','mudMapDriveUrl'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('inspQuoteStatus').value='Pending';
+  openModal('inspectionModal');
+};
+
+window.editInspection=async(id)=>{
+  const snap=await getDoc(doc(db,'inspections',id));
+  if(!snap.exists())return;
+  const i=snap.data();
+  const leads=allLeadsCache||[];
+  document.getElementById('inspId').value=id;
+  document.getElementById('inspModalTitle').textContent='Edit Inspection';
+  document.getElementById('inspLeadSelect').innerHTML=
+    '<option value="">— No job linked —</option>'+
+    leads.filter(l=>l.jobNumber).map(l=>`<option value="${l.jobNumber}" ${l.jobNumber===i.jobNumber?'selected':''}>#${l.jobNumber} — ${l.name||''}</option>`).join('');
+  document.getElementById('inspClient').value=i.client||'';
+  document.getElementById('inspPhone').value=i.phone||'';
+  document.getElementById('inspAddress').value=i.address||'';
+  document.getElementById('inspDate').value=i.date||'';
+  document.getElementById('inspBy').value=i.inspBy||'Ronny';
+  document.getElementById('inspRoofType').value=i.roofType||'Colorbond';
+  document.getElementById('inspAge').value=i.age||'';
+  document.getElementById('inspCondition').value=i.condition||'';
+  document.getElementById('inspQuote').value=i.quote||'';
+  document.getElementById('inspQuoteStatus').value=i.quoteStatus||'Pending';
+  document.getElementById('inspCutList').value=i.cutList||'';
+  document.getElementById('inspMudMap').value=i.mudMap||'';
+  document.getElementById('mudMapDriveUrl').value=i.mudMapFileUrl||'';
   openModal('inspectionModal');
 };
 
 window.saveInspection=async()=>{
+  const id=document.getElementById('inspId').value;
   const linkedJobNumber=document.getElementById('inspLeadSelect').value||'';
   const mudMapDriveUrl=document.getElementById('mudMapDriveUrl').value.trim();
-  const data={client:document.getElementById('inspClient').value,phone:document.getElementById('inspPhone').value,address:document.getElementById('inspAddress').value,date:document.getElementById('inspDate').value,inspBy:document.getElementById('inspBy').value,roofType:document.getElementById('inspRoofType').value,age:document.getElementById('inspAge').value,condition:document.getElementById('inspCondition').value,quote:document.getElementById('inspQuote').value,quoteStatus:document.getElementById('inspQuoteStatus').value,cutList:document.getElementById('inspCutList').value,mudMap:document.getElementById('inspMudMap').value,mudMapFileUrl:mudMapDriveUrl,jobNumber:linkedJobNumber,created:new Date().toISOString()};
+  const data={
+    client:document.getElementById('inspClient').value,
+    phone:document.getElementById('inspPhone').value,
+    address:document.getElementById('inspAddress').value,
+    date:document.getElementById('inspDate').value,
+    inspBy:document.getElementById('inspBy').value,
+    roofType:document.getElementById('inspRoofType').value,
+    age:document.getElementById('inspAge').value,
+    condition:document.getElementById('inspCondition').value,
+    quote:document.getElementById('inspQuote').value,
+    quoteStatus:document.getElementById('inspQuoteStatus').value,
+    cutList:document.getElementById('inspCutList').value,
+    mudMap:document.getElementById('inspMudMap').value,
+    mudMapFileUrl:mudMapDriveUrl,
+    jobNumber:linkedJobNumber,
+    updated:new Date().toISOString()
+  };
   try{
-    await addDoc(collection(db,'inspections'),data);
+    if(id){
+      await updateDoc(doc(db,'inspections',id),data);
+      showToast('Inspection updated ✅');
+    }else{
+      data.created=new Date().toISOString();
+      await addDoc(collection(db,'inspections'),data);
+      showToast('Inspection saved'+(linkedJobNumber?' — Job #'+linkedJobNumber:''));
+    }
     closeModal('inspectionModal');
-    ['inspClient','inspPhone','inspAddress','inspDate','inspAge','inspCondition','inspQuote','inspCutList','inspMudMap','mudMapDriveUrl'].forEach(i=>document.getElementById(i).value='');
     await loadInspections();
-    showToast('Inspection saved'+(linkedJobNumber?' — Job #'+linkedJobNumber:''));
   }catch(e){showToast('Error saving inspection','error');console.error(e);}
 };
 
