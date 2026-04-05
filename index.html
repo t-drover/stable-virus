@@ -407,7 +407,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
       <!-- SCHEDULE -->
       <div class="page" id="page-schedule">
         <div class="page-header"><h1>Schedule</h1><p>Team scheduling and job calendar.</p>
-          <div class="page-actions"><button class="btn btn-primary" onclick="openModal('scheduleModal')">+ Add Event</button></div>
+          <div class="page-actions"><button class="btn btn-primary" onclick="openScheduleModal()">+ Add Event</button></div>
         </div>
         <div id="scheduleList" class="card"><div class="empty-state"><div class="empty-icon">📅</div><p>No events scheduled</p></div></div>
       </div>
@@ -610,6 +610,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
     <div class="modal-header"><div class="modal-title">Add Event</div><button class="modal-close" onclick="closeModal('scheduleModal')">✕</button></div>
     <div class="form-grid">
       <div class="form-field full"><label>Event Title</label><input id="schedTitle" placeholder="e.g. Woolooware Re-Roof Day 1"></div>
+      <div class="form-field full"><label>Job Number <span style="color:var(--text-3);font-weight:400;font-size:.7rem">(optional — link to a lead)</span></label><select id="schedJobNumber"><option value="">— No job linked —</option></select></div>
       <div class="form-field"><label>Date</label><input type="date" id="schedDate"></div>
       <div class="form-field"><label>Time</label><input type="time" id="schedTime"></div>
       <div class="form-field"><label>Crew</label><select id="schedCrew"><option>All Crew</option><option>Harry</option><option>Pauly</option><option>Josh</option><option>Ronny</option><option>Myla</option><option>Toneth</option></select></div>
@@ -1213,12 +1214,39 @@ async function loadSchedule(){
   const now=new Date(),week=new Date(now.getTime()+7*24*60*60*1000);
   document.getElementById('statWeek').textContent=events.filter(e=>{const d=new Date(e.date+'T00:00:00');return d>=now&&d<=week;}).length;
   const el=document.getElementById('scheduleList');
-  el.innerHTML=events.length?`<div class="card-title">Upcoming Events</div>`+events.map(e=>`<div style="display:flex;align-items:center;gap:1rem;padding:.85rem 0;border-bottom:1px solid var(--border)"><div style="background:var(--surface);border-radius:8px;padding:.5rem .75rem;text-align:center;min-width:52px"><div style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;color:var(--rust-lt)">${e.date?e.date.slice(8):''}</div><div style="font-size:.65rem;color:var(--text-2);text-transform:uppercase">${e.date?new Date(e.date+'T00:00:00').toLocaleString('en',{month:'short'}):''}</div></div><div style="flex:1"><div style="font-weight:500;font-size:.9rem">${e.title||''}</div><div style="font-size:.78rem;color:var(--text-2)">${e.time||''} · ${e.crew||''} · ${e.type||''}</div>${e.notes?`<div style="font-size:.78rem;color:var(--text-3);margin-top:2px">${e.notes}</div>`:''}</div><button class="btn btn-sm btn-danger" onclick="archiveItem('schedule','${e.id}',loadSchedule)">✕</button></div>`).join(''):'<div class="empty-state"><div class="empty-icon">📅</div><p>No events scheduled</p></div>';
+  el.innerHTML=events.length?`<div class="card-title">Upcoming Events</div>`+events.map(e=>`
+    <div style="display:flex;align-items:center;gap:1rem;padding:.85rem 0;border-bottom:1px solid var(--border)">
+      <div style="background:var(--surface);border-radius:8px;padding:.5rem .75rem;text-align:center;min-width:52px">
+        <div style="font-family:var(--font-head);font-size:1.1rem;font-weight:700;color:var(--rust-lt)">${e.date?e.date.slice(8):''}</div>
+        <div style="font-size:.65rem;color:var(--text-2);text-transform:uppercase">${e.date?new Date(e.date+'T00:00:00').toLocaleString('en',{month:'short'}):''}</div>
+      </div>
+      <div style="flex:1">
+        <div style="font-weight:500;font-size:.9rem">${e.title||''} ${e.jobNumber?`<span class="job-number-badge" style="font-size:.68rem;padding:1px 7px;margin-left:.35rem">#${e.jobNumber}</span>`:''}</div>
+        <div style="font-size:.78rem;color:var(--text-2)">${e.time||''} · ${e.crew||''} · ${e.type||''}</div>
+        ${e.notes?`<div style="font-size:.78rem;color:var(--text-3);margin-top:2px">${e.notes}</div>`:''}
+      </div>
+      <button class="btn btn-sm btn-danger" onclick="archiveItem('schedule','${e.id}',loadSchedule)">✕</button>
+    </div>`).join(''):'<div class="empty-state"><div class="empty-icon">📅</div><p>No events scheduled</p></div>';
 }
+window.openScheduleModal=()=>{
+  // Populate job number dropdown from leads cache
+  const leads=allLeadsCache||[];
+  document.getElementById('schedJobNumber').innerHTML=
+    '<option value="">— No job linked —</option>'+
+    leads.filter(l=>l.jobNumber).map(l=>`<option value="${l.jobNumber}">#${l.jobNumber} — ${l.name||''}</option>`).join('');
+  ['schedTitle','schedDate','schedTime','schedNotes'].forEach(i=>document.getElementById(i).value='');
+  openModal('scheduleModal');
+};
 window.saveSchedule=async()=>{
-  const data={title:document.getElementById('schedTitle').value,date:document.getElementById('schedDate').value,time:document.getElementById('schedTime').value,crew:document.getElementById('schedCrew').value,type:document.getElementById('schedType').value,notes:document.getElementById('schedNotes').value,created:new Date().toISOString()};
-  try{await addDoc(collection(db,'schedule'),data);closeModal('scheduleModal');['schedTitle','schedDate','schedTime','schedNotes'].forEach(i=>document.getElementById(i).value='');await loadSchedule();showToast('Event added');}
-  catch(e){showToast('Error','error');}
+  const jobNumber=document.getElementById('schedJobNumber').value||'';
+  const data={title:document.getElementById('schedTitle').value,jobNumber,date:document.getElementById('schedDate').value,time:document.getElementById('schedTime').value,crew:document.getElementById('schedCrew').value,type:document.getElementById('schedType').value,notes:document.getElementById('schedNotes').value,created:new Date().toISOString()};
+  try{
+    await addDoc(collection(db,'schedule'),data);
+    closeModal('scheduleModal');
+    ['schedTitle','schedDate','schedTime','schedNotes'].forEach(i=>document.getElementById(i).value='');
+    await loadSchedule();
+    showToast('Event added'+(jobNumber?' — Job #'+jobNumber:''));
+  }catch(e){showToast('Error saving event','error');}
 };
 
 // ── INSPECTIONS ───────────────────────────────────────────────────────────────
@@ -1441,7 +1469,14 @@ async function loadTasks() {
   if (sel) sel.innerHTML = allTaskPanels.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
 }
 
-window.openTaskModal = () => { document.getElementById('taskTitle').value = ''; openModal('taskModal'); };
+window.openTaskModal = async () => {
+  // Make sure panels are loaded first
+  if (!allTaskPanels.length) await loadTaskPanels();
+  const sel = document.getElementById('taskAssignTo');
+  sel.innerHTML = allTaskPanels.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+  document.getElementById('taskTitle').value = '';
+  openModal('taskModal');
+};
 
 window.saveTask = async () => {
   if (!isAdmin) { showToast('Admin only', 'error'); return; }
