@@ -505,7 +505,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
         <div class="page-header">
           <h1>RDU Workflow</h1>
           <p>Standard operating process for every job.</p>
-          <div class="page-actions admin-only" id="workflowAdminActions">
+          <div class="page-actions" id="workflowAdminActions" style="display:none">
             <button class="btn btn-secondary btn-sm" onclick="toggleWorkflowEdit()" id="workflowEditBtn">✏️ Edit Mode</button>
             <button class="btn btn-primary btn-sm" onclick="saveWorkflow()" id="workflowSaveBtn" style="display:none">💾 Save Changes</button>
           </div>
@@ -517,35 +517,31 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
       <div class="page" id="page-admin">
         <div class="page-header"><h1>Admin Settings</h1><p>System configuration — admin access only.</p></div>
 
-        <!-- Role Permissions -->
+        <!-- Per-User Permissions -->
         <div class="card mb-2">
-          <div class="card-title">Role Permissions</div>
-          <div class="perm-grid" id="permGrid">
-            <div class="perm-role-card">
-              <div class="perm-role-title"><span class="role-tag admin">Admin</span></div>
-              <div class="perm-check-row"><span>manage_tasks</span><button class="perm-toggle on" disabled title="Always on for admin"></button></div>
-              <div class="perm-check-row"><span>manage_leads</span><button class="perm-toggle on" disabled></button></div>
-              <div class="perm-check-row"><span>manage_users</span><button class="perm-toggle on" disabled></button></div>
-              <div class="perm-check-row"><span>view_reports</span><button class="perm-toggle on" disabled></button></div>
-            </div>
-            <div class="perm-role-card">
-              <div class="perm-role-title"><span class="role-tag manager">Manager</span></div>
-              <div class="perm-check-row"><span>manage_tasks</span><button class="perm-toggle" id="perm-manager-manage_tasks" onclick="togglePerm('manager','manage_tasks',this)"></button></div>
-              <div class="perm-check-row"><span>manage_leads</span><button class="perm-toggle" id="perm-manager-manage_leads" onclick="togglePerm('manager','manage_leads',this)"></button></div>
-              <div class="perm-check-row"><span>manage_users</span><button class="perm-toggle" id="perm-manager-manage_users" onclick="togglePerm('manager','manage_users',this)"></button></div>
-              <div class="perm-check-row"><span>view_reports</span><button class="perm-toggle" id="perm-manager-view_reports" onclick="togglePerm('manager','view_reports',this)"></button></div>
-            </div>
-            <div class="perm-role-card">
-              <div class="perm-role-title"><span class="role-tag staff">Staff</span></div>
-              <div class="perm-check-row"><span>manage_tasks</span><button class="perm-toggle" id="perm-staff-manage_tasks" onclick="togglePerm('staff','manage_tasks',this)"></button></div>
-              <div class="perm-check-row"><span>manage_leads</span><button class="perm-toggle" id="perm-staff-manage_leads" onclick="togglePerm('staff','manage_leads',this)"></button></div>
-              <div class="perm-check-row"><span>manage_users</span><button class="perm-toggle off" id="perm-staff-manage_users" onclick="togglePerm('staff','manage_users',this)"></button></div>
-              <div class="perm-check-row"><span>view_reports</span><button class="perm-toggle" id="perm-staff-view_reports" onclick="togglePerm('staff','view_reports',this)"></button></div>
-            </div>
+          <div class="card-title">Team Permissions</div>
+          <div style="overflow-x:auto">
+            <table style="width:100%;border-collapse:collapse;font-size:.83rem">
+              <thead>
+                <tr style="border-bottom:1px solid var(--border)">
+                  <th style="text-align:left;padding:.6rem 1rem;color:var(--text-2);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600">Member</th>
+                  <th style="padding:.6rem .75rem;color:var(--text-2);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600;text-align:center">Manage Tasks</th>
+                  <th style="padding:.6rem .75rem;color:var(--text-2);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600;text-align:center">Manage Leads</th>
+                  <th style="padding:.6rem .75rem;color:var(--text-2);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600;text-align:center">Manage Jobs</th>
+                  <th style="padding:.6rem .75rem;color:var(--text-2);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600;text-align:center">View Reports</th>
+                  <th style="padding:.6rem .75rem;color:var(--text-2);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600;text-align:center">Manage Finance</th>
+                  <th style="padding:.6rem .75rem;color:var(--text-2);font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600;text-align:center">Admin Access</th>
+                </tr>
+              </thead>
+              <tbody id="permUserTable">
+                <tr style="border-bottom:1px solid var(--border)"><td colspan="7" style="padding:1rem;color:var(--text-3);text-align:center">Loading…</td></tr>
+              </tbody>
+            </table>
           </div>
+          <div style="font-size:.75rem;color:var(--text-3);margin-top:.75rem">Toggles save instantly to Firestore. Admin row is always locked.</div>
         </div>
 
-        <!-- User Role Assignment -->
+        <!-- Team Members & Task Panels -->
         <div class="card mb-2">
           <div class="card-title">Team Members & Task Panels</div>
           <div id="adminTeamList"></div>
@@ -814,7 +810,13 @@ onAuthStateChanged(auth,user=>{
     document.getElementById('sidebarRole').textContent=currentUserInfo.role;
     document.getElementById('firstName').textContent=currentUserInfo.name;
     document.querySelectorAll('.admin-only').forEach(el=>el.style.display=isAdmin?'':'none');
-    if(isAdmin){document.getElementById('navAdmin').style.display='';loadPermissions();loadAdminCounter();}
+    if(isAdmin){
+      document.getElementById('navAdmin').style.display='';
+      loadPermissions();
+      loadAdminCounter();
+      const wa=document.getElementById('workflowAdminActions');
+      if(wa)wa.style.display='flex';
+    }
     loadAll();
     renderAdminTeam();
     initGoogleCalendar();
@@ -901,36 +903,70 @@ async function getNextJobNumber(){
 // Keep old name as alias so saveLead still works
 const getNextLeadNumber=getNextJobNumber;
 
-// ── PERMISSIONS SYSTEM ────────────────────────────────────────────────────────
-const PERMS=['manage_tasks','manage_leads','manage_users','view_reports'];
-let permCache={};
+// ── PERMISSIONS SYSTEM (Per-User) ─────────────────────────────────────────────
+const USER_PERMS=['manage_tasks','manage_leads','manage_jobs','view_reports','manage_finance','admin_access'];
+const USER_PERM_LABELS={manage_tasks:'Manage Tasks',manage_leads:'Manage Leads',manage_jobs:'Manage Jobs',view_reports:'View Reports',manage_finance:'Manage Finance',admin_access:'Admin Access'};
+// Default permissions per team member
+const DEFAULT_USER_PERMS={
+  'ronny@roofingdownunder.com':  {manage_tasks:true, manage_leads:true, manage_jobs:true, view_reports:true, manage_finance:true, admin_access:false},
+  'harry@roofingdownunder.com':  {manage_tasks:true, manage_leads:false,manage_jobs:true, view_reports:true, manage_finance:false,admin_access:false},
+  'pauly@roofingdownunder.com':  {manage_tasks:true, manage_leads:false,manage_jobs:false,view_reports:true, manage_finance:false,admin_access:false},
+  'josh@roofingdownunder.com':   {manage_tasks:true, manage_leads:false,manage_jobs:false,view_reports:true, manage_finance:false,admin_access:false},
+  'myla@roofingdownunder.com':   {manage_tasks:true, manage_leads:true, manage_jobs:true, view_reports:true, manage_finance:true, admin_access:false},
+  'toneth@roofingdownunder.com': {manage_tasks:true, manage_leads:true, manage_jobs:true, view_reports:true, manage_finance:true, admin_access:true},
+};
+let userPermCache={};
 
 async function loadPermissions(){
+  if(!isAdmin)return;
   try{
-    const snap=await getDocs(collection(db,'roles_permissions'));
-    snap.forEach(d=>{permCache[d.id]=d.data();});
-    ['manager','staff'].forEach(role=>{
-      PERMS.forEach(perm=>{
-        const btn=document.getElementById(`perm-${role}-${perm}`);
-        if(!btn)return;
-        const val=permCache[role]?.[perm]??false;
-        btn.className='perm-toggle '+(val?'on':'off');
-      });
-    });
-  }catch(e){console.warn('loadPermissions:',e);}
+    const snap=await getDocs(collection(db,'user_permissions'));
+    snap.forEach(d=>{userPermCache[d.id]=d.data();});
+    renderPermTable();
+  }catch(e){console.warn('loadPermissions:',e);renderPermTable();}
 }
 
-window.togglePerm=async(role,perm,btn)=>{
+function renderPermTable(){
+  const tbody=document.getElementById('permUserTable');
+  if(!tbody)return;
+  const rows=Object.entries(TEAM).map(([email,info])=>{
+    const isAdminUser=email===ADMIN_EMAIL;
+    const perms=userPermCache[email]||DEFAULT_USER_PERMS[email]||{};
+    const cells=USER_PERMS.map(perm=>{
+      const val=perms[perm]??false;
+      if(isAdminUser){
+        // Admin row — always on, locked
+        return `<td style="text-align:center;padding:.6rem .75rem"><button class="perm-toggle on" disabled style="opacity:.5;cursor:not-allowed"></button></td>`;
+      }
+      return `<td style="text-align:center;padding:.6rem .75rem">
+        <button class="perm-toggle ${val?'on':'off'}" id="uperm-${email.split('@')[0]}-${perm}"
+          onclick="toggleUserPerm('${email}','${perm}',this)"></button>
+      </td>`;
+    }).join('');
+    const roleTag=isAdminUser?'admin':info.role==='Owner'||info.role==='Site Lead'?'manager':'staff';
+    return `<tr style="border-bottom:1px solid var(--border)">
+      <td style="padding:.6rem 1rem">
+        <div style="font-weight:500;font-size:.88rem">${info.name}</div>
+        <div style="font-size:.72rem;color:var(--text-2)">${info.role}</div>
+      </td>
+      ${cells}
+    </tr>`;
+  }).join('');
+  tbody.innerHTML=rows;
+}
+
+window.toggleUserPerm=async(email,perm,btn)=>{
   const isOn=btn.classList.contains('on');
   const newVal=!isOn;
   btn.className='perm-toggle '+(newVal?'on':'off');
   try{
-    const ref=doc(db,'roles_permissions',role);
-    const snap=await getDoc(ref);
-    if(snap.exists())await updateDoc(ref,{[perm]:newVal});
-    else await setDoc(ref,{[perm]:newVal});
-    permCache[role]={...permCache[role],[perm]:newVal};
-    showToast(`${role}: ${perm} ${newVal?'enabled':'disabled'}`);
+    const ref=doc(db,'user_permissions',email);
+    const existing=userPermCache[email]||DEFAULT_USER_PERMS[email]||{};
+    const updated={...existing,[perm]:newVal};
+    await setDoc(ref,updated);
+    userPermCache[email]=updated;
+    const name=TEAM[email]?.name||email;
+    showToast(`${name}: ${USER_PERM_LABELS[perm]||perm} ${newVal?'enabled':'disabled'}`);
   }catch(e){
     showToast('Error saving permission','error');
     btn.className='perm-toggle '+(isOn?'on':'off');
@@ -1161,25 +1197,60 @@ function subscribeToComments(jobId){
   if(commentsUnsubscribe){commentsUnsubscribe();commentsUnsubscribe=null;}
   const q=query(collection(db,'job_comments'),where('jobId','==',jobId),orderBy('createdAt','asc'));
   commentsUnsubscribe=onSnapshot(q,snap=>{
-    const list=document.getElementById('commentsList');if(!list)return;
-    if(snap.empty){list.innerHTML=`<div style="text-align:center;padding:2rem;color:var(--text-3);font-size:.82rem">No notes yet — start the conversation</div>`;return;}
-    list.innerHTML='';
+    const list=document.getElementById('commentsList');
+    if(!list)return;
+    if(snap.empty){
+      list.innerHTML=`<div style="text-align:center;padding:2rem;color:var(--text-3);font-size:.82rem">No notes yet — start the conversation</div>`;
+      return;
+    }
+    // Build all items at once — never use innerHTML+= in a loop
+    const allNames=[...TEAM_NAMES,...allTaskPanels.map(p=>p.name)].filter((v,i,a)=>a.indexOf(v)===i);
+    const mentionRegex=new RegExp('@('+allNames.map(n=>n.replace(/[.*+?^${}()|[\]\\]/g,'\$&')).join('|')+')','g');
+    const items=[];
     snap.forEach(d=>{
-      const c=d.data(),mine=c.userId===currentUser?.uid;
+      const c=d.data();
+      const mine=c.userId===currentUser?.uid;
       const init=(c.userName||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
       const ts=c.createdAt?.toDate?c.createdAt.toDate().toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'}):'';
       const ds=c.createdAt?.toDate?c.createdAt.toDate().toLocaleDateString('en-AU',{day:'numeric',month:'short'}):'';
-      const msg=(c.message||'').replace(/@(\w+)/g,'<span class="comment-mention">@$1</span>');
-      list.innerHTML+=`<div class="comment-item"><div class="comment-avatar">${init}</div><div class="comment-bubble ${mine?'mine':''}"><div class="comment-meta"><strong>${c.userName||'Unknown'}</strong> · ${ds} ${ts}</div><div class="comment-text">${msg}</div></div></div>`;
+      // Highlight @mentions and make them stand out
+      const msg=(c.message||'')
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(mentionRegex,'<span class="comment-mention">@$1</span>');
+      items.push(`
+        <div class="comment-item">
+          <div class="comment-avatar">${init}</div>
+          <div class="comment-bubble ${mine?'mine':''}">
+            <div class="comment-meta"><strong>${c.userName||'Unknown'}</strong> · ${ds} ${ts}</div>
+            <div class="comment-text">${msg}</div>
+          </div>
+        </div>`);
     });
-    list.scrollTop=list.scrollHeight;
+    list.innerHTML=items.join('');
+    // Scroll to bottom after paint
+    requestAnimationFrame(()=>{list.scrollTop=list.scrollHeight;});
   });
 }
+
 window.sendComment=async()=>{
-  const input=document.getElementById('commentInput');const msg=input.value.trim();if(!msg||!currentJobId||!currentUser)return;
-  const mentions=[];TEAM_NAMES.forEach(name=>{if(msg.includes('@'+name))mentions.push(name);});
-  try{await addDoc(collection(db,'job_comments'),{jobId:currentJobId,userId:currentUser.uid,userName:currentUserInfo?.name||currentUser.email,message:msg,mentions,createdAt:serverTimestamp()});input.value='';}
-  catch(e){showToast('Error sending note','error');}
+  const input=document.getElementById('commentInput');
+  const msg=input.value.trim();
+  if(!msg||!currentJobId||!currentUser)return;
+  // Detect @mentions from all known names (TEAM + task panels)
+  const allNames=[...TEAM_NAMES,...allTaskPanels.map(p=>p.name)].filter((v,i,a)=>a.indexOf(v)===i);
+  const mentions=allNames.filter(name=>msg.includes('@'+name));
+  const userName=currentUserInfo?.name||currentUser.email.split('@')[0];
+  try{
+    await addDoc(collection(db,'job_comments'),{
+      jobId:currentJobId,
+      userId:currentUser.uid,
+      userName,
+      message:msg,
+      mentions,
+      createdAt:serverTimestamp()
+    });
+    input.value='';
+  }catch(e){showToast('Error sending note','error');}
 };
 
 // ── LEADS ─────────────────────────────────────────────────────────────────────
