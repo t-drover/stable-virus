@@ -294,6 +294,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
         <button class="nav-item" onclick="nav('leads')"><span class="nav-icon">📋</span> Leads <span class="nav-badge" id="leadsBadge">0</span></button>
         <button class="nav-item" onclick="nav('schedule')"><span class="nav-icon">📅</span> Booking</button>
         <button class="nav-item" onclick="nav('inspections')"><span class="nav-icon">🔍</span> Inspections</button>
+        <button class="nav-item" onclick="nav('files')"><span class="nav-icon">🗂️</span> Files &amp; Photos</button>
       </div>
       <div class="nav-section">
         <span class="nav-label">Finance</span>
@@ -535,6 +536,47 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
           <thead><tr><th>Campaign</th><th>Platform</th><th>Budget</th><th>Leads</th><th>CPL</th><th>Status</th><th>Actions</th></tr></thead>
           <tbody id="adsTable"><tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No campaigns yet</td></tr></tbody>
         </table></div>
+      </div>
+
+      <!-- FILES & PHOTOS -->
+      <div class="page" id="page-files">
+        <div class="page-header">
+          <h1>Files &amp; Photos</h1>
+          <p>All uploaded files and photos across every job.</p>
+          <div class="page-actions">
+            <select id="filesJobFilter" class="btn btn-secondary" onchange="filterFiles()" style="cursor:pointer;padding:.5rem .9rem;font-size:.82rem">
+              <option value="">All Jobs</option>
+            </select>
+            <select id="filesTypeFilter" class="btn btn-secondary" onchange="filterFiles()" style="cursor:pointer;padding:.5rem .9rem;font-size:.82rem">
+              <option value="">All Types</option>
+              <option value="image">Photos</option>
+              <option value="pdf">PDFs</option>
+              <option value="doc">Documents</option>
+            </select>
+          </div>
+        </div>
+        <div class="card mb-2">
+          <div class="card-title">Upload Files</div>
+          <div style="margin-bottom:.75rem">
+            <select id="filesUploadJob" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.55rem .9rem;color:var(--text);font-family:var(--font-body);font-size:.85rem;outline:none;width:100%">
+              <option value="">— Select a Job to upload to —</option>
+            </select>
+          </div>
+          <div class="upload-zone" id="filesUploadZone" onclick="document.getElementById('filesUploadInput').click()" ondrop="handleFilesDrop(event)" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')">
+            <p>📎 Tap to upload or drag &amp; drop<br><span style="font-size:.75rem;color:var(--text-3)">JPG, PNG, PDF, DOCX — max 10MB each</span></p>
+            <div class="upload-progress" id="filesUploadProgress"><div class="upload-progress-bar" id="filesUploadProgressBar"></div></div>
+            <input type="file" id="filesUploadInput" multiple accept="image/*,.pdf,.doc,.docx" onchange="uploadFilesGlobal(this.files)" style="display:none">
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:1rem;margin-bottom:1.5rem">
+          <div class="stat-card"><div class="stat-label">Total Files</div><div class="stat-value" id="filesTotalCount">0</div></div>
+          <div class="stat-card"><div class="stat-label">Photos</div><div class="stat-value" id="filesPhotoCount">0</div></div>
+          <div class="stat-card"><div class="stat-label">Documents</div><div class="stat-value" id="filesDocCount">0</div></div>
+          <div class="stat-card highlight"><div class="stat-label">Jobs with Files</div><div class="stat-value" id="filesJobCount">0</div></div>
+        </div>
+        <div id="filesGrid" class="attach-list" style="grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:1rem">
+          <div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🗂️</div><p>No files uploaded yet</p></div>
+        </div>
       </div>
 
       <!-- WORKFLOW -->
@@ -949,7 +991,7 @@ window.toggleSidebar=()=>{
   document.getElementById('mobileOverlay').classList.toggle('open');
 };
 
-async function loadAll(){await Promise.all([loadJobs(),loadLeads(),loadSchedule(),loadInspections(),loadInvoices(),loadReports(),loadAds(),loadReminders(),loadTasks(),loadQuickLauncher()]);}
+async function loadAll(){await Promise.all([loadJobs(),loadLeads(),loadSchedule(),loadInspections(),loadInvoices(),loadReports(),loadAds(),loadReminders(),loadTasks(),loadQuickLauncher()]);await loadAllFiles();}
 
 // ── SOFT DELETE ───────────────────────────────────────────────────────────────
 window.archiveItem=async(col,id,reload)=>{
@@ -1265,6 +1307,141 @@ window.deleteAttachment=async(id,path)=>{
     if(path){const sRef=storageRef(storage,path);await deleteObject(sRef).catch(()=>{});}
     await updateDoc(doc(db,'attachments',id),{archived:true,archivedAt:new Date().toISOString()});
     await loadJobFiles(currentJobId);showToast('File removed');
+  }catch(e){showToast('Error removing file','error');}
+};
+
+// ── FILES & PHOTOS PAGE ───────────────────────────────────────────────────────
+let allFilesCache=[];
+
+async function loadAllFiles(){
+  const snap=await getDocs(collection(db,'attachments'));
+  allFilesCache=[];
+  snap.forEach(d=>{const data=d.data();if(notArchived(data))allFilesCache.push({id:d.id,...data});});
+  allFilesCache.sort((a,b)=>(b.createdAt||'')>(a.createdAt||'')?1:-1);
+
+  const photos=allFilesCache.filter(f=>isImage(f.fileName));
+  const docs=allFilesCache.filter(f=>!isImage(f.fileName));
+  const jobIds=[...new Set(allFilesCache.map(f=>f.jobId).filter(Boolean))];
+
+  const tc=document.getElementById('filesTotalCount');
+  const pc=document.getElementById('filesPhotoCount');
+  const dc=document.getElementById('filesDocCount');
+  const jc=document.getElementById('filesJobCount');
+  if(tc)tc.textContent=allFilesCache.length;
+  if(pc)pc.textContent=photos.length;
+  if(dc)dc.textContent=docs.length;
+  if(jc)jc.textContent=jobIds.length;
+
+  // Populate job filter dropdown
+  const filterSel=document.getElementById('filesJobFilter');
+  if(filterSel){
+    const cur=filterSel.value;
+    filterSel.innerHTML='<option value="">All Jobs</option>'+
+      allJobs.filter(j=>jobIds.includes(j.id)).map(j=>
+        `<option value="${j.id}">${j.client||'Unnamed'}${j.jobNumber?' — #'+j.jobNumber:''}</option>`
+      ).join('');
+    filterSel.value=cur;
+  }
+
+  // Populate upload job dropdown
+  const uploadSel=document.getElementById('filesUploadJob');
+  if(uploadSel){
+    const cv=uploadSel.value;
+    uploadSel.innerHTML='<option value="">— Select a Job to upload to —</option>'+
+      allJobs.map(j=>`<option value="${j.id}">${j.client||'Unnamed'}${j.jobNumber?' — #'+j.jobNumber:''}</option>`).join('');
+    uploadSel.value=cv;
+  }
+
+  renderFilesGrid(allFilesCache);
+}
+
+window.filterFiles=()=>{
+  const jobFilter=document.getElementById('filesJobFilter')?.value||'';
+  const typeFilter=document.getElementById('filesTypeFilter')?.value||'';
+  let filtered=allFilesCache;
+  if(jobFilter)filtered=filtered.filter(f=>f.jobId===jobFilter);
+  if(typeFilter==='image')filtered=filtered.filter(f=>isImage(f.fileName));
+  else if(typeFilter==='pdf')filtered=filtered.filter(f=>f.fileName?.toLowerCase().endsWith('.pdf'));
+  else if(typeFilter==='doc')filtered=filtered.filter(f=>!isImage(f.fileName)&&!f.fileName?.toLowerCase().endsWith('.pdf'));
+  renderFilesGrid(filtered);
+};
+
+function renderFilesGrid(files){
+  const el=document.getElementById('filesGrid');if(!el)return;
+  if(!files.length){
+    el.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">🗂️</div><p>No files found</p></div>';
+    return;
+  }
+  el.innerHTML=files.map(f=>{
+    const job=allJobs.find(j=>j.id===f.jobId);
+    const jobLabel=job?(job.client||'Job')+(job.jobNumber?' #'+job.jobNumber:''):'';
+    const dateStr=f.createdAt?new Date(f.createdAt).toLocaleDateString('en-AU',{day:'numeric',month:'short',year:'numeric'}):'';
+    return `<div class="attach-item" style="position:relative">
+      ${isImage(f.fileName)
+        ?`<img class="attach-thumb" src="${f.fileUrl}" alt="${f.fileName}" onclick="window.open('${f.fileUrl}','_blank')" style="cursor:pointer;height:120px;object-fit:cover">`
+        :`<a class="attach-file" href="${f.fileUrl}" target="_blank" rel="noopener" style="height:120px">
+            <div class="attach-file-icon">${f.fileName?.endsWith('.pdf')?'📄':'📎'}</div>
+            <div class="attach-file-name">${f.fileName||'File'}</div>
+          </a>`}
+      <button class="attach-del" onclick="deleteAttachmentGlobal('${f.id}','${f.storagePath}')">✕</button>
+      <div style="padding:5px 7px;border-top:1px solid var(--border)">
+        <div style="font-size:.7rem;color:var(--text);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="${f.fileName||''}">${f.fileName||''}</div>
+        ${jobLabel?`<div style="font-size:.65rem;color:var(--rust-lt);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${jobLabel}</div>`:''}
+        <div style="font-size:.62rem;color:var(--text-3);margin-top:1px">${f.uploadedBy||''} · ${dateStr}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.handleFilesDrop=(e)=>{
+  e.preventDefault();
+  document.getElementById('filesUploadZone')?.classList.remove('drag');
+  uploadFilesGlobal(e.dataTransfer.files);
+};
+
+window.uploadFilesGlobal=async(files)=>{
+  const jobId=document.getElementById('filesUploadJob')?.value;
+  if(!jobId){showToast('Select a job first','error');return;}
+  if(!files||!files.length)return;
+  const progressWrap=document.getElementById('filesUploadProgress');
+  const progressBar=document.getElementById('filesUploadProgressBar');
+  if(progressWrap)progressWrap.style.display='block';
+  if(progressBar)progressBar.style.width='0%';
+  for(const file of files){
+    if(file.size>10*1024*1024){showToast(`${file.name} over 10MB — skipped`,'error');continue;}
+    const path=`attachments/${jobId}/${Date.now()}_${file.name}`;
+    const sRef=storageRef(storage,path);
+    const task=uploadBytesResumable(sRef,file);
+    await new Promise((resolve,reject)=>{
+      task.on('state_changed',
+        snap=>{if(progressBar)progressBar.style.width=Math.round(snap.bytesTransferred/snap.totalBytes*100)+'%';},
+        err=>{showToast('Upload failed','error');reject(err);},
+        async()=>{
+          const url=await getDownloadURL(task.snapshot.ref);
+          await addDoc(collection(db,'attachments'),{
+            jobId,type:'files',fileUrl:url,
+            fileName:file.name,storagePath:path,
+            uploadedBy:currentUserInfo?.name||currentUser.email,
+            createdAt:new Date().toISOString()
+          });
+          resolve();
+        }
+      );
+    }).catch(()=>{});
+  }
+  if(progressWrap)progressWrap.style.display='none';
+  const input=document.getElementById('filesUploadInput');
+  if(input)input.value='';
+  await loadAllFiles();
+  showToast('Upload complete ✅');
+};
+
+window.deleteAttachmentGlobal=async(id,path)=>{
+  if(!confirm('Remove this file?'))return;
+  try{
+    if(path){const sRef=storageRef(storage,path);await deleteObject(sRef).catch(()=>{});}
+    await updateDoc(doc(db,'attachments',id),{archived:true,archivedAt:new Date().toISOString()});
+    await loadAllFiles();showToast('File removed');
   }catch(e){showToast('Error removing file','error');}
 };
 
@@ -2211,7 +2388,7 @@ window.saveAd=async()=>{
 };
 
 // Expose globals
-window.loadJobs=loadJobs;window.loadLeads=loadLeads;window.loadSchedule=loadSchedule;window.loadInspections=loadInspections;window.loadInvoices=loadInvoices;window.loadReports=loadReports;window.loadAds=loadAds;window.loadReminders=loadReminders;window.loadTasks=loadTasks;
+window.loadJobs=loadJobs;window.loadLeads=loadLeads;window.loadSchedule=loadSchedule;window.loadInspections=loadInspections;window.loadInvoices=loadInvoices;window.loadReports=loadReports;window.loadAds=loadAds;window.loadReminders=loadReminders;window.loadTasks=loadTasks;window.loadAllFiles=loadAllFiles;
 </script>
 </body>
 </html>
