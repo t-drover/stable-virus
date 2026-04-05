@@ -504,8 +504,8 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
       <div class="page" id="page-workflow">
         <div class="page-header">
           <h1>RDU Workflow</h1>
-          <p>Standard operating process for every job. Click any step to edit.</p>
-          <div class="page-actions admin-only">
+          <p>Standard operating process for every job.</p>
+          <div class="page-actions">
             <button class="btn btn-secondary btn-sm" onclick="toggleWorkflowEdit()" id="workflowEditBtn">✏️ Edit Mode</button>
             <button class="btn btn-primary btn-sm" onclick="saveWorkflow()" id="workflowSaveBtn" style="display:none">💾 Save Changes</button>
           </div>
@@ -1760,14 +1760,19 @@ async function loadWorkflow(){
 
 function renderWorkflow(){
   const el=document.getElementById('workflowContent');if(!el)return;
-  const colorMap={'var(--blue)':'#5B9BD5','var(--green)':'#4CAF7D','var(--red)':'#E05252','var(--amber)':'#E8A234','var(--rust-lt)':'#D4703F','var(--purple)':'#9B72CF'};
-  el.innerHTML=workflowData.map((phase,pi)=>`
+  let html='';
+  if(workflowEditMode){
+    html+=`<div style="background:rgba(232,162,52,.1);border:1px solid rgba(232,162,52,.3);border-radius:8px;padding:.75rem 1rem;margin-bottom:1rem;font-size:.85rem;color:var(--amber)">
+      ✏️ <strong>Edit Mode active</strong> — Edit phase names, step titles and descriptions directly. Click <strong>💾 Save Changes</strong> when done.
+    </div>`;
+  }
+  html+=workflowData.map((phase,pi)=>`
     <div class="card mb-2">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem">
-        <div style="display:flex;align-items:center;gap:.75rem">
+        <div style="display:flex;align-items:center;gap:.75rem;flex:1">
           <div style="width:12px;height:12px;border-radius:50%;background:${phase.color};flex-shrink:0"></div>
           ${workflowEditMode
-            ?`<input class="wf-phase-input" value="${phase.phase}" onchange="updateWorkflowPhase(${pi},'phase',this.value)" style="font-family:var(--font-head);font-size:1rem;font-weight:700;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.35rem .7rem;outline:none;width:320px">`
+            ?`<input value="${(phase.phase||'').replace(/"/g,'&quot;')}" oninput="updateWorkflowPhase(${pi},'phase',this.value)" style="font-family:var(--font-head);font-size:1rem;font-weight:700;color:var(--text);background:var(--surface);border:1px solid var(--rust);border-radius:6px;padding:.35rem .7rem;outline:none;flex:1;max-width:400px">`
             :`<h3 style="font-family:var(--font-head);font-size:1rem;font-weight:700;color:var(--text);margin:0">${phase.phase}</h3>`
           }
         </div>
@@ -1775,29 +1780,34 @@ function renderWorkflow(){
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.75rem">
         ${phase.steps.map((step,si)=>`
-          <div class="workflow-step" style="border-left:3px solid ${phase.color};margin-bottom:0;position:relative">
-            ${workflowEditMode?`<button onclick="removeWorkflowStep(${pi},${si})" style="position:absolute;top:.5rem;right:.5rem;background:none;border:none;color:var(--text-3);cursor:pointer;font-size:.85rem" title="Remove step">✕</button>`:''}
+          <div class="workflow-step" style="border-left:3px solid ${phase.color};margin-bottom:0;position:relative;${workflowEditMode?'padding-top:1.75rem':''}">
+            ${workflowEditMode?`<button onclick="removeWorkflowStep(${pi},${si})" style="position:absolute;top:.5rem;right:.5rem;background:rgba(224,82,82,.15);color:var(--red);border:1px solid rgba(224,82,82,.3);border-radius:4px;cursor:pointer;font-size:.75rem;padding:2px 7px;line-height:1.4" title="Remove step">✕ Remove</button>`:''}
             <div class="workflow-step-header">
-              <div class="workflow-num">${si+1}</div>
+              <div class="workflow-num" style="flex-shrink:0">${si+1}</div>
               ${workflowEditMode
-                ?`<input value="${step.title}" onchange="updateWorkflowStep(${pi},${si},'title',this.value)" style="font-weight:600;font-size:.88rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:.25rem .5rem;outline:none;flex:1">`
+                ?`<input value="${(step.title||'').replace(/"/g,'&quot;')}" oninput="updateWorkflowStep(${pi},${si},'title',this.value)" style="font-weight:600;font-size:.88rem;color:var(--text);background:var(--surface);border:1px solid var(--rust);border-radius:5px;padding:.25rem .5rem;outline:none;flex:1;width:100%">`
                 :`<div class="workflow-step-title">${step.title}</div>`
               }
             </div>
             ${workflowEditMode
-              ?`<textarea onchange="updateWorkflowStep(${pi},${si},'desc',this.value)" style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:.4rem .6rem;color:var(--text-2);font-family:var(--font-body);font-size:.82rem;resize:vertical;min-height:60px;outline:none;margin-top:.4rem">${step.desc}</textarea>`
+              ?`<textarea oninput="updateWorkflowStep(${pi},${si},'desc',this.value)" style="width:100%;background:var(--surface);border:1px solid var(--rust);border-radius:5px;padding:.4rem .6rem;color:var(--text-2);font-family:var(--font-body);font-size:.82rem;resize:vertical;min-height:70px;outline:none;margin-top:.5rem;line-height:1.5">${(step.desc||'').replace(/</g,'&lt;')}</textarea>`
               :`<p>${step.desc}</p>`
             }
           </div>`).join('')}
       </div>
     </div>`).join('');
+  el.innerHTML=html;
 }
 
 window.toggleWorkflowEdit=()=>{
   workflowEditMode=!workflowEditMode;
-  document.getElementById('workflowEditBtn').textContent=workflowEditMode?'👁 View Mode':'✏️ Edit Mode';
-  document.getElementById('workflowSaveBtn').style.display=workflowEditMode?'':'none';
+  const editBtn=document.getElementById('workflowEditBtn');
+  const saveBtn=document.getElementById('workflowSaveBtn');
+  if(editBtn)editBtn.textContent=workflowEditMode?'👁 View Mode':'✏️ Edit Mode';
+  if(editBtn)editBtn.className=workflowEditMode?'btn btn-stage btn-sm':'btn btn-secondary btn-sm';
+  if(saveBtn)saveBtn.style.display=workflowEditMode?'':'none';
   renderWorkflow();
+  if(workflowEditMode)showToast('Edit mode on — click any field to edit','success');
 };
 
 window.updateWorkflowPhase=(pi,key,val)=>{workflowData[pi][key]=val;};
@@ -1807,18 +1817,22 @@ window.addWorkflowStep=(pi)=>{
   renderWorkflow();
 };
 window.removeWorkflowStep=(pi,si)=>{
+  if(!confirm('Remove this step?'))return;
   workflowData[pi].steps.splice(si,1);renderWorkflow();
 };
 
 window.saveWorkflow=async()=>{
+  if(!isAdmin){showToast('Only admin can save workflow changes','error');return;}
   try{
     await setDoc(doc(db,'settings','workflow'),{phases:workflowData,updatedAt:new Date().toISOString()});
     workflowEditMode=false;
-    document.getElementById('workflowEditBtn').textContent='✏️ Edit Mode';
-    document.getElementById('workflowSaveBtn').style.display='none';
+    const editBtn=document.getElementById('workflowEditBtn');
+    const saveBtn=document.getElementById('workflowSaveBtn');
+    if(editBtn){editBtn.textContent='✏️ Edit Mode';editBtn.className='btn btn-secondary btn-sm';}
+    if(saveBtn)saveBtn.style.display='none';
     renderWorkflow();
     showToast('Workflow saved ✅');
-  }catch(e){showToast('Error saving workflow','error');}
+  }catch(e){showToast('Error saving workflow','error');console.error(e);}
 };
 
 // ── UPDATED saveSchedule with Google Calendar push ────────────────────────────
