@@ -809,9 +809,11 @@ onAuthStateChanged(auth,user=>{
     document.getElementById('sidebarUser').textContent=currentUserInfo.name;
     document.getElementById('sidebarRole').textContent=currentUserInfo.role;
     document.getElementById('firstName').textContent=currentUserInfo.name;
-    document.querySelectorAll('.admin-only').forEach(el=>el.style.display=isAdmin?'':'none');
+    document.querySelectorAll('.admin-only').forEach(el=>{
+      el.style.display=isAdmin?(el.tagName==='BUTTON'||el.tagName==='A'?'flex':'block'):'none';
+    });
     if(isAdmin){
-      document.getElementById('navAdmin').style.display='';
+      document.getElementById('navAdmin').style.display='flex';
       loadPermissions();
       loadAdminCounter();
       const wa=document.getElementById('workflowAdminActions');
@@ -1193,53 +1195,75 @@ window.advanceStage=async(jobId,newStage)=>{
 };
 
 // ── INTERNAL NOTES ────────────────────────────────────────────────────────────
+function renderComments(docs){
+  const list=document.getElementById('commentsList');
+  if(!list)return;
+  if(!docs.length){
+    list.innerHTML=`<div style="text-align:center;padding:2rem;color:var(--text-3);font-size:.82rem">No notes yet — be the first to add one</div>`;
+    return;
+  }
+  const allNames=[...TEAM_NAMES,...allTaskPanels.map(p=>p.name)].filter((v,i,a)=>a.indexOf(v)===i);
+  const escaped=allNames.map(n=>n.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'));
+  const mentionRx=escaped.length?new RegExp('@('+escaped.join('|')+')','g'):null;
+  const items=docs.map(c=>{
+    const mine=c.userId===currentUser?.uid;
+    const init=(c.userName||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    // Handle both serverTimestamp (Timestamp object) and plain ISO strings
+    let ts='',ds='';
+    if(c.createdAt?.toDate){
+      const d=c.createdAt.toDate();
+      ts=d.toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'});
+      ds=d.toLocaleDateString('en-AU',{day:'numeric',month:'short'});
+    }
+    const rawMsg=(c.message||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const msg=mentionRx?rawMsg.replace(mentionRx,'<span class="comment-mention">@$1</span>'):rawMsg;
+    return `<div class="comment-item">
+      <div class="comment-avatar">${init}</div>
+      <div class="comment-bubble ${mine?'mine':''}">
+        <div class="comment-meta"><strong>${c.userName||'Unknown'}</strong>${ds?' · '+ds:''} ${ts}</div>
+        <div class="comment-text">${msg}</div>
+      </div>
+    </div>`;
+  });
+  list.innerHTML=items.join('');
+  requestAnimationFrame(()=>{list.scrollTop=list.scrollHeight;});
+}
+
 function subscribeToComments(jobId){
   if(commentsUnsubscribe){commentsUnsubscribe();commentsUnsubscribe=null;}
-  const q=query(collection(db,'job_comments'),where('jobId','==',jobId),orderBy('createdAt','asc'));
-  commentsUnsubscribe=onSnapshot(q,snap=>{
-    const list=document.getElementById('commentsList');
-    if(!list)return;
-    if(snap.empty){
-      list.innerHTML=`<div style="text-align:center;padding:2rem;color:var(--text-3);font-size:.82rem">No notes yet — start the conversation</div>`;
-      return;
+  // Use only where() — no orderBy — to avoid requiring a composite Firestore index
+  const q=query(collection(db,'job_comments'),where('jobId','==',jobId));
+  commentsUnsubscribe=onSnapshot(q,
+    snap=>{
+      // Sort client-side by createdAt ascending
+      const docs=[];
+      snap.forEach(d=>docs.push({id:d.id,...d.data()}));
+      docs.sort((a,b)=>{
+        const ta=a.createdAt?.toMillis?a.createdAt.toMillis():0;
+        const tb=b.createdAt?.toMillis?b.createdAt.toMillis():0;
+        return ta-tb;
+      });
+      renderComments(docs);
+    },
+    err=>{
+      console.error('Comments listener error:',err);
+      const list=document.getElementById('commentsList');
+      if(list)list.innerHTML=`<div style="text-align:center;padding:2rem;color:var(--red);font-size:.82rem">⚠️ Could not load notes: ${err.message}</div>`;
     }
-    // Build all items at once — never use innerHTML+= in a loop
-    const allNames=[...TEAM_NAMES,...allTaskPanels.map(p=>p.name)].filter((v,i,a)=>a.indexOf(v)===i);
-    const mentionRegex=new RegExp('@('+allNames.map(n=>n.replace(/[.*+?^${}()|[\]\\]/g,'\$&')).join('|')+')','g');
-    const items=[];
-    snap.forEach(d=>{
-      const c=d.data();
-      const mine=c.userId===currentUser?.uid;
-      const init=(c.userName||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-      const ts=c.createdAt?.toDate?c.createdAt.toDate().toLocaleTimeString('en-AU',{hour:'2-digit',minute:'2-digit'}):'';
-      const ds=c.createdAt?.toDate?c.createdAt.toDate().toLocaleDateString('en-AU',{day:'numeric',month:'short'}):'';
-      // Highlight @mentions and make them stand out
-      const msg=(c.message||'')
-        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-        .replace(mentionRegex,'<span class="comment-mention">@$1</span>');
-      items.push(`
-        <div class="comment-item">
-          <div class="comment-avatar">${init}</div>
-          <div class="comment-bubble ${mine?'mine':''}">
-            <div class="comment-meta"><strong>${c.userName||'Unknown'}</strong> · ${ds} ${ts}</div>
-            <div class="comment-text">${msg}</div>
-          </div>
-        </div>`);
-    });
-    list.innerHTML=items.join('');
-    // Scroll to bottom after paint
-    requestAnimationFrame(()=>{list.scrollTop=list.scrollHeight;});
-  });
+  );
 }
 
 window.sendComment=async()=>{
   const input=document.getElementById('commentInput');
   const msg=input.value.trim();
-  if(!msg||!currentJobId||!currentUser)return;
-  // Detect @mentions from all known names (TEAM + task panels)
+  if(!msg){return;}
+  if(!currentJobId){showToast('No job selected','error');return;}
+  if(!currentUser){showToast('Not logged in','error');return;}
   const allNames=[...TEAM_NAMES,...allTaskPanels.map(p=>p.name)].filter((v,i,a)=>a.indexOf(v)===i);
   const mentions=allNames.filter(name=>msg.includes('@'+name));
   const userName=currentUserInfo?.name||currentUser.email.split('@')[0];
+  // Optimistically clear the input immediately
+  input.value='';
   try{
     await addDoc(collection(db,'job_comments'),{
       jobId:currentJobId,
@@ -1249,8 +1273,11 @@ window.sendComment=async()=>{
       mentions,
       createdAt:serverTimestamp()
     });
-    input.value='';
-  }catch(e){showToast('Error sending note','error');}
+  }catch(e){
+    console.error('sendComment error:',e);
+    showToast('Error sending note: '+e.message,'error');
+    input.value=msg; // restore on failure
+  }
 };
 
 // ── LEADS ─────────────────────────────────────────────────────────────────────
