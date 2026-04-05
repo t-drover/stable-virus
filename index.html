@@ -265,7 +265,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
         <span class="nav-label">Operations</span>
         <button class="nav-item" onclick="nav('jobs')"><span class="nav-icon">🔨</span> Jobs <span class="nav-badge" id="jobsBadge">0</span></button>
         <button class="nav-item" onclick="nav('leads')"><span class="nav-icon">📋</span> Leads <span class="nav-badge" id="leadsBadge">0</span></button>
-        <button class="nav-item" onclick="nav('schedule')"><span class="nav-icon">📅</span> Schedule</button>
+        <button class="nav-item" onclick="nav('schedule')"><span class="nav-icon">📅</span> Booking</button>
         <button class="nav-item" onclick="nav('inspections')"><span class="nav-icon">🔍</span> Inspections</button>
       </div>
       <div class="nav-section">
@@ -410,12 +410,31 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
         </table></div>
       </div>
 
-      <!-- SCHEDULE -->
+      <!-- BOOKING -->
       <div class="page" id="page-schedule">
-        <div class="page-header"><h1>Schedule</h1><p>Team scheduling and job calendar.</p>
-          <div class="page-actions"><button class="btn btn-primary" onclick="openScheduleModal()">+ Add Event</button></div>
+        <div class="page-header">
+          <h1>Booking</h1><p>Team bookings, site events and job scheduling.</p>
+          <div class="page-actions">
+            <button class="btn btn-secondary" id="gcalConnectBtn" onclick="connectGoogleCalendar()" title="Connect Google Calendar">
+              <span>📆</span> Connect Google Calendar
+            </button>
+            <span id="gcalStatus" style="font-size:.78rem;color:var(--text-3);align-self:center;display:none"></span>
+            <button class="btn btn-primary" onclick="openScheduleModal()">+ Add Booking</button>
+          </div>
         </div>
-        <div id="scheduleList" class="card"><div class="empty-state"><div class="empty-icon">📅</div><p>No events scheduled</p></div></div>
+        <div id="gcalInfo" style="display:none" class="card mb-2">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.75rem">
+            <div>
+              <div style="font-size:.85rem;font-weight:500;color:var(--green)">✅ Google Calendar Connected</div>
+              <div id="gcalEmail" style="font-size:.78rem;color:var(--text-2);margin-top:2px"></div>
+            </div>
+            <div style="display:flex;gap:.5rem">
+              <button class="btn btn-sm btn-secondary" onclick="openGoogleCalendar()">Open Calendar</button>
+              <button class="btn btn-sm btn-danger" onclick="disconnectGoogleCalendar()">Disconnect</button>
+            </div>
+          </div>
+        </div>
+        <div id="scheduleList" class="card"><div class="empty-state"><div class="empty-icon">📅</div><p>No bookings yet</p></div></div>
       </div>
 
       <!-- INSPECTIONS -->
@@ -483,27 +502,15 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
 
       <!-- WORKFLOW -->
       <div class="page" id="page-workflow">
-        <div class="page-header"><h1>RDU Workflow</h1><p>Standard operating process for every job.</p></div>
-        <div class="grid-2">
-          <div>
-            <h3 class="section-title">Direct Client Jobs</h3>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">01</div><div class="workflow-step-title">Initial Enquiry</div></div><p>Log as lead immediately with source tagged — website, Rocky chatbot, or referral.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">02</div><div class="workflow-step-title">Site Inspection</div></div><p>Book within 48hrs. Harry or Ronny attends. Record findings in Inspections module with photos.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">03</div><div class="workflow-step-title">Quote Preparation</div></div><p>Itemised quote within 24hrs. Payment terms: 10% deposit, 40% materials, 30% progress, 20% retention.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">04</div><div class="workflow-step-title">Quote Acceptance</div></div><p>Client signs off. Deposit invoice auto-generated. Job added to schedule. Lead updated to Converted.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">05</div><div class="workflow-step-title">Works on Site</div></div><p>Harry leads crew. Daily Activity Reports filed. Progress photos uploaded at each milestone.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">06</div><div class="workflow-step-title">Completion and Sign-Off</div></div><p>Walkthrough before final invoice. Site left clean. Job set to Completed. Request Google review.</p></div>
-          </div>
-          <div>
-            <h3 class="section-title">Builder-Referred Jobs</h3>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">01</div><div class="workflow-step-title">Builder Referral</div></div><p>Builder contacts Ronny directly. Log in leads with source "Builder Referral" and builder name in notes.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">02</div><div class="workflow-step-title">Plans and Scope Review</div></div><p>Obtain plans from builder. Confirm inclusions/exclusions in writing before quoting.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">03</div><div class="workflow-step-title">Quote to Builder</div></div><p>Quote to builder, not end client. Include provisional sums if plans incomplete.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">04</div><div class="workflow-step-title">Scheduling</div></div><p>Coordinate with builder's program. Confirm slab/frame readiness before committing crew.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">05</div><div class="workflow-step-title">Works and Variations</div></div><p>All variations approved in writing. Harry to notify Ronny of scope changes same day.</p></div>
-            <div class="workflow-step"><div class="workflow-step-header"><div class="workflow-num">06</div><div class="workflow-step-title">Practical Completion</div></div><p>Invoice builder on PC. Note defects liability period. Follow up for referrals.</p></div>
+        <div class="page-header">
+          <h1>RDU Workflow</h1>
+          <p>Standard operating process for every job. Click any step to edit.</p>
+          <div class="page-actions admin-only">
+            <button class="btn btn-secondary btn-sm" onclick="toggleWorkflowEdit()" id="workflowEditBtn">✏️ Edit Mode</button>
+            <button class="btn btn-primary btn-sm" onclick="saveWorkflow()" id="workflowSaveBtn" style="display:none">💾 Save Changes</button>
           </div>
         </div>
+        <div id="workflowContent"></div>
       </div>
 
       <!-- ADMIN -->
@@ -612,9 +619,9 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
 </div>
 <div class="modal-overlay" id="scheduleModal">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title">Add Event</div><button class="modal-close" onclick="closeModal('scheduleModal')">✕</button></div>
+    <div class="modal-header"><div class="modal-title">New Booking</div><button class="modal-close" onclick="closeModal('scheduleModal')">✕</button></div>
     <div class="form-grid">
-      <div class="form-field full"><label>Event Title</label><input id="schedTitle" placeholder="e.g. Woolooware Re-Roof Day 1"></div>
+      <div class="form-field full"><label>Booking Title</label><input id="schedTitle" placeholder="e.g. Woolooware Re-Roof Day 1"></div>
       <div class="form-field full"><label>Job Number <span style="color:var(--text-3);font-weight:400;font-size:.7rem">(optional — link to a lead)</span></label><select id="schedJobNumber"><option value="">— No job linked —</option></select></div>
       <div class="form-field"><label>Date</label><input type="date" id="schedDate"></div>
       <div class="form-field"><label>Time</label><input type="time" id="schedTime"></div>
@@ -622,7 +629,8 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
       <div class="form-field"><label>Type</label><select id="schedType"><option>Site Work</option><option>Inspection</option><option>Quote Meeting</option><option>BNI Meeting</option><option>Admin</option><option>Other</option></select></div>
       <div class="form-field full"><label>Notes</label><textarea id="schedNotes"></textarea></div>
     </div>
-    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('scheduleModal')">Cancel</button><button class="btn btn-primary" onclick="saveSchedule()">Save Event</button></div>
+    <div id="gcalAddHint" style="display:none;font-size:.78rem;color:var(--green);padding:.5rem 0">📆 This booking will also be added to your Google Calendar.</div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('scheduleModal')">Cancel</button><button class="btn btn-primary" onclick="saveSchedule()">Save Booking</button></div>
   </div>
 </div>
 <div class="modal-overlay" id="inspectionModal">
@@ -651,6 +659,15 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
         <div class="form-field"><label>Quote Status</label><select id="inspQuoteStatus"><option>Pending</option><option>Sent</option><option>Accepted</option><option>Declined</option></select></div>
         <div class="form-field full"><label>Cut List / Materials</label><textarea id="inspCutList" placeholder="e.g. Colorbond Surfmist 6m x 24 sheets..."></textarea></div>
         <div class="form-field full"><label>Mud Map Notes</label><textarea id="inspMudMap" placeholder="Roof layout, ridgelines, valleys, dimensions..."></textarea></div>
+        <div class="form-field full">
+          <label>Mud Map File <span style="color:var(--text-3);font-weight:400;font-size:.7rem">(photo, sketch, PDF — max 10MB)</span></label>
+          <div class="upload-zone" style="margin-top:.35rem" onclick="document.getElementById('mudMapFile').click()" ondrop="handleMudMapDrop(event)" ondragover="event.preventDefault();this.classList.add('drag')" ondragleave="this.classList.remove('drag')">
+            <p id="mudMapFileLabel">📐 Tap to attach mud map file</p>
+            <div class="upload-progress" id="mudMapUploadProgress"><div class="upload-progress-bar" id="mudMapUploadProgressBar"></div></div>
+            <input type="file" id="mudMapFile" accept="image/*,.pdf,.doc,.docx" style="display:none" onchange="previewMudMapFile(this)">
+          </div>
+          <div id="mudMapFilePreview" style="display:none;margin-top:.5rem;font-size:.82rem;color:var(--green)"></div>
+        </div>
       </div>
     </div>
     <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('inspectionModal')">Cancel</button><button class="btn btn-primary" onclick="saveInspection()">Save Inspection</button></div>
@@ -752,6 +769,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
   </div>
 </div>
 <div class="toast" id="toast"></div>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, signOut as fbSignOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
@@ -799,6 +817,8 @@ onAuthStateChanged(auth,user=>{
     if(isAdmin){document.getElementById('navAdmin').style.display='';loadPermissions();loadAdminCounter();}
     loadAll();
     renderAdminTeam();
+    initGoogleCalendar();
+    loadWorkflow();
   }else{
     document.getElementById('authScreen').style.display='flex';
     document.getElementById('app').style.display='none';
@@ -1231,49 +1251,91 @@ async function loadSchedule(){
         ${e.notes?`<div style="font-size:.78rem;color:var(--text-3);margin-top:2px">${e.notes}</div>`:''}
       </div>
       <button class="btn btn-sm btn-danger" onclick="archiveItem('schedule','${e.id}',loadSchedule)">✕</button>
-    </div>`).join(''):'<div class="empty-state"><div class="empty-icon">📅</div><p>No events scheduled</p></div>';
+    </div>`).join(''):'<div class="empty-state"><div class="empty-icon">📅</div><p>No bookings yet</p></div>';
 }
-window.openScheduleModal=()=>{
-  // Populate job number dropdown from leads cache
-  const leads=allLeadsCache||[];
-  document.getElementById('schedJobNumber').innerHTML=
-    '<option value="">— No job linked —</option>'+
-    leads.filter(l=>l.jobNumber).map(l=>`<option value="${l.jobNumber}">#${l.jobNumber} — ${l.name||''}</option>`).join('');
-  ['schedTitle','schedDate','schedTime','schedNotes'].forEach(i=>document.getElementById(i).value='');
-  openModal('scheduleModal');
-};
-window.saveSchedule=async()=>{
-  const jobNumber=document.getElementById('schedJobNumber').value||'';
-  const data={title:document.getElementById('schedTitle').value,jobNumber,date:document.getElementById('schedDate').value,time:document.getElementById('schedTime').value,crew:document.getElementById('schedCrew').value,type:document.getElementById('schedType').value,notes:document.getElementById('schedNotes').value,created:new Date().toISOString()};
-  try{
-    await addDoc(collection(db,'schedule'),data);
-    closeModal('scheduleModal');
-    ['schedTitle','schedDate','schedTime','schedNotes'].forEach(i=>document.getElementById(i).value='');
-    await loadSchedule();
-    showToast('Event added'+(jobNumber?' — Job #'+jobNumber:''));
-  }catch(e){showToast('Error saving event','error');}
-};
 
 // ── INSPECTIONS ───────────────────────────────────────────────────────────────
 async function loadInspections(){
   const snap=await getDocs(collection(db,'inspections'));const items=[];
   snap.forEach(d=>{const data=d.data();if(notArchived(data))items.push({id:d.id,...data});});
   const el=document.getElementById('inspectionsList');
-  el.innerHTML=items.length?items.map(i=>`<div class="card mb-1"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem"><div><div style="font-family:var(--font-head);font-size:1rem;font-weight:600">${i.jobNumber?`<span class="job-number-badge" style="font-size:.72rem;margin-right:.5rem">#${i.jobNumber}</span>`:''}${i.client||''}</div><div style="font-size:.8rem;color:var(--text-2)">${i.address||''} · ${i.date||''} · By ${i.inspBy||''}</div></div><div style="display:flex;gap:.5rem;align-items:center">${badge(i.quoteStatus?.toLowerCase()||'pending')}<button class="btn btn-sm btn-danger" onclick="archiveItem('inspections','${i.id}',loadInspections)">✕</button></div></div><div class="grid-3"><div><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Roof Type</div><div style="font-size:.85rem">${i.roofType||'—'}</div></div><div><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Age</div><div style="font-size:.85rem">${i.age||'—'}</div></div><div><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Quote</div><div style="font-size:.85rem;color:var(--rust-lt);font-weight:500">${i.quote?fmt$(i.quote):'TBC'}</div></div></div>${i.condition?`<div style="margin-top:.75rem;padding:.75rem;background:var(--surface);border-radius:6px;font-size:.82rem;color:var(--text-2)">${i.condition}</div>`:''}${i.cutList?`<div style="margin-top:.5rem"><div style="font-size:.68rem;text-transform:uppercase;color:var(--text-2);margin-bottom:4px">Cut List</div><div style="font-size:.82rem;white-space:pre-wrap;background:var(--surface);padding:.75rem;border-radius:6px">${i.cutList}</div></div>`:''}${i.mudMap?`<div style="margin-top:.5rem"><div style="font-size:.68rem;text-transform:uppercase;color:var(--text-2);margin-bottom:4px">Mud Map</div><div style="font-size:.82rem;background:var(--surface);padding:.75rem;border-radius:6px">${i.mudMap}</div></div>`:''}</div>`).join(''):'<div class="empty-state card"><div class="empty-icon">🔍</div><p>No inspections recorded yet</p></div>';
+  el.innerHTML=items.length?items.map(i=>`<div class="card mb-1">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem">
+      <div>
+        <div style="font-family:var(--font-head);font-size:1rem;font-weight:600">${i.jobNumber?`<span class="job-number-badge" style="font-size:.72rem;margin-right:.5rem">#${i.jobNumber}</span>`:''}${i.client||''}</div>
+        <div style="font-size:.8rem;color:var(--text-2)">${i.address||''} · ${i.date||''} · By ${i.inspBy||''}</div>
+      </div>
+      <div style="display:flex;gap:.5rem;align-items:center">${badge(i.quoteStatus?.toLowerCase()||'pending')}<button class="btn btn-sm btn-danger" onclick="archiveItem('inspections','${i.id}',loadInspections)">✕</button></div>
+    </div>
+    <div class="grid-3">
+      <div><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Roof Type</div><div style="font-size:.85rem">${i.roofType||'—'}</div></div>
+      <div><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Age</div><div style="font-size:.85rem">${i.age||'—'}</div></div>
+      <div><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Quote</div><div style="font-size:.85rem;color:var(--rust-lt);font-weight:500">${i.quote?fmt$(i.quote):'TBC'}</div></div>
+    </div>
+    ${i.condition?`<div style="margin-top:.75rem;padding:.75rem;background:var(--surface);border-radius:6px;font-size:.82rem;color:var(--text-2)">${i.condition}</div>`:''}
+    ${i.cutList?`<div style="margin-top:.5rem"><div style="font-size:.68rem;text-transform:uppercase;color:var(--text-2);margin-bottom:4px">Cut List</div><div style="font-size:.82rem;white-space:pre-wrap;background:var(--surface);padding:.75rem;border-radius:6px">${i.cutList}</div></div>`:''}
+    ${i.mudMap||i.mudMapFileUrl?`<div style="margin-top:.5rem"><div style="font-size:.68rem;text-transform:uppercase;color:var(--text-2);margin-bottom:4px">Mud Map</div>${i.mudMap?`<div style="font-size:.82rem;background:var(--surface);padding:.75rem;border-radius:6px;margin-bottom:.4rem">${i.mudMap}</div>`:''}${i.mudMapFileUrl?`<a href="${i.mudMapFileUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.4rem .85rem;font-size:.8rem;color:var(--blue);text-decoration:none">📎 ${i.mudMapFileName||'Mud Map File'}</a>`:''}` :''}
+  </div>`).join(''):'<div class="empty-state card"><div class="empty-icon">🔍</div><p>No inspections recorded yet</p></div>';
 }
 window.openInspectionModal=()=>{
-  // Populate lead dropdown
   const leads=allLeadsCache||[];
   document.getElementById('inspLeadSelect').innerHTML=
     '<option value="">— Select a Lead / Job Number —</option>'+
     leads.filter(l=>l.jobNumber).map(l=>`<option value="${l.jobNumber}">#${l.jobNumber} — ${l.name||''}</option>`).join('');
   ['inspClient','inspPhone','inspAddress','inspDate','inspAge','inspCondition','inspQuote','inspCutList','inspMudMap'].forEach(i=>document.getElementById(i).value='');
+  document.getElementById('mudMapFile').value='';
+  document.getElementById('mudMapFileLabel').textContent='📐 Tap to attach mud map file';
+  document.getElementById('mudMapFilePreview').style.display='none';
+  document.getElementById('mudMapFilePreview').textContent='';
   openModal('inspectionModal');
 };
+
+window.previewMudMapFile=(input)=>{
+  const file=input.files[0];
+  if(!file)return;
+  if(file.size>10*1024*1024){showToast('File too large — max 10MB','error');input.value='';return;}
+  document.getElementById('mudMapFileLabel').textContent=`📎 ${file.name}`;
+  const prev=document.getElementById('mudMapFilePreview');
+  prev.textContent=`Selected: ${file.name} (${(file.size/1024).toFixed(0)}KB)`;
+  prev.style.display='block';
+};
+
+window.handleMudMapDrop=(e)=>{
+  e.preventDefault();e.currentTarget.classList.remove('drag');
+  const file=e.dataTransfer.files[0];if(!file)return;
+  const dt=new DataTransfer();dt.items.add(file);
+  document.getElementById('mudMapFile').files=dt.files;
+  previewMudMapFile(document.getElementById('mudMapFile'));
+};
+
 window.saveInspection=async()=>{
   const linkedJobNumber=document.getElementById('inspLeadSelect').value||'';
   const data={client:document.getElementById('inspClient').value,phone:document.getElementById('inspPhone').value,address:document.getElementById('inspAddress').value,date:document.getElementById('inspDate').value,inspBy:document.getElementById('inspBy').value,roofType:document.getElementById('inspRoofType').value,age:document.getElementById('inspAge').value,condition:document.getElementById('inspCondition').value,quote:document.getElementById('inspQuote').value,quoteStatus:document.getElementById('inspQuoteStatus').value,cutList:document.getElementById('inspCutList').value,mudMap:document.getElementById('inspMudMap').value,jobNumber:linkedJobNumber,created:new Date().toISOString()};
   try{
+    // Upload mud map file first if selected
+    const fileInput=document.getElementById('mudMapFile');
+    if(fileInput.files&&fileInput.files[0]){
+      const file=fileInput.files[0];
+      const path=`mud_maps/${Date.now()}_${file.name}`;
+      const sRef=storageRef(storage,path);
+      const progressWrap=document.getElementById('mudMapUploadProgress');
+      const progressBar=document.getElementById('mudMapUploadProgressBar');
+      progressWrap.style.display='block';progressBar.style.width='0%';
+      await new Promise((res,rej)=>{
+        const task=uploadBytesResumable(sRef,file);
+        task.on('state_changed',
+          snap=>{progressBar.style.width=Math.round(snap.bytesTransferred/snap.totalBytes*100)+'%';},
+          err=>{showToast('File upload failed','error');rej(err);},
+          async()=>{
+            data.mudMapFileUrl=await getDownloadURL(task.snapshot.ref);
+            data.mudMapFileName=file.name;
+            data.mudMapStoragePath=path;
+            progressWrap.style.display='none';
+            res();
+          }
+        );
+      }).catch(()=>{document.getElementById('mudMapUploadProgress').style.display='none';});
+    }
     await addDoc(collection(db,'inspections'),data);
     closeModal('inspectionModal');
     ['inspClient','inspPhone','inspAddress','inspDate','inspAge','inspCondition','inspQuote','inspCutList','inspMudMap'].forEach(i=>document.getElementById(i).value='');
@@ -1544,7 +1606,250 @@ async function loadQuickLinks() {}
 
 
 
-// ── ADVERTISING ───────────────────────────────────────────────────────────────
+// ── GOOGLE CALENDAR INTEGRATION ───────────────────────────────────────────────
+const GCAL_CLIENT_ID='YOUR_GOOGLE_CLIENT_ID'; // Replace in Firebase console env
+const GCAL_SCOPES='https://www.googleapis.com/auth/calendar.events';
+let gcalToken=null;
+
+function initGoogleCalendar(){
+  const saved=localStorage.getItem('rdu_gcal_token');
+  if(saved){
+    try{
+      const parsed=JSON.parse(saved);
+      if(parsed.expiry>Date.now()){gcalToken=parsed;updateGCalUI(true,parsed.email);}
+      else{localStorage.removeItem('rdu_gcal_token');}
+    }catch(e){}
+  }
+}
+
+window.connectGoogleCalendar=()=>{
+  // Uses Google Identity Services popup flow
+  if(typeof google==='undefined'){
+    showToast('Google API not loaded — check connection','error');return;
+  }
+  const client=google.accounts.oauth2.initTokenClient({
+    client_id:GCAL_CLIENT_ID,
+    scope:GCAL_SCOPES,
+    callback:(resp)=>{
+      if(resp.error){showToast('Calendar connection failed','error');return;}
+      gcalToken={access_token:resp.access_token,expiry:Date.now()+(resp.expires_in*1000),email:''};
+      // Fetch user email
+      fetch('https://www.googleapis.com/oauth2/v3/userinfo',{headers:{Authorization:'Bearer '+resp.access_token}})
+        .then(r=>r.json()).then(info=>{
+          gcalToken.email=info.email||'';
+          localStorage.setItem('rdu_gcal_token',JSON.stringify(gcalToken));
+          updateGCalUI(true,gcalToken.email);
+          showToast('Google Calendar connected ✅');
+        }).catch(()=>{
+          localStorage.setItem('rdu_gcal_token',JSON.stringify(gcalToken));
+          updateGCalUI(true,'');
+          showToast('Google Calendar connected ✅');
+        });
+    }
+  });
+  client.requestAccessToken();
+};
+
+window.disconnectGoogleCalendar=()=>{
+  gcalToken=null;localStorage.removeItem('rdu_gcal_token');
+  updateGCalUI(false,'');showToast('Google Calendar disconnected');
+};
+
+window.openGoogleCalendar=()=>{window.open('https://calendar.google.com','_blank');};
+
+function updateGCalUI(connected,email){
+  const btn=document.getElementById('gcalConnectBtn');
+  const info=document.getElementById('gcalInfo');
+  const hint=document.getElementById('gcalAddHint');
+  const status=document.getElementById('gcalStatus');
+  if(connected){
+    if(btn){btn.textContent='📆 Connected';btn.style.color='var(--green)';btn.disabled=true;}
+    if(info){info.style.display='';document.getElementById('gcalEmail').textContent=email||'';}
+    if(hint)hint.style.display='';
+    if(status){status.textContent='✅ Connected';status.style.color='var(--green)';status.style.display='';}
+  }else{
+    if(btn){btn.textContent='📆 Connect Google Calendar';btn.style.color='';btn.disabled=false;}
+    if(info)info.style.display='none';
+    if(hint)hint.style.display='none';
+    if(status)status.style.display='none';
+  }
+}
+
+async function pushEventToGCal(title,date,time,notes){
+  if(!gcalToken?.access_token)return;
+  const start=time?`${date}T${time}:00`:`${date}T09:00:00`;
+  const end=time?`${date}T${(parseInt(time)+1).toString().padStart(2,'0')}:00:00`:`${date}T10:00:00`;
+  const tz=Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const event={summary:title,description:notes||'',start:{dateTime:start,timeZone:tz},end:{dateTime:end,timeZone:tz}};
+  try{
+    const resp=await fetch('https://www.googleapis.com/calendar/v3/calendars/primary/events',{
+      method:'POST',headers:{Authorization:'Bearer '+gcalToken.access_token,'Content-Type':'application/json'},
+      body:JSON.stringify(event)
+    });
+    if(resp.ok)showToast('Added to Google Calendar 📆');
+    else showToast('Calendar sync failed — event saved locally','error');
+  }catch(e){showToast('Calendar sync failed — event saved locally','error');}
+}
+
+// ── WORKFLOW (Editable, Firestore-backed) ─────────────────────────────────────
+let workflowData=[];
+let workflowEditMode=false;
+
+const DEFAULT_WORKFLOW=[
+  {id:'s1',phase:'1. Lead → Quote',color:'var(--blue)',steps:[
+    {title:'Capture Lead',desc:'Email, WhatsApp, referral etc. Log immediately in Leads module with source tagged.'},
+    {title:'Qualify Lead & Collect Details',desc:'Collect project details, client contact, site address, urgency.'},
+    {title:'Site Measurement',desc:'Roof or onsite inspection. Harry or Ronny attends within 48hrs.'},
+    {title:'Take-off Decision',desc:'Is take-off data available? If not, request from supplier/QS before proceeding.'},
+    {title:'QS Prepares Draft SoW & RFI',desc:'Quantity Surveyor prepares Scope of Work and RFI register, sends to client/builder.'},
+    {title:'Client/Builder Confirms SoW',desc:'Client confirms SoW & RFI, then builds quote (Claude + spreadsheet).'},
+    {title:'Send Quote via Xero',desc:'Send quote via Xero (temporary pricing by Ronny). Negotiate as needed.'},
+    {title:'Quote Decision',desc:'Quote accepted → Move to Job Setup. Quote declined → Close lead.'},
+  ]},
+  {id:'s2',phase:'2. Job Setup (Contract + Work Order)',color:'var(--green)',steps:[
+    {title:'Receive PO / Letter of Engagement',desc:'Receive contract with project amount, payment terms, confirmed specs/brand.'},
+    {title:'Identify Contract Type',desc:'Direct Client or Builder-referred job. Different payment flows apply.'},
+    {title:'Verify Compliance',desc:'Permits, Insurance, Licences — all must be verified before proceeding.'},
+    {title:'Create NOA (Notice to Proceed)',desc:'Formal notice issued to kick off the job.'},
+    {title:'Define Scope, Materials, Crew',desc:'Finalise scope, materials list, and assign crew members.'},
+    {title:'Assign Subcontractors',desc:'Identify and assign subcontractors as needed.'},
+    {title:'Send Jotform to Collect Subcontractor Data',desc:'Collect SWMS, agreements and other compliance docs via Jotform.'},
+    {title:'Issue PO to Subcontractor',desc:'Purchase Order issued — includes mud map and cut list.'},
+  ]},
+  {id:'s3',phase:'3. Payment Gate System (Hard Blockers)',color:'var(--red)',steps:[
+    {title:'10% Deposit',desc:'Work cannot start until deposit received. Builder exception: Harry/team can prepare cut list & mud map.'},
+    {title:'40% Materials Payment',desc:'No ordering of materials without this payment. Hard blocker.'},
+    {title:'30% Progress Claim',desc:'Issued at 95% physical completion. Must be paid before final stage.'},
+    {title:'20% Final Payment',desc:'Issued with completion report. No exceptions.'},
+  ]},
+  {id:'s4',phase:'4. Procurement & Mobilisation',color:'var(--amber)',steps:[
+    {title:'Order Materials (Supplier PO)',desc:'Place supplier PO for all confirmed materials.'},
+    {title:'Confirm Delivery',desc:'Confirm delivery schedule with supplier.'},
+    {title:'Book Equipment & Site Access',desc:'Safety rail, scaffold, tipper/skip — book in advance.'},
+    {title:'Confirm Subcontractor Readiness',desc:'SWMS uploaded, agreements signed before mobilisation.'},
+    {title:'Change Orders (Parallel Path)',desc:'Identify change → Prepare separate quote → Get client approval → Update NOA + PO and invoice separately. No approval = no work on variation.'},
+  ]},
+  {id:'s5',phase:'5. Execution (On-Site Work)',color:'var(--rust-lt)',steps:[
+    {title:'Work Starts When Materials On-Site',desc:'Do not start until materials are confirmed on-site.'},
+    {title:'Track Progress & Milestones',desc:'Harry files Daily Activity Reports. Progress photos uploaded at each milestone.'},
+    {title:'Pre-Completion Check (95%)',desc:'Ensure compliance: SWMS submitted, photos captured. Issue 30% Progress Invoice.'},
+  ]},
+  {id:'s6',phase:'6. Pre-Completion (95% Physical Completion)',color:'var(--purple)',steps:[
+    {title:'Issue 30% Progress Invoice',desc:'Issued at 95% physical completion.'},
+    {title:'Ensure Compliance',desc:'SWMS submitted, photos captured, site documentation complete.'},
+  ]},
+  {id:'s7',phase:'7. Completion & Handover',color:'var(--green)',steps:[
+    {title:'Site Cleanup',desc:'Leave site clean and safe.'},
+    {title:'Remove Scaffold / Safety Rail',desc:'Only after payment conditions are met.'},
+    {title:'Prepare Handover Documentation',desc:'Completion Report, Handover Form, Warranty Certificates.'},
+    {title:'Client Sign-Off',desc:'Walkthrough with client. Collect signature. Request Google review.'},
+  ]},
+  {id:'s8',phase:'8. Final Billing',color:'var(--amber)',steps:[
+    {title:'Send 20% Final Invoice with Completion Report',desc:'Must be sent together. No report = cannot issue invoice.'},
+    {title:'Close Job',desc:'Mark job as completed in the system. Archive all documents.'},
+  ]},
+];
+
+async function loadWorkflow(){
+  try{
+    const snap=await getDoc(doc(db,'settings','workflow'));
+    workflowData=snap.exists()&&snap.data().phases?.length?snap.data().phases:JSON.parse(JSON.stringify(DEFAULT_WORKFLOW));
+  }catch(e){workflowData=JSON.parse(JSON.stringify(DEFAULT_WORKFLOW));}
+  renderWorkflow();
+}
+
+function renderWorkflow(){
+  const el=document.getElementById('workflowContent');if(!el)return;
+  const colorMap={'var(--blue)':'#5B9BD5','var(--green)':'#4CAF7D','var(--red)':'#E05252','var(--amber)':'#E8A234','var(--rust-lt)':'#D4703F','var(--purple)':'#9B72CF'};
+  el.innerHTML=workflowData.map((phase,pi)=>`
+    <div class="card mb-2">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem">
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <div style="width:12px;height:12px;border-radius:50%;background:${phase.color};flex-shrink:0"></div>
+          ${workflowEditMode
+            ?`<input class="wf-phase-input" value="${phase.phase}" onchange="updateWorkflowPhase(${pi},'phase',this.value)" style="font-family:var(--font-head);font-size:1rem;font-weight:700;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.35rem .7rem;outline:none;width:320px">`
+            :`<h3 style="font-family:var(--font-head);font-size:1rem;font-weight:700;color:var(--text);margin:0">${phase.phase}</h3>`
+          }
+        </div>
+        ${workflowEditMode?`<button class="btn btn-xs btn-primary" onclick="addWorkflowStep(${pi})">+ Add Step</button>`:''}
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.75rem">
+        ${phase.steps.map((step,si)=>`
+          <div class="workflow-step" style="border-left:3px solid ${phase.color};margin-bottom:0;position:relative">
+            ${workflowEditMode?`<button onclick="removeWorkflowStep(${pi},${si})" style="position:absolute;top:.5rem;right:.5rem;background:none;border:none;color:var(--text-3);cursor:pointer;font-size:.85rem" title="Remove step">✕</button>`:''}
+            <div class="workflow-step-header">
+              <div class="workflow-num">${si+1}</div>
+              ${workflowEditMode
+                ?`<input value="${step.title}" onchange="updateWorkflowStep(${pi},${si},'title',this.value)" style="font-weight:600;font-size:.88rem;color:var(--text);background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:.25rem .5rem;outline:none;flex:1">`
+                :`<div class="workflow-step-title">${step.title}</div>`
+              }
+            </div>
+            ${workflowEditMode
+              ?`<textarea onchange="updateWorkflowStep(${pi},${si},'desc',this.value)" style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:.4rem .6rem;color:var(--text-2);font-family:var(--font-body);font-size:.82rem;resize:vertical;min-height:60px;outline:none;margin-top:.4rem">${step.desc}</textarea>`
+              :`<p>${step.desc}</p>`
+            }
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+window.toggleWorkflowEdit=()=>{
+  workflowEditMode=!workflowEditMode;
+  document.getElementById('workflowEditBtn').textContent=workflowEditMode?'👁 View Mode':'✏️ Edit Mode';
+  document.getElementById('workflowSaveBtn').style.display=workflowEditMode?'':'none';
+  renderWorkflow();
+};
+
+window.updateWorkflowPhase=(pi,key,val)=>{workflowData[pi][key]=val;};
+window.updateWorkflowStep=(pi,si,key,val)=>{workflowData[pi].steps[si][key]=val;};
+window.addWorkflowStep=(pi)=>{
+  workflowData[pi].steps.push({title:'New Step',desc:'Describe this step...'});
+  renderWorkflow();
+};
+window.removeWorkflowStep=(pi,si)=>{
+  workflowData[pi].steps.splice(si,1);renderWorkflow();
+};
+
+window.saveWorkflow=async()=>{
+  try{
+    await setDoc(doc(db,'settings','workflow'),{phases:workflowData,updatedAt:new Date().toISOString()});
+    workflowEditMode=false;
+    document.getElementById('workflowEditBtn').textContent='✏️ Edit Mode';
+    document.getElementById('workflowSaveBtn').style.display='none';
+    renderWorkflow();
+    showToast('Workflow saved ✅');
+  }catch(e){showToast('Error saving workflow','error');}
+};
+
+// ── UPDATED saveSchedule with Google Calendar push ────────────────────────────
+window.openScheduleModal=()=>{
+  const leads=allLeadsCache||[];
+  document.getElementById('schedJobNumber').innerHTML=
+    '<option value="">— No job linked —</option>'+
+    leads.filter(l=>l.jobNumber).map(l=>`<option value="${l.jobNumber}">#${l.jobNumber} — ${l.name||''}</option>`).join('');
+  ['schedTitle','schedDate','schedTime','schedNotes'].forEach(i=>document.getElementById(i).value='');
+  openModal('scheduleModal');
+};
+
+window.saveSchedule=async()=>{
+  const jobNumber=document.getElementById('schedJobNumber').value||'';
+  const title=document.getElementById('schedTitle').value;
+  const date=document.getElementById('schedDate').value;
+  const time=document.getElementById('schedTime').value;
+  const notes=document.getElementById('schedNotes').value;
+  const data={title,jobNumber,date,time,crew:document.getElementById('schedCrew').value,type:document.getElementById('schedType').value,notes,created:new Date().toISOString()};
+  try{
+    await addDoc(collection(db,'schedule'),data);
+    closeModal('scheduleModal');
+    ['schedTitle','schedDate','schedTime','schedNotes'].forEach(i=>document.getElementById(i).value='');
+    await loadSchedule();
+    showToast('Booking added'+(jobNumber?' — Job #'+jobNumber:''));
+    // Push to Google Calendar if connected
+    if(gcalToken?.access_token&&title&&date){
+      await pushEventToGCal(title+(jobNumber?' [#'+jobNumber+']':''),date,time,notes);
+    }
+  }catch(e){showToast('Error saving booking','error');}
+};
 async function loadAds(){
   const snap=await getDocs(collection(db,'ads'));const ads=[];
   snap.forEach(d=>{const data=d.data();if(notArchived(data))ads.push({id:d.id,...data});});
