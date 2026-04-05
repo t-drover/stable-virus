@@ -134,6 +134,43 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
 .task-add-row{display:flex;gap:.5rem;margin-top:.75rem}
 .task-add-row input{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.45rem .75rem;color:var(--text);font-family:var(--font-body);font-size:.82rem;outline:none}.task-add-row input:focus{border-color:var(--rust)}
 .task-add-row button{background:var(--rust);color:white;border:none;border-radius:6px;padding:.45rem .85rem;font-size:.8rem;cursor:pointer}
+/* TASK PANEL SYSTEM */
+.task-panels{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+.task-panel{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.task-panel-header{padding:.85rem 1rem;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.task-panel-name{font-family:var(--font-head);font-size:.88rem;font-weight:600;color:var(--text)}
+.task-panel-count{font-size:.72rem;color:var(--text-3);background:var(--card);padding:2px 8px;border-radius:10px;border:1px solid var(--border)}
+.task-panel-body{padding:.75rem}
+.task-panel-item{display:flex;align-items:center;gap:.6rem;padding:.5rem .25rem;border-bottom:1px solid var(--border)}
+.task-panel-item:last-of-type{border-bottom:none}
+.task-panel-item .task-check{width:16px;height:16px;border-radius:4px;border:1px solid var(--border);cursor:pointer;appearance:none;background:var(--surface);flex-shrink:0;position:relative;transition:all .15s}
+.task-panel-item .task-check:checked{background:var(--green);border-color:var(--green)}
+.task-panel-item .task-check:checked::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:10px;color:white}
+.task-panel-item .task-label{flex:1;font-size:.84rem;color:var(--text)}
+.task-panel-item .task-label.done{text-decoration:line-through;color:var(--text-3)}
+.task-panel-item .task-remove{background:none;border:none;color:var(--text-3);cursor:pointer;font-size:.8rem;padding:2px 5px;border-radius:4px;transition:color .15s}
+.task-panel-item .task-remove:hover{color:var(--red)}
+.task-panel-empty{text-align:center;padding:1.5rem;color:var(--text-3);font-size:.82rem}
+/* QUICK LAUNCHER ENHANCED */
+.ql-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:.75rem;margin-top:1rem}
+.ql-tile{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:.85rem .5rem;text-align:center;text-decoration:none;color:var(--text);transition:border-color .15s,background .15s,transform .1s;display:flex;flex-direction:column;align-items:center;gap:.35rem;cursor:pointer}
+.ql-tile:hover{border-color:var(--rust);background:rgba(192,90,46,.06);transform:translateY(-1px)}
+.ql-tile-icon{font-size:1.6rem;line-height:1}
+.ql-tile-label{font-size:.74rem;font-weight:500;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.ql-tile-type{font-size:.62rem;color:var(--text-3);letter-spacing:.04em}
+/* JOB NUMBER BADGE */
+.job-number-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(232,162,52,.12);border:1px solid rgba(232,162,52,.25);color:var(--amber);font-family:var(--font-head);font-size:.78rem;font-weight:700;padding:2px 10px;border-radius:4px;letter-spacing:.05em}
+/* PERMISSIONS / ADMIN SETTINGS */
+.perm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;margin-bottom:1.5rem}
+.perm-role-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem}
+.perm-role-title{font-family:var(--font-head);font-size:.88rem;font-weight:600;margin-bottom:.75rem;display:flex;align-items:center;gap:.5rem}
+.perm-check-row{display:flex;align-items:center;justify-content:space-between;padding:.35rem 0;border-bottom:1px solid var(--border);font-size:.82rem;color:var(--text-2)}
+.perm-check-row:last-child{border-bottom:none}
+.perm-toggle{width:32px;height:18px;border-radius:9px;border:none;cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.perm-toggle.on{background:var(--green)}.perm-toggle.off{background:var(--border)}
+.perm-toggle::after{content:'';position:absolute;top:2px;width:14px;height:14px;border-radius:50%;background:white;transition:left .2s}
+.perm-toggle.on::after{left:16px}.perm-toggle.off::after{left:2px}
+.role-tag.manager{background:rgba(91,155,213,.15);color:var(--blue)}
 .reminder-item{display:flex;justify-content:space-between;align-items:center;padding:.85rem 1rem;background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:.5rem}
 .reminder-item.overdue{border-color:rgba(224,82,82,.35);background:rgba(224,82,82,.04)}
 .reminder-left .reminder-title{font-weight:500;font-size:.88rem}.reminder-left .reminder-meta{font-size:.75rem;color:var(--text-2);margin-top:2px}
@@ -268,11 +305,11 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
           <div class="stat-card"><div class="stat-label">Unpaid Invoices</div><div class="stat-value" id="statUnpaid">—</div><div class="stat-sub">Awaiting payment</div></div>
         </div>
         <div class="card mb-2" id="dashQuickLauncher" style="display:none">
-          <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem">
             <div class="card-title" style="margin-bottom:0">Quick Launcher</div>
-            <button class="btn btn-xs btn-secondary admin-only" onclick="openModal('quickLinkModal')">+ Add Link</button>
+            <button class="btn btn-xs btn-secondary admin-only" onclick="openModal('quickLauncherModal')">+ Add</button>
           </div>
-          <div class="quick-links-grid" id="quickLinksGrid"></div>
+          <div class="ql-grid" id="quickLinksGrid"></div>
         </div>
         <div class="grid-2">
           <div class="card"><div class="card-title">Recent Jobs</div><div id="dashRecentJobs"><div class="empty-state"><div class="empty-icon">🔨</div><p>No jobs yet</p></div></div></div>
@@ -286,7 +323,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
           <div class="page-actions"><button class="btn btn-primary" onclick="openJobModal()">+ New Job</button></div>
         </div>
         <div class="table-wrap"><table>
-          <thead><tr><th>ID</th><th>Client</th><th>Type</th><th>Location</th><th>Assigned</th><th>Stage</th><th>Value</th><th>Actions</th></tr></thead>
+          <thead><tr><th>Job #</th><th>Client</th><th>Type</th><th>Location</th><th>Assigned</th><th>Stage</th><th>Value</th><th>Actions</th></tr></thead>
           <tbody id="jobsTable"><tr><td colspan="8" style="text-align:center;color:var(--text-2);padding:2rem">No jobs yet</td></tr></tbody>
         </table></div>
       </div>
@@ -431,10 +468,10 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
 
       <!-- TASKS -->
       <div class="page" id="page-tasks">
-        <div class="page-header"><h1>Tasks</h1><p>Team task lists. Admin creates groups, team adds items.</p>
-          <div class="page-actions admin-only"><button class="btn btn-primary" onclick="openModal('taskGroupModal')">+ New Task Group</button></div>
+        <div class="page-header"><h1>Tasks</h1><p>Assigned tasks per team member. Admin assigns, team checks off.</p>
+          <div class="page-actions admin-only"><button class="btn btn-primary" onclick="openModal('taskModal')">+ Assign Task</button></div>
         </div>
-        <div id="tasksList"><div class="empty-state card"><div class="empty-icon">✅</div><p>No tasks yet</p></div></div>
+        <div id="tasksPanels" class="task-panels"><div class="empty-state card" style="grid-column:1/-1"><div class="empty-icon">✅</div><p>No tasks assigned yet</p></div></div>
       </div>
 
       <!-- ADVERTISING -->
@@ -481,21 +518,64 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
       <!-- ADMIN -->
       <div class="page" id="page-admin">
         <div class="page-header"><h1>Admin Settings</h1><p>System configuration — admin access only.</p></div>
+
+        <!-- Role Permissions -->
         <div class="card mb-2">
-          <div class="card-title">Team Members</div>
+          <div class="card-title">Role Permissions</div>
+          <div class="perm-grid" id="permGrid">
+            <div class="perm-role-card">
+              <div class="perm-role-title"><span class="role-tag admin">Admin</span></div>
+              <div class="perm-check-row"><span>manage_tasks</span><button class="perm-toggle on" disabled title="Always on for admin"></button></div>
+              <div class="perm-check-row"><span>manage_quick_launcher</span><button class="perm-toggle on" disabled></button></div>
+              <div class="perm-check-row"><span>manage_users</span><button class="perm-toggle on" disabled></button></div>
+              <div class="perm-check-row"><span>view_reports</span><button class="perm-toggle on" disabled></button></div>
+            </div>
+            <div class="perm-role-card">
+              <div class="perm-role-title"><span class="role-tag manager">Manager</span></div>
+              <div class="perm-check-row"><span>manage_tasks</span><button class="perm-toggle" id="perm-manager-manage_tasks" onclick="togglePerm('manager','manage_tasks',this)"></button></div>
+              <div class="perm-check-row"><span>manage_quick_launcher</span><button class="perm-toggle" id="perm-manager-manage_quick_launcher" onclick="togglePerm('manager','manage_quick_launcher',this)"></button></div>
+              <div class="perm-check-row"><span>manage_users</span><button class="perm-toggle" id="perm-manager-manage_users" onclick="togglePerm('manager','manage_users',this)"></button></div>
+              <div class="perm-check-row"><span>view_reports</span><button class="perm-toggle" id="perm-manager-view_reports" onclick="togglePerm('manager','view_reports',this)"></button></div>
+            </div>
+            <div class="perm-role-card">
+              <div class="perm-role-title"><span class="role-tag staff">Staff</span></div>
+              <div class="perm-check-row"><span>manage_tasks</span><button class="perm-toggle" id="perm-staff-manage_tasks" onclick="togglePerm('staff','manage_tasks',this)"></button></div>
+              <div class="perm-check-row"><span>manage_quick_launcher</span><button class="perm-toggle" id="perm-staff-manage_quick_launcher" onclick="togglePerm('staff','manage_quick_launcher',this)"></button></div>
+              <div class="perm-check-row"><span>manage_users</span><button class="perm-toggle off" id="perm-staff-manage_users" onclick="togglePerm('staff','manage_users',this)"></button></div>
+              <div class="perm-check-row"><span>view_reports</span><button class="perm-toggle" id="perm-staff-view_reports" onclick="togglePerm('staff','view_reports',this)"></button></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- User Role Assignment -->
+        <div class="card mb-2">
+          <div class="card-title">Team Members & Role Assignment</div>
           <div id="adminTeamList"></div>
         </div>
+
+        <!-- Quick Launcher -->
         <div class="card mb-2">
-          <div class="card-title">Quick Launcher Links</div>
+          <div class="card-title">Quick Launcher</div>
           <div id="adminQuickLinks"></div>
-          <button class="btn btn-primary btn-sm" style="margin-top:1rem" onclick="openModal('quickLinkModal')">+ Add Link</button>
+          <button class="btn btn-primary btn-sm" style="margin-top:1rem" onclick="openModal('quickLauncherModal')">+ Add Launcher</button>
         </div>
+
+        <!-- Job Counter -->
+        <div class="card mb-2">
+          <div class="card-title">Job Number Counter</div>
+          <div style="font-size:.85rem;color:var(--text-2);line-height:2">
+            <div>Counter Document: <span style="color:var(--text);font-family:var(--font-head)">counters/jobNumber</span></div>
+            <div>Current Value: <span style="color:var(--rust-lt);font-family:var(--font-head)" id="adminJobCounter">Loading…</span></div>
+            <div style="font-size:.78rem;color:var(--text-3);margin-top:.25rem">⚠️ Job numbers are immutable once assigned. Never manually edit this counter.</div>
+          </div>
+        </div>
+
         <div class="card">
           <div class="card-title">System Info</div>
           <div style="font-size:.85rem;color:var(--text-2);line-height:2">
             <div>Firebase Project: <span style="color:var(--text)">rdu-dashboard</span></div>
             <div>Admin: <span style="color:var(--text)">toneth@roofingdownunder.com</span></div>
-            <div>Version: <span style="color:var(--text)">Commit 2 — Files, Roles, Mobile</span></div>
+            <div>Version: <span style="color:var(--text)">Commit 3 — Tasks, Quick Launcher, Permissions, Job Numbers</span></div>
           </div>
         </div>
       </div>
@@ -654,25 +734,36 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
     <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('reminderModal')">Cancel</button><button class="btn btn-primary" onclick="saveReminder()">Save Reminder</button></div>
   </div>
 </div>
-<div class="modal-overlay" id="taskGroupModal">
+<div class="modal-overlay" id="taskModal">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title">New Task Group</div><button class="modal-close" onclick="closeModal('taskGroupModal')">✕</button></div>
+    <div class="modal-header"><div class="modal-title">Assign Task</div><button class="modal-close" onclick="closeModal('taskModal')">✕</button></div>
     <div class="form-grid">
-      <div class="form-field full"><label>Task Group Title</label><input id="taskGroupTitle" placeholder="e.g. Weekly Site Checks"></div>
-      <div class="form-field full"><label>Description</label><textarea id="taskGroupDesc" placeholder="What this task group is for..."></textarea></div>
+      <div class="form-field full"><label>Task Title</label><input id="taskTitle" placeholder="e.g. Order Colorbond sheets for Woolooware job"></div>
+      <div class="form-field full"><label>Assign To</label><select id="taskAssignTo">
+        <option value="Ronny">Ronny (Owner)</option>
+        <option value="Harry">Harry (Site Lead)</option>
+        <option value="Pauly">Pauly (Crew)</option>
+        <option value="Josh">Josh (Crew)</option>
+        <option value="Myla">Myla (Operations)</option>
+        <option value="Toneth">Toneth (Admin)</option>
+      </select></div>
     </div>
-    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('taskGroupModal')">Cancel</button><button class="btn btn-primary" onclick="saveTaskGroup()">Create Group</button></div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('taskModal')">Cancel</button><button class="btn btn-primary" onclick="saveTask()">Assign Task</button></div>
   </div>
 </div>
-<div class="modal-overlay" id="quickLinkModal">
+<div class="modal-overlay" id="quickLauncherModal">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title">Add Quick Link</div><button class="modal-close" onclick="closeModal('quickLinkModal')">✕</button></div>
+    <div class="modal-header"><div class="modal-title">Add Quick Launcher</div><button class="modal-close" onclick="closeModal('quickLauncherModal')">✕</button></div>
     <div class="form-grid">
-      <div class="form-field full"><label>Title</label><input id="qlTitle" placeholder="e.g. Xero"></div>
-      <div class="form-field full"><label>URL</label><input id="qlUrl" placeholder="https://..."></div>
-      <div class="form-field full"><label>Icon (emoji)</label><input id="qlIcon" placeholder="e.g. 📊" maxlength="2"></div>
+      <div class="form-field full"><label>Name</label><input id="qlName" placeholder="e.g. Xero, Job Portal, Reports"></div>
+      <div class="form-field full"><label>Link (URL or internal route)</label><input id="qlLink" placeholder="https://... or /jobs or /invoices"></div>
+      <div class="form-field"><label>Icon (emoji)</label><input id="qlIcon" placeholder="e.g. 📊" maxlength="2"></div>
+      <div class="form-field"><label>Type</label><select id="qlType">
+        <option value="external">External (new tab)</option>
+        <option value="internal">Internal route (same tab)</option>
+      </select></div>
     </div>
-    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('quickLinkModal')">Cancel</button><button class="btn btn-primary" onclick="saveQuickLink()">Add Link</button></div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('quickLauncherModal')">Cancel</button><button class="btn btn-primary" onclick="saveQuickLauncher()">Add Launcher</button></div>
   </div>
 </div>
 <div class="modal-overlay" id="adModal">
@@ -691,10 +782,10 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
   </div>
 </div>
 <div class="toast" id="toast"></div>
-<script type="module">
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, signOut as fbSignOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, collection, addDoc, getDocs, getDoc, updateDoc, doc, query, where, orderBy, onSnapshot, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, collection, addDoc, getDocs, getDoc, setDoc, updateDoc, doc, query, where, orderBy, onSnapshot, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
 
 const firebaseConfig = {
@@ -735,7 +826,7 @@ onAuthStateChanged(auth,user=>{
     document.getElementById('sidebarRole').textContent=currentUserInfo.role;
     document.getElementById('firstName').textContent=currentUserInfo.name;
     document.querySelectorAll('.admin-only').forEach(el=>el.style.display=isAdmin?'':'none');
-    if(isAdmin)document.getElementById('navAdmin').style.display='';
+    if(isAdmin){document.getElementById('navAdmin').style.display='';loadPermissions();loadAdminCounter();}
     loadAll();
     renderAdminTeam();
   }else{
@@ -800,15 +891,72 @@ window.archiveItem=async(col,id,reload)=>{
   catch(e){showToast('Error archiving','error');}
 };
 
-// ── LEAD NUMBERING ────────────────────────────────────────────────────────────
-async function getNextLeadNumber(){
-  const metaRef=doc(db,'settings','metadata');let num=1;
+// ── JOB NUMBER SYSTEM (Unified Counter) ───────────────────────────────────────
+async function getNextJobNumber(){
+  const counterRef=doc(db,'counters','jobNumber');
+  let num=1;
   await runTransaction(db,async tx=>{
-    const snap=await tx.get(metaRef);
-    if(snap.exists()){num=(snap.data().leadCounter||0)+1;tx.update(metaRef,{leadCounter:num});}
-    else{num=1;tx.set(metaRef,{leadCounter:1});}
+    const snap=await tx.get(counterRef);
+    if(snap.exists()){
+      num=(snap.data().currentValue||0)+1;
+      tx.update(counterRef,{currentValue:num});
+    }else{
+      num=1;
+      tx.set(counterRef,{currentValue:1});
+    }
   });
   return String(num).padStart(5,'0');
+}
+
+// Keep old name as alias so saveLead still works
+const getNextLeadNumber=getNextJobNumber;
+
+// ── PERMISSIONS SYSTEM ────────────────────────────────────────────────────────
+const PERMS=['manage_tasks','manage_quick_launcher','manage_users','view_reports'];
+let permCache={};
+
+async function loadPermissions(){
+  try{
+    const snap=await getDocs(collection(db,'roles_permissions'));
+    snap.forEach(d=>{permCache[d.id]=d.data();});
+    ['manager','staff'].forEach(role=>{
+      PERMS.forEach(perm=>{
+        const btn=document.getElementById(`perm-${role}-${perm}`);
+        if(!btn)return;
+        const val=permCache[role]?.[perm]??false;
+        btn.className='perm-toggle '+(val?'on':'off');
+      });
+    });
+  }catch(e){console.warn('loadPermissions:',e);}
+}
+
+window.togglePerm=async(role,perm,btn)=>{
+  const isOn=btn.classList.contains('on');
+  const newVal=!isOn;
+  btn.className='perm-toggle '+(newVal?'on':'off');
+  try{
+    const ref=doc(db,'roles_permissions',role);
+    const snap=await getDoc(ref);
+    if(snap.exists())await updateDoc(ref,{[perm]:newVal});
+    else await setDoc(ref,{[perm]:newVal});
+    permCache[role]={...permCache[role],[perm]:newVal};
+    showToast(`${role}: ${perm} ${newVal?'enabled':'disabled'}`);
+  }catch(e){
+    showToast('Error saving permission','error');
+    btn.className='perm-toggle '+(isOn?'on':'off');
+  }
+};
+
+async function loadAdminCounter(){
+  try{
+    const snap=await getDoc(doc(db,'counters','jobNumber'));
+    const val=snap.exists()?(snap.data().currentValue||0):0;
+    const el=document.getElementById('adminJobCounter');
+    if(el)el.textContent='#'+String(val).padStart(5,'0')+' · Next: #'+String(val+1).padStart(5,'0');
+  }catch(e){
+    const el=document.getElementById('adminJobCounter');
+    if(el)el.textContent='Not initialised yet';
+  }
 }
 
 // ── ADMIN ROLE UI ─────────────────────────────────────────────────────────────
@@ -817,7 +965,7 @@ function renderAdminTeam(){
   el.innerHTML=Object.entries(TEAM).map(([email,info])=>`
     <div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--border)">
       <div><div style="font-weight:500;font-size:.88rem">${info.name}</div><div style="font-size:.75rem;color:var(--text-2)">${email}</div></div>
-      <span class="role-tag ${info.role==='Admin'?'admin':'staff'}">${info.role}</span>
+      <span class="role-tag ${info.role==='Admin'?'admin':info.role==='Owner'||info.role==='Site Lead'?'manager':'staff'}">${info.role}</span>
     </div>`).join('');
 }
 
@@ -892,7 +1040,7 @@ async function loadJobs(){
   document.getElementById('jobsBadge').textContent=active;document.getElementById('statActiveJobs').textContent=active;
   const tb=document.getElementById('jobsTable');
   tb.innerHTML=allJobs.length?allJobs.map(j=>`<tr>
-    <td style="font-family:var(--font-head);color:var(--rust-lt);font-size:.8rem">#${j.id.slice(-4).toUpperCase()}</td>
+    <td>${j.jobNumber?`<span class="job-number-badge">#${j.jobNumber}</span>`:`<span style="font-size:.75rem;color:var(--text-3)">#${j.id.slice(-4).toUpperCase()}</span>`}</td>
     <td><div style="font-weight:500">${j.client||''}</div><div style="font-size:.75rem;color:var(--text-2)">${j.phone||''}</div></td>
     <td>${j.type||''}</td><td style="font-size:.82rem">${j.location||'—'}</td>
     <td><span style="background:var(--surface);padding:2px 8px;border-radius:4px;font-size:.78rem">${j.assigned||'—'}</span></td>
@@ -903,7 +1051,7 @@ async function loadJobs(){
       <button class="btn btn-sm btn-danger" onclick="archiveItem('jobs','${j.id}',loadJobs)">Archive</button>
     </div></td></tr>`).join(''):`<tr><td colspan="8" style="text-align:center;color:var(--text-2);padding:2rem">No jobs yet</td></tr>`;
   const el=document.getElementById('dashRecentJobs');
-  el.innerHTML=allJobs.slice(0,4).map(j=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="openJobDetail('${j.id}')"><div><div style="font-weight:500;font-size:.85rem">${j.client||''}</div><div style="font-size:.75rem;color:var(--text-2)">${j.type||''}</div></div>${badge(j.stage||'lead')}</div>`).join('')||'<div class="empty-state"><div class="empty-icon">🔨</div><p>No jobs yet</p></div>';
+  el.innerHTML=allJobs.slice(0,4).map(j=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--border);cursor:pointer" onclick="openJobDetail('${j.id}')"><div><div style="font-weight:500;font-size:.85rem">${j.jobNumber?`<span class="job-number-badge" style="font-size:.7rem;padding:1px 6px">#${j.jobNumber}</span> `:''} ${j.client||''}</div><div style="font-size:.75rem;color:var(--text-2)">${j.type||''}</div></div>${badge(j.stage||'lead')}</div>`).join('')||'<div class="empty-state"><div class="empty-icon">🔨</div><p>No jobs yet</p></div>';
 }
 
 window.openJobModal=()=>{
@@ -923,23 +1071,29 @@ window.saveJob=async()=>{
   const id=document.getElementById('jobId').value;
   const data={client:document.getElementById('jobClient').value,phone:document.getElementById('jobPhone').value,type:document.getElementById('jobType').value,stage:document.getElementById('jobStage').value,location:document.getElementById('jobLocation').value,assigned:document.getElementById('jobAssigned').value,date:document.getElementById('jobDate').value,value:document.getElementById('jobValue').value,notes:document.getElementById('jobNotes').value,updated:new Date().toISOString()};
   try{
-    if(id)await updateDoc(doc(db,'jobs',id),data);else await addDoc(collection(db,'jobs'),{...data,created:new Date().toISOString()});
+    if(id){
+      await updateDoc(doc(db,'jobs',id),data); // jobNumber is immutable — never update it
+    }else{
+      const jobNumber=await getNextJobNumber();
+      await addDoc(collection(db,'jobs'),{...data,jobNumber,created:new Date().toISOString()});
+      if(isAdmin)loadAdminCounter(); // refresh counter display
+    }
     closeModal('jobModal');await loadJobs();showToast(id?'Job updated':'Job added');if(currentJobId===id)openJobDetail(id);
-  }catch(e){showToast('Error saving job','error');}
+  }catch(e){showToast('Error saving job','error');console.error(e);}
 };
 
 // ── JOB DETAIL ────────────────────────────────────────────────────────────────
 window.openJobDetail=async(id)=>{
   currentJobId=id;const snap=await getDoc(doc(db,'jobs',id));if(!snap.exists())return;const j=snap.data();
   document.getElementById('detailJobTitle').textContent=j.client||'Job Detail';
-  document.getElementById('detailJobSub').textContent=`${j.type||''} · ${j.location||''}`;
+  document.getElementById('detailJobSub').textContent=`${j.jobNumber?'#'+j.jobNumber+' · ':''}${j.type||''} · ${j.location||''}`;
   document.getElementById('detailStageBadge').innerHTML=badge(j.stage||'lead');
   const stage=j.stage||'lead',si=STAGES.indexOf(stage);let th='';
   STAGES.forEach((s,i)=>{const d=i<si,c=i===si;if(i>0)th+=`<div class="stage-line ${d?'done':''}"></div>`;th+=`<div class="stage-dot"><div class="stage-dot-circle ${d?'done':''} ${c?'current':''}"></div><div class="stage-dot-label ${d?'done':''} ${c?'current':''}">${STAGE_LABELS[s]}</div></div>`;});
   document.getElementById('stageTrack').innerHTML=th;
   const tr=VALID_TRANSITIONS[stage]||[];
   document.getElementById('stageActions').innerHTML=tr.map(t=>`<button class="btn btn-stage" onclick="advanceStage('${id}','${t}')">→ ${STAGE_LABELS[t]}</button>`).join('')||`<span style="font-size:.8rem;color:var(--text-3)">No further transitions</span>`;
-  document.getElementById('detailInfo').innerHTML=`<div style="display:grid;gap:.75rem">${row('Phone',j.phone)}${row('Service',j.type)}${row('Location',j.location)}${row('Assigned',j.assigned)}${row('Start Date',j.date)}${row('Contract Value',j.value?fmt$(j.value):'')}</div>`;
+  document.getElementById('detailInfo').innerHTML=`<div style="display:grid;gap:.75rem">${j.jobNumber?row('Job Number','#'+j.jobNumber):''}${row('Phone',j.phone)}${row('Service',j.type)}${row('Location',j.location)}${row('Assigned',j.assigned)}${row('Start Date',j.date)}${row('Contract Value',j.value?fmt$(j.value):'')}</div>`;
   document.getElementById('detailNotes').textContent=j.notes||'No notes recorded.';
   await Promise.all([loadJobInvoices(id),loadJobReports(id),loadJobPOs(id),loadJobQuotes(id),loadJobFiles(id)]);
   subscribeToComments(id);
@@ -957,8 +1111,15 @@ window.advanceStage=async(jobId,newStage)=>{
     if(!VALID_TRANSITIONS[j.stage||'lead']?.includes(newStage)){showToast('Invalid stage transition','error');return;}
     await updateDoc(jobRef,{stage:newStage,updated:new Date().toISOString()});
     const trigger=STAGE_INVOICE_TRIGGERS[newStage];
-    if(trigger&&j.value){const amount=Math.round(Number(j.value)*trigger.pct);await addDoc(collection(db,'invoices'),{jobId,jobClient:j.client||'',type:trigger.type,amount,status:'pending',issuedAt:new Date().toISOString(),notes:trigger.label,created:new Date().toISOString()});showToast(`Stage updated · ${trigger.label} created (${fmt$(amount)})`);}
-    else showToast(`Job moved to ${STAGE_LABELS[newStage]}`);
+    if(trigger&&j.value){
+      const amount=Math.round(Number(j.value)*trigger.pct);
+      await addDoc(collection(db,'invoices'),{
+        jobId,jobClient:j.client||'',jobNumber:j.jobNumber||'',
+        type:trigger.type,amount,status:'pending',
+        issuedAt:new Date().toISOString(),notes:trigger.label,created:new Date().toISOString()
+      });
+      showToast(`Stage updated · ${trigger.label} created (${fmt$(amount)})`);
+    }else showToast(`Job moved to ${STAGE_LABELS[newStage]}`);
     await loadJobs();await loadInvoices();await openJobDetail(jobId);
   }catch(e){showToast('Error updating stage','error');}
 };
@@ -1048,12 +1209,16 @@ async function loadInspections(){
   const snap=await getDocs(collection(db,'inspections'));const items=[];
   snap.forEach(d=>{const data=d.data();if(notArchived(data))items.push({id:d.id,...data});});
   const el=document.getElementById('inspectionsList');
-  el.innerHTML=items.length?items.map(i=>`<div class="card mb-1"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem"><div><div style="font-family:var(--font-head);font-size:1rem;font-weight:600">${i.client||''}</div><div style="font-size:.8rem;color:var(--text-2)">${i.address||''} · ${i.date||''} · By ${i.inspBy||''}</div></div><div style="display:flex;gap:.5rem;align-items:center">${badge(i.quoteStatus?.toLowerCase()||'pending')}<button class="btn btn-sm btn-danger" onclick="archiveItem('inspections','${i.id}',loadInspections)">✕</button></div></div><div class="grid-3"><div><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Roof Type</div><div style="font-size:.85rem">${i.roofType||'—'}</div></div><div><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Age</div><div style="font-size:.85rem">${i.age||'—'}</div></div><div><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Quote</div><div style="font-size:.85rem;color:var(--rust-lt);font-weight:500">${i.quote?fmt$(i.quote):'TBC'}</div></div></div>${i.condition?`<div style="margin-top:.75rem;padding:.75rem;background:var(--surface);border-radius:6px;font-size:.82rem;color:var(--text-2)">${i.condition}</div>`:''}${i.cutList?`<div style="margin-top:.5rem"><div style="font-size:.68rem;text-transform:uppercase;color:var(--text-2);margin-bottom:4px">Cut List</div><div style="font-size:.82rem;white-space:pre-wrap;background:var(--surface);padding:.75rem;border-radius:6px">${i.cutList}</div></div>`:''}${i.mudMap?`<div style="margin-top:.5rem"><div style="font-size:.68rem;text-transform:uppercase;color:var(--text-2);margin-bottom:4px">Mud Map</div><div style="font-size:.82rem;background:var(--surface);padding:.75rem;border-radius:6px">${i.mudMap}</div></div>`:''}</div>`).join(''):'<div class="empty-state card"><div class="empty-icon">🔍</div><p>No inspections recorded yet</p></div>';
+  el.innerHTML=items.length?items.map(i=>`<div class="card mb-1"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem"><div><div style="font-family:var(--font-head);font-size:1rem;font-weight:600">${i.jobNumber?`<span class="job-number-badge" style="font-size:.72rem;margin-right:.5rem">#${i.jobNumber}</span>`:''}${i.client||''}</div><div style="font-size:.8rem;color:var(--text-2)">${i.address||''} · ${i.date||''} · By ${i.inspBy||''}</div></div><div style="display:flex;gap:.5rem;align-items:center">${badge(i.quoteStatus?.toLowerCase()||'pending')}<button class="btn btn-sm btn-danger" onclick="archiveItem('inspections','${i.id}',loadInspections)">✕</button></div></div><div class="grid-3"><div><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Roof Type</div><div style="font-size:.85rem">${i.roofType||'—'}</div></div><div><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Age</div><div style="font-size:.85rem">${i.age||'—'}</div></div><div><div style="font-size:.68rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-2);margin-bottom:4px">Quote</div><div style="font-size:.85rem;color:var(--rust-lt);font-weight:500">${i.quote?fmt$(i.quote):'TBC'}</div></div></div>${i.condition?`<div style="margin-top:.75rem;padding:.75rem;background:var(--surface);border-radius:6px;font-size:.82rem;color:var(--text-2)">${i.condition}</div>`:''}${i.cutList?`<div style="margin-top:.5rem"><div style="font-size:.68rem;text-transform:uppercase;color:var(--text-2);margin-bottom:4px">Cut List</div><div style="font-size:.82rem;white-space:pre-wrap;background:var(--surface);padding:.75rem;border-radius:6px">${i.cutList}</div></div>`:''}${i.mudMap?`<div style="margin-top:.5rem"><div style="font-size:.68rem;text-transform:uppercase;color:var(--text-2);margin-bottom:4px">Mud Map</div><div style="font-size:.82rem;background:var(--surface);padding:.75rem;border-radius:6px">${i.mudMap}</div></div>`:''}</div>`).join(''):'<div class="empty-state card"><div class="empty-icon">🔍</div><p>No inspections recorded yet</p></div>';
 }
 window.saveInspection=async()=>{
   const data={client:document.getElementById('inspClient').value,phone:document.getElementById('inspPhone').value,address:document.getElementById('inspAddress').value,date:document.getElementById('inspDate').value,inspBy:document.getElementById('inspBy').value,roofType:document.getElementById('inspRoofType').value,age:document.getElementById('inspAge').value,condition:document.getElementById('inspCondition').value,quote:document.getElementById('inspQuote').value,quoteStatus:document.getElementById('inspQuoteStatus').value,cutList:document.getElementById('inspCutList').value,mudMap:document.getElementById('inspMudMap').value,created:new Date().toISOString()};
-  try{await addDoc(collection(db,'inspections'),data);closeModal('inspectionModal');['inspClient','inspPhone','inspAddress','inspDate','inspAge','inspCondition','inspQuote','inspCutList','inspMudMap'].forEach(i=>document.getElementById(i).value='');await loadInspections();showToast('Inspection saved');}
-  catch(e){showToast('Error','error');}
+  try{
+    const jobNumber=await getNextJobNumber();
+    await addDoc(collection(db,'inspections'),{...data,jobNumber});
+    if(isAdmin)loadAdminCounter();
+    closeModal('inspectionModal');['inspClient','inspPhone','inspAddress','inspDate','inspAge','inspCondition','inspQuote','inspCutList','inspMudMap'].forEach(i=>document.getElementById(i).value='');await loadInspections();showToast('Inspection saved — Job #'+jobNumber);
+  }catch(e){showToast('Error saving inspection','error');console.error(e);}
 };
 
 // ── INVOICES ──────────────────────────────────────────────────────────────────
@@ -1066,7 +1231,7 @@ async function loadInvoices(){
   invs.forEach(i=>{const amt=Number(i.amount||0);total+=amt;if(i.status!=='paid')outstanding+=amt;else if(i.paidAt){const p=new Date(i.paidAt);if(p.getMonth()===now.getMonth()&&p.getFullYear()===now.getFullYear())paidMonth+=amt;}});
   document.getElementById('invOutstanding').textContent=fmt$(outstanding);document.getElementById('invPaidMonth').textContent=fmt$(paidMonth);document.getElementById('invTotal').textContent=fmt$(total);
   const tb=document.getElementById('invoicesTable');
-  tb.innerHTML=invs.length?invs.map(i=>`<tr><td style="font-family:var(--font-head);color:var(--rust-lt);font-size:.8rem">#INV-${i.id.slice(-4).toUpperCase()}</td><td>${i.jobClient||'—'}</td><td style="font-size:.82rem">${INV_LABELS[i.type]||i.type||'—'}</td><td style="font-weight:500;color:var(--rust-lt)">${fmt$(i.amount)}</td><td style="font-size:.82rem;color:var(--text-2)">${i.issuedAt?new Date(i.issuedAt).toLocaleDateString('en-AU'):'—'}</td><td>${badge(i.status||'pending')}</td><td><div style="display:flex;gap:.5rem">${i.status!=='paid'?`<button class="btn btn-xs btn-success" onclick="markInvoicePaid('${i.id}')">Mark Paid</button>`:''}<button class="btn btn-xs btn-danger" onclick="archiveItem('invoices','${i.id}',loadInvoices)">Archive</button></div></td></tr>`).join(''):`<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No invoices yet</td></tr>`;
+  tb.innerHTML=invs.length?invs.map(i=>`<tr><td style="font-family:var(--font-head);color:var(--rust-lt);font-size:.8rem">#INV-${i.id.slice(-4).toUpperCase()}</td><td>${i.jobNumber?`<span class="job-number-badge" style="font-size:.68rem;padding:1px 6px;margin-right:.35rem">#${i.jobNumber}</span>`:''}${i.jobClient||'—'}</td><td style="font-size:.82rem">${INV_LABELS[i.type]||i.type||'—'}</td><td style="font-weight:500;color:var(--rust-lt)">${fmt$(i.amount)}</td><td style="font-size:.82rem;color:var(--text-2)">${i.issuedAt?new Date(i.issuedAt).toLocaleDateString('en-AU'):'—'}</td><td>${badge(i.status||'pending')}</td><td><div style="display:flex;gap:.5rem">${i.status!=='paid'?`<button class="btn btn-xs btn-success" onclick="markInvoicePaid('${i.id}')">Mark Paid</button>`:''}<button class="btn btn-xs btn-danger" onclick="archiveItem('invoices','${i.id}',loadInvoices)">Archive</button></div></td></tr>`).join(''):`<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No invoices yet</td></tr>`;
 }
 async function loadJobInvoices(jobId){
   const snap=await getDocs(collection(db,'invoices'));const invs=[];
@@ -1086,15 +1251,23 @@ window.openInvoiceModalStandalone=async()=>{
   document.getElementById('invId').value='';document.getElementById('invJobId').value='';document.getElementById('invJobFieldWrap').style.display='flex';
   document.getElementById('invAmount').value='';document.getElementById('invNotes').value='';document.getElementById('invIssued').value=new Date().toISOString().slice(0,10);
   document.getElementById('invoiceModalTitle').textContent='New Invoice';
-  document.getElementById('invJobSelect').innerHTML=allJobs.map(j=>`<option value="${j.id}" data-client="${j.client||''}">${j.client||'Unnamed'} — #${j.id.slice(-4).toUpperCase()}</option>`).join('');
+  document.getElementById('invJobSelect').innerHTML=allJobs.map(j=>`<option value="${j.id}" data-client="${j.client||''}" data-jobnum="${j.jobNumber||''}">${j.client||'Unnamed'}${j.jobNumber?' — #'+j.jobNumber:' — #'+j.id.slice(-4).toUpperCase()}</option>`).join('');
   openModal('invoiceModal');
 };
 window.saveInvoice=async()=>{
-  let jobId=document.getElementById('invJobId').value,jobClient='';
-  if(!jobId){const sel=document.getElementById('invJobSelect');jobId=sel.value;jobClient=sel.options[sel.selectedIndex]?.dataset.client||'';}
-  else{jobClient=allJobs.find(j=>j.id===jobId)?.client||'';}
-  const data={jobId,jobClient,type:document.getElementById('invType').value,amount:document.getElementById('invAmount').value,status:document.getElementById('invStatus').value,issuedAt:new Date(document.getElementById('invIssued').value||Date.now()).toISOString(),notes:document.getElementById('invNotes').value,created:new Date().toISOString()};
-  try{await addDoc(collection(db,'invoices'),data);closeModal('invoiceModal');await loadInvoices();if(currentJobId)await loadJobInvoices(currentJobId);showToast('Invoice saved');}catch(e){showToast('Error','error');}
+  let jobId=document.getElementById('invJobId').value,jobClient='',jobNumber='';
+  if(!jobId){
+    const sel=document.getElementById('invJobSelect');
+    jobId=sel.value;
+    jobClient=sel.options[sel.selectedIndex]?.dataset.client||'';
+    jobNumber=sel.options[sel.selectedIndex]?.dataset.jobnum||'';
+  }else{
+    const job=allJobs.find(j=>j.id===jobId);
+    jobClient=job?.client||'';
+    jobNumber=job?.jobNumber||'';
+  }
+  const data={jobId,jobClient,jobNumber,type:document.getElementById('invType').value,amount:document.getElementById('invAmount').value,status:document.getElementById('invStatus').value,issuedAt:new Date(document.getElementById('invIssued').value||Date.now()).toISOString(),notes:document.getElementById('invNotes').value,created:new Date().toISOString()};
+  try{await addDoc(collection(db,'invoices'),data);closeModal('invoiceModal');await loadInvoices();if(currentJobId)await loadJobInvoices(currentJobId);showToast('Invoice saved');}catch(e){showToast('Error saving invoice','error');}
 };
 
 // ── PURCHASE ORDERS ───────────────────────────────────────────────────────────
@@ -1140,13 +1313,28 @@ async function loadJobReports(jobId){
   const el=document.getElementById('jobReportsList');
   el.innerHTML=reports.length?reports.map(r=>renderReport(r)).join(''):'<div class="empty-state"><div class="empty-icon">📊</div><p>No reports yet</p></div>';
 }
-function renderReport(r){return `<div class="report-card"><div class="report-card-header"><span class="report-date">${r.date?new Date(r.date+'T00:00:00').toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'}):'—'}</span><span class="report-crew">${r.crew||'—'}</span></div><div class="report-work">${r.workDone||''}</div>${r.issues?`<div class="report-issue">⚠️ ${r.issues}</div>`:''}<div style="text-align:right;margin-top:.5rem"><button class="btn btn-xs btn-danger" onclick="archiveItem('daily_reports','${r.id}',loadReports)">✕</button></div></div>`;}
+function renderReport(r){
+  const jn=r.jobNumber?`<span class="job-number-badge" style="font-size:.68rem;padding:1px 6px">#${r.jobNumber}</span> `:'';
+  return `<div class="report-card"><div class="report-card-header"><span class="report-date">${r.date?new Date(r.date+'T00:00:00').toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'}):'—'}</span><span class="report-crew">${jn}${r.crew||'—'}</span></div><div class="report-work">${r.workDone||''}</div>${r.issues?`<div class="report-issue">⚠️ ${r.issues}</div>`:''}<div style="text-align:right;margin-top:.5rem"><button class="btn btn-xs btn-danger" onclick="archiveItem('daily_reports','${r.id}',loadReports)">✕</button></div></div>`;
+}
 window.openReportModal=()=>{document.getElementById('rptJobId').value=currentJobId||'';document.getElementById('rptJobFieldWrap').style.display='none';document.getElementById('rptDate').value=new Date().toISOString().slice(0,10);document.getElementById('rptWork').value='';document.getElementById('rptIssues').value='';openModal('reportModal');};
-window.openReportModalStandalone=()=>{document.getElementById('rptJobId').value='';document.getElementById('rptJobFieldWrap').style.display='flex';document.getElementById('rptJobSelect').innerHTML=allJobs.map(j=>`<option value="${j.id}">${j.client||'Unnamed'} — #${j.id.slice(-4).toUpperCase()}</option>`).join('');document.getElementById('rptDate').value=new Date().toISOString().slice(0,10);document.getElementById('rptWork').value='';document.getElementById('rptIssues').value='';openModal('reportModal');};
+window.openReportModalStandalone=()=>{
+  document.getElementById('rptJobId').value='';document.getElementById('rptJobFieldWrap').style.display='flex';
+  document.getElementById('rptJobSelect').innerHTML=allJobs.map(j=>`<option value="${j.id}" data-jobnum="${j.jobNumber||''}">${j.client||'Unnamed'}${j.jobNumber?' — #'+j.jobNumber:' — #'+j.id.slice(-4).toUpperCase()}</option>`).join('');
+  document.getElementById('rptDate').value=new Date().toISOString().slice(0,10);document.getElementById('rptWork').value='';document.getElementById('rptIssues').value='';openModal('reportModal');
+};
 window.saveReport=async()=>{
-  let jobId=document.getElementById('rptJobId').value;if(!jobId)jobId=document.getElementById('rptJobSelect').value;
-  const data={jobId,date:document.getElementById('rptDate').value,crew:document.getElementById('rptCrew').value,workDone:document.getElementById('rptWork').value,issues:document.getElementById('rptIssues').value,created:new Date().toISOString()};
-  try{await addDoc(collection(db,'daily_reports'),data);closeModal('reportModal');await loadReports();if(currentJobId)await loadJobReports(currentJobId);showToast('Report saved');}catch(e){showToast('Error','error');}
+  let jobId=document.getElementById('rptJobId').value;
+  let jobNumber='';
+  if(!jobId){
+    const sel=document.getElementById('rptJobSelect');
+    jobId=sel.value;
+    jobNumber=sel.options[sel.selectedIndex]?.dataset.jobnum||'';
+  }else{
+    jobNumber=allJobs.find(j=>j.id===jobId)?.jobNumber||'';
+  }
+  const data={jobId,jobNumber,date:document.getElementById('rptDate').value,crew:document.getElementById('rptCrew').value,workDone:document.getElementById('rptWork').value,issues:document.getElementById('rptIssues').value,created:new Date().toISOString()};
+  try{await addDoc(collection(db,'daily_reports'),data);closeModal('reportModal');await loadReports();if(currentJobId)await loadJobReports(currentJobId);showToast('Report saved');}catch(e){showToast('Error saving report','error');}
 };
 
 // ── REMINDERS ─────────────────────────────────────────────────────────────────
@@ -1169,45 +1357,124 @@ window.saveReminder=async()=>{
   try{await addDoc(collection(db,'reminders'),data);closeModal('reminderModal');['remTitle','remDue','remNotes'].forEach(i=>document.getElementById(i).value='');await loadReminders();showToast('Reminder saved');}catch(e){showToast('Error','error');}
 };
 
-// ── TASKS ─────────────────────────────────────────────────────────────────────
+// ── TASKS (Panel System) ───────────────────────────────────────────────────────
+const TASK_TEAM_MEMBERS=['Ronny','Harry','Pauly','Josh','Myla','Toneth'];
+
 async function loadTasks(){
-  const gs=await getDocs(collection(db,'tasks'));const groups=[];gs.forEach(d=>{const data=d.data();if(notArchived(data))groups.push({id:d.id,...data});});
-  const is=await getDocs(collection(db,'task_items'));const allItems={};
-  is.forEach(d=>{const data=d.data();if(notArchived(data)&&(!data.userId||data.userId===currentUser?.uid)){if(!allItems[data.taskId])allItems[data.taskId]=[];allItems[data.taskId].push({id:d.id,...data});}});
-  const el=document.getElementById('tasksList');
-  if(!groups.length){el.innerHTML='<div class="empty-state card"><div class="empty-icon">✅</div><p>No tasks yet</p></div>';return;}
-  el.innerHTML=groups.map(g=>{
-    const items=allItems[g.id]||[];
-    return `<div class="task-group"><div class="task-group-title"><span>${g.title||'Task Group'}</span>${isAdmin?`<button class="btn btn-xs btn-danger" onclick="archiveItem('tasks','${g.id}',loadTasks)">Archive Group</button>`:''}</div>${g.description?`<div style="font-size:.8rem;color:var(--text-2);margin-bottom:.75rem">${g.description}</div>`:''}`+items.map(i=>`<div class="task-item"><input type="checkbox" class="task-check" ${i.completed?'checked':''} onchange="toggleTaskItem('${i.id}',this.checked)"><span class="task-text ${i.completed?'done':''}">${i.text||''}</span><button class="btn btn-xs btn-danger" onclick="archiveItem('task_items','${i.id}',loadTasks)" style="margin-left:auto">✕</button></div>`).join('')+`<div class="task-add-row"><input id="taskInput-${g.id}" placeholder="Add a task item..." onkeydown="if(event.key==='Enter')addTaskItem('${g.id}')"><button onclick="addTaskItem('${g.id}')">Add</button></div></div>`;
-  }).join('');
+  const snap=await getDocs(collection(db,'tasks'));
+  const allTasks=[];
+  snap.forEach(d=>{const data=d.data();if(!data.archived)allTasks.push({id:d.id,...data});});
+
+  // Build panel per team member (only show panels that have tasks)
+  const byMember={};
+  TASK_TEAM_MEMBERS.forEach(m=>{byMember[m]=[];});
+  allTasks.forEach(t=>{if(byMember[t.assignedTo]!==undefined)byMember[t.assignedTo].push(t);});
+
+  // For non-admin: only show their own panel
+  const el=document.getElementById('tasksPanels');
+  let html='';
+  const membersToShow=isAdmin?TASK_TEAM_MEMBERS:
+    [currentUserInfo?.name].filter(n=>TASK_TEAM_MEMBERS.includes(n));
+
+  membersToShow.forEach(member=>{
+    const tasks=byMember[member]||[];
+    const isOwn=currentUserInfo?.name===member;
+    const completedCount=tasks.filter(t=>t.completed).length;
+    html+=`<div class="task-panel">
+      <div class="task-panel-header">
+        <span class="task-panel-name">${member}</span>
+        <span class="task-panel-count">${completedCount}/${tasks.length} done</span>
+      </div>
+      <div class="task-panel-body">
+        ${tasks.length?tasks.map(t=>`
+          <div class="task-panel-item">
+            <input type="checkbox" class="task-check" ${t.completed?'checked':''} ${isOwn||isAdmin?`onchange="toggleTask('${t.id}',this.checked)"`:''} ${isOwn||isAdmin?'':'disabled'}>
+            <span class="task-label ${t.completed?'done':''}">${t.title||''}</span>
+            ${isOwn||isAdmin?`<button class="task-remove" onclick="removeTask('${t.id}')" title="Remove task">✕</button>`:''}
+          </div>`).join(''):'<div class="task-panel-empty">No tasks assigned</div>'}
+      </div>
+    </div>`;
+  });
+
+  if(!html)html='<div class="empty-state card" style="grid-column:1/-1"><div class="empty-icon">✅</div><p>No tasks assigned yet</p></div>';
+  el.innerHTML=html;
 }
-window.toggleTaskItem=async(id,completed)=>{await updateDoc(doc(db,'task_items',id),{completed});};
-window.addTaskItem=async(taskId)=>{
-  const input=document.getElementById(`taskInput-${taskId}`);const text=input.value.trim();if(!text)return;
-  await addDoc(collection(db,'task_items'),{taskId,userId:currentUser?.uid,text,completed:false,created:new Date().toISOString()});
-  input.value='';await loadTasks();
-};
-window.saveTaskGroup=async()=>{
+
+window.saveTask=async()=>{
   if(!isAdmin){showToast('Admin only','error');return;}
-  const data={title:document.getElementById('taskGroupTitle').value,description:document.getElementById('taskGroupDesc').value,createdBy:currentUser?.uid,created:new Date().toISOString()};
-  try{await addDoc(collection(db,'tasks'),data);closeModal('taskGroupModal');['taskGroupTitle','taskGroupDesc'].forEach(i=>document.getElementById(i).value='');await loadTasks();showToast('Task group created');}catch(e){showToast('Error','error');}
+  const title=document.getElementById('taskTitle').value.trim();
+  const assignedTo=document.getElementById('taskAssignTo').value;
+  if(!title){showToast('Enter a task title','error');return;}
+  try{
+    await addDoc(collection(db,'tasks'),{title,assignedTo,completed:false,createdBy:currentUser?.uid});
+    closeModal('taskModal');
+    document.getElementById('taskTitle').value='';
+    await loadTasks();showToast('Task assigned');
+  }catch(e){showToast('Error assigning task','error');}
 };
 
-// ── QUICK LINKS ───────────────────────────────────────────────────────────────
+window.toggleTask=async(id,completed)=>{
+  try{await updateDoc(doc(db,'tasks',id),{completed});await loadTasks();}
+  catch(e){showToast('Error updating task','error');}
+};
+
+window.removeTask=async(id)=>{
+  if(!confirm('Remove this task?'))return;
+  try{await updateDoc(doc(db,'tasks',id),{archived:true});await loadTasks();showToast('Task removed');}
+  catch(e){showToast('Error removing task','error');}
+};
+
+// ── QUICK LAUNCHER ────────────────────────────────────────────────────────────
 async function loadQuickLinks(){
-  const snap=await getDocs(collection(db,'quick_links'));const links=[];
-  snap.forEach(d=>{const data=d.data();if(notArchived(data))links.push({id:d.id,...data});});
-  const grid=document.getElementById('quickLinksGrid');const launcher=document.getElementById('dashQuickLauncher');
+  const snap=await getDocs(collection(db,'quick_launchers'));const links=[];
+  snap.forEach(d=>{const data=d.data();if(!data.archived)links.push({id:d.id,...data});});
+  const grid=document.getElementById('quickLinksGrid');
+  const launcher=document.getElementById('dashQuickLauncher');
   if(!links.length){launcher.style.display='none';return;}
   launcher.style.display='';
-  grid.innerHTML=links.map(l=>`<a class="quick-link-tile" href="${l.url||'#'}" target="_blank" rel="noopener"><div class="quick-link-icon">${l.icon||'🔗'}</div><div class="quick-link-label">${l.title||'Link'}</div></a>`).join('');
+  grid.innerHTML=links.map(l=>{
+    const isInternal=l.type==='internal';
+    const href=isInternal?(l.link||'#'):l.link;
+    const target=isInternal?'':'_blank';
+    const rel=isInternal?'':'noopener';
+    const onclick=isInternal?`onclick="handleQLInternal('${l.link||''}');return false;"`:'' ;
+    return `<a class="ql-tile" href="${href}" target="${target}" rel="${rel}" ${onclick}>
+      <div class="ql-tile-icon">${l.icon||'🔗'}</div>
+      <div class="ql-tile-label">${l.name||'Link'}</div>
+      <div class="ql-tile-type">${isInternal?'Internal':'External'}</div>
+    </a>`;
+  }).join('');
+  // Admin settings list
   const ag=document.getElementById('adminQuickLinks');
-  if(ag)ag.innerHTML=links.map(l=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--border)"><div>${l.icon||'🔗'} <strong>${l.title}</strong> — <span style="color:var(--text-2);font-size:.8rem">${l.url}</span></div><button class="btn btn-xs btn-danger" onclick="archiveItem('quick_links','${l.id}',loadQuickLinks)">Remove</button></div>`).join('');
+  if(ag)ag.innerHTML=links.length?links.map(l=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:.65rem 0;border-bottom:1px solid var(--border)">
+    <div style="display:flex;align-items:center;gap:.65rem">
+      <span style="font-size:1.2rem">${l.icon||'🔗'}</span>
+      <div><div style="font-weight:500;font-size:.88rem">${l.name||''}</div><div style="font-size:.75rem;color:var(--text-2)">${l.link||''} · <span style="color:${l.type==='internal'?'var(--blue)':'var(--green)'}">${l.type||'external'}</span></div></div>
+    </div>
+    <button class="btn btn-xs btn-danger" onclick="archiveItem('quick_launchers','${l.id}',loadQuickLinks)">Remove</button>
+  </div>`).join(''):'<div style="color:var(--text-3);font-size:.82rem;padding:.5rem 0">No launchers added yet</div>';
 }
-window.saveQuickLink=async()=>{
+window.handleQLInternal=route=>{
+  // strip leading slash and handle as nav
+  const id=route.replace(/^\//,'');
+  const validPages=['dashboard','jobs','leads','schedule','inspections','invoices','reports','reminders','tasks','advertising','workflow','admin'];
+  if(validPages.includes(id))nav(id);
+  else window.open(route,'_blank');
+};
+window.saveQuickLauncher=async()=>{
   if(!isAdmin){showToast('Admin only','error');return;}
-  const data={title:document.getElementById('qlTitle').value,url:document.getElementById('qlUrl').value,icon:document.getElementById('qlIcon').value||'🔗',created:new Date().toISOString()};
-  try{await addDoc(collection(db,'quick_links'),data);closeModal('quickLinkModal');['qlTitle','qlUrl','qlIcon'].forEach(i=>document.getElementById(i).value='');await loadQuickLinks();showToast('Link added');}catch(e){showToast('Error','error');}
+  const name=document.getElementById('qlName').value.trim();
+  const link=document.getElementById('qlLink').value.trim();
+  const icon=document.getElementById('qlIcon').value||'🔗';
+  const type=document.getElementById('qlType').value;
+  if(!name||!link){showToast('Name and link are required','error');return;}
+  const data={name,link,icon,type,createdBy:currentUser?.uid,created:new Date().toISOString()};
+  try{
+    await addDoc(collection(db,'quick_launchers'),data);
+    closeModal('quickLauncherModal');
+    ['qlName','qlLink','qlIcon'].forEach(i=>document.getElementById(i).value='');
+    await loadQuickLinks();showToast('Launcher added');
+  }catch(e){showToast('Error adding launcher','error');}
 };
 
 // ── ADVERTISING ───────────────────────────────────────────────────────────────
@@ -1227,9 +1494,7 @@ window.saveAd=async()=>{
 // Expose globals
 window.loadJobs=loadJobs;window.loadLeads=loadLeads;window.loadSchedule=loadSchedule;
 window.loadInspections=loadInspections;window.loadInvoices=loadInvoices;window.loadReports=loadReports;
-window.loadAds=loadAds;window.loadReminders=loadReminders;window.loadTasks=loadTasks;
-window.loadQuickLinks=loadQuickLinks;window.loadJobPOs=loadJobPOs;window.loadJobQuotes=loadJobQuotes;
-window.loadJobFiles=loadJobFiles;
+window.loadTasks=loadTasks;window.loadQuickLinks=loadQuickLinks;window.loadAds=loadAds;window.loadReminders=loadReminders;
 </script>
 </body>
 </html>
