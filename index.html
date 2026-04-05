@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#0F0D0B;--surface:#1A1714;--card:#221F1B;--border:#2E2A25;--rust:#C05A2E;--rust-lt:#D4703F;--rust-dk:#8A3B1C;--amber:#E8A234;--green:#4CAF7D;--red:#E05252;--blue:#5B9BD5;--purple:#9B72CF;--text:#F5F0E8;--text-2:#9A8E82;--text-3:#5C544C;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;}
+:root{--bg:#F5EFE6;--surface:#EDE4D8;--card:#FBF7F2;--border:#D6C9B8;--rust:#B84E22;--rust-lt:#C96030;--rust-dk:#8A3B1C;--amber:#C47D0A;--green:#2E7D55;--red:#C0392B;--blue:#2463A0;--purple:#6B4FA8;--text:#1C1410;--text-2:#5A4A3A;--text-3:#8C7A6A;--font-head:'Syne',sans-serif;--font-body:'DM Sans',sans-serif;}
 body{font-family:var(--font-body);background:var(--bg);color:var(--text);font-size:14px;line-height:1.6;min-height:100vh;overflow-x:hidden}
 #authScreen{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:1000}
 .auth-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:2.5rem;width:380px;text-align:center}
@@ -32,7 +32,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);font-si
 .nav-section{padding:0 .75rem;margin-bottom:.5rem}
 .nav-label{font-size:.65rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);padding:.5rem .75rem;display:block}
 .nav-item{display:flex;align-items:center;gap:.65rem;padding:.6rem .75rem;border-radius:6px;cursor:pointer;transition:background .15s,color .15s;color:var(--text-2);font-size:.85rem;font-weight:400;border:none;background:none;width:100%;text-align:left}
-.nav-item:hover{background:var(--card);color:var(--text)}.nav-item.active{background:rgba(192,90,46,.15);color:var(--rust)}
+.nav-item:hover{background:var(--card);color:var(--text)}.nav-item.active{background:rgba(184,78,34,.12);color:var(--rust)}
 .nav-icon{font-size:1rem;width:18px;text-align:center;flex-shrink:0}
 .nav-badge{margin-left:auto;background:var(--rust);color:white;font-size:.65rem;font-weight:600;padding:1px 6px;border-radius:10px}
 .sidebar-bottom{margin-top:auto;padding:1rem .75rem 0;border-top:1px solid var(--border)}
@@ -49,7 +49,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);font-si
 .stat-label{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-2);margin-bottom:.4rem}
 .stat-value{font-family:var(--font-head);font-size:2rem;font-weight:700;color:var(--text);line-height:1}
 .stat-sub{font-size:.75rem;color:var(--text-3);margin-top:.3rem}
-.stat-card.highlight{border-color:var(--rust);background:rgba(192,90,46,.08)}.stat-card.highlight .stat-value{color:var(--rust-lt)}
+.stat-card.highlight{border-color:var(--rust);background:rgba(184,78,34,.06)}.stat-card.highlight .stat-value{color:var(--rust-lt)}
 .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1.1rem;border-radius:6px;font-family:var(--font-body);font-size:.82rem;font-weight:500;cursor:pointer;border:none;transition:all .15s}
 .btn-primary{background:var(--rust);color:white}.btn-primary:hover{background:var(--rust-lt)}
 .btn-secondary{background:var(--card);border:1px solid var(--border);color:var(--text)}.btn-secondary:hover{border-color:var(--rust);color:var(--rust)}
@@ -62,7 +62,7 @@ table{width:100%;border-collapse:collapse}
 thead tr{background:var(--surface);border-bottom:1px solid var(--border)}
 th{padding:.75rem 1rem;text-align:left;font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-2)}
 td{padding:.85rem 1rem;font-size:.85rem;color:var(--text);border-bottom:1px solid var(--border)}
-tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)}
+tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
 .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:500}.badge::before{content:'';width:5px;height:5px;border-radius:50%}
 .badge-active{background:rgba(76,175,125,.15);color:var(--green)}.badge-active::before{background:var(--green)}
 .badge-pending{background:rgba(232,162,52,.15);color:var(--amber)}.badge-pending::before{background:var(--amber)}
@@ -83,7 +83,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
 .form-field input,.form-field select,.form-field textarea{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.65rem .9rem;color:var(--text);font-family:var(--font-body);font-size:.88rem;outline:none;transition:border-color .2s;width:100%}
 .form-field input:focus,.form-field select:focus,.form-field textarea:focus{border-color:var(--rust)}
 .form-field select option{background:var(--card)}.form-field textarea{resize:vertical;min-height:80px}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem}
 .modal-overlay.open{display:flex}
 .modal{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:2rem;width:100%;max-width:600px;max-height:90vh;overflow-y:auto}
 .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
@@ -112,13 +112,24 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
 .report-work{font-size:.85rem;color:var(--text);margin-bottom:.4rem}.report-issue{font-size:.82rem;color:var(--amber);margin-top:.4rem}
 .inspection-section{margin-bottom:1.5rem}
 .inspection-section h4{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-2);margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid var(--border)}
-.comments-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;height:340px}
+.comments-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;display:flex;flex-direction:column;height:380px}
 .comments-list{flex:1;overflow-y:auto;padding:1rem;display:flex;flex-direction:column;gap:.75rem}
 .comment-item{display:flex;gap:.65rem;align-items:flex-start}
 .comment-avatar{width:28px;height:28px;border-radius:50%;background:var(--rust-dk);color:white;font-size:.7rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--font-head)}
-.comment-bubble{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.6rem .85rem;flex:1;min-width:0}.comment-bubble.mine{background:rgba(192,90,46,.1);border-color:rgba(192,90,46,.25)}
+.comment-bubble{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:.6rem .85rem;flex:1;min-width:0}.comment-bubble.mine{background:rgba(184,78,34,.08);border-color:rgba(184,78,34,.2)}
 .comment-meta{font-size:.68rem;color:var(--text-3);margin-bottom:3px}.comment-meta strong{color:var(--text-2);font-weight:600}
 .comment-text{font-size:.83rem;color:var(--text);line-height:1.5;word-break:break-word}.comment-mention{color:var(--rust-lt);font-weight:500}
+.comment-actions{display:flex;gap:.35rem;margin-top:.4rem;opacity:0;transition:opacity .15s}
+.comment-item:hover .comment-actions{opacity:1}
+@media(hover:none){.comment-actions{opacity:1}}
+.comment-actions.editing-active{opacity:0;pointer-events:none}
+.comment-edit-area{display:none;margin-top:.45rem;gap:.4rem;flex-direction:column}
+.comment-edit-area textarea{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:.45rem .7rem;color:var(--text);font-family:var(--font-body);font-size:.83rem;outline:none;resize:vertical;min-height:56px;transition:border-color .2s}
+.comment-edit-area textarea:focus{border-color:var(--rust)}
+.comment-edit-btns{display:flex;gap:.4rem;margin-top:.3rem}
+.btn-comment-action{background:none;border:1px solid var(--border);border-radius:5px;padding:2px 8px;font-size:.7rem;cursor:pointer;color:var(--text-2);transition:all .15s}
+.btn-comment-action:hover{border-color:var(--rust);color:var(--rust)}
+.btn-comment-action.del:hover{border-color:var(--red);color:var(--red)}
 .comments-input{display:flex;gap:.5rem;padding:.75rem;border-top:1px solid var(--border)}
 .comments-input input{flex:1;background:var(--card);border:1px solid var(--border);border-radius:6px;padding:.55rem .85rem;color:var(--text);font-family:var(--font-body);font-size:.85rem;outline:none;transition:border-color .2s}
 .comments-input input:focus{border-color:var(--rust)}.comments-input button{background:var(--rust);color:white;border:none;border-radius:6px;padding:.55rem 1rem;font-size:.82rem;cursor:pointer}.comments-input button:hover{background:var(--rust-lt)}
@@ -603,7 +614,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
           <div class="card-title">System Info</div>
           <div style="font-size:.85rem;color:var(--text-2);line-height:2">
             <div>Firebase Project: <span style="color:var(--text)">rdu-dashboard</span></div>
-            <div>Admin: <span style="color:var(--text)">toneth@roofingdownunder.com</span></div>
+            <div>Admin: <span style="color:var(--text)"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7d0912131809153d0f12121b14131a19120a13081319180f531e1210">[email&#160;protected]</a></span></div>
             <div>Version: <span style="color:var(--text)">Commit 3 — Tasks, Permissions, Job Numbers</span></div>
           </div>
         </div>
@@ -829,11 +840,11 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
   </div>
 </div>
 <div class="toast" id="toast"></div>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://accounts.google.com/gsi/client" async defer></script>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, signOut as fbSignOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, collection, addDoc, getDocs, getDoc, setDoc, updateDoc, doc, query, where, orderBy, onSnapshot, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, collection, addDoc, getDocs, getDoc, setDoc, updateDoc, deleteDoc, doc, query, where, orderBy, onSnapshot, runTransaction, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
 
 const firebaseConfig = {
@@ -1383,8 +1394,9 @@ function renderComments(docs){
   const mentionRx=escaped.length?new RegExp('@('+escaped.join('|')+')','g'):null;
   const items=docs.map(c=>{
     const mine=c.userId===currentUser?.uid;
+    const canEdit=mine;
+    const canDelete=mine||isAdmin;
     const init=(c.userName||'?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-    // Handle both serverTimestamp (Timestamp object) and plain ISO strings
     let ts='',ds='';
     if(c.createdAt?.toDate){
       const d=c.createdAt.toDate();
@@ -1393,15 +1405,33 @@ function renderComments(docs){
     }
     const rawMsg=(c.message||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
     const msg=mentionRx?rawMsg.replace(mentionRx,'<span class="comment-mention">@$1</span>'):rawMsg;
-    return `<div class="comment-item">
+    const actionBtns=(canEdit||canDelete)?`
+      <div class="comment-actions">
+        ${canEdit?`<button class="btn-comment-action" onclick="startEditComment('${c.id}')">✏️ Edit</button>`:''}
+        ${canDelete?`<button class="btn-comment-action del" onclick="deleteComment('${c.id}')">🗑 Delete</button>`:''}
+      </div>
+      ${canEdit?`<div class="comment-edit-area" id="edit-area-${c.id}">
+        <textarea id="edit-input-${c.id}"></textarea>
+        <div class="comment-edit-btns">
+          <button class="btn-comment-action" onclick="saveEditComment('${c.id}')">💾 Save</button>
+          <button class="btn-comment-action" onclick="cancelEditComment('${c.id}')">✕ Cancel</button>
+        </div>
+      </div>`:''}`:'';
+    return `<div class="comment-item" id="comment-row-${c.id}">
       <div class="comment-avatar">${init}</div>
       <div class="comment-bubble ${mine?'mine':''}">
-        <div class="comment-meta"><strong>${c.userName||'Unknown'}</strong>${ds?' · '+ds:''} ${ts}</div>
-        <div class="comment-text">${msg}</div>
+        <div class="comment-meta"><strong>${c.userName||'Unknown'}</strong>${ds?' · '+ds:''} ${ts}${c.editedAt?' · <em style="color:var(--text-3)">edited</em>':''}</div>
+        <div class="comment-text" id="comment-text-${c.id}">${msg}</div>
+        ${actionBtns}
       </div>
     </div>`;
   });
   list.innerHTML=items.join('');
+  // Safely set textarea values after DOM is built (avoids injection via innerHTML)
+  docs.forEach(c=>{
+    const ta=document.getElementById(`edit-input-${c.id}`);
+    if(ta)ta.value=c.message||'';
+  });
   requestAnimationFrame(()=>{list.scrollTop=list.scrollHeight;});
 }
 
@@ -1456,7 +1486,48 @@ window.sendComment=async()=>{
   }
 };
 
-// ── LEADS ─────────────────────────────────────────────────────────────────────
+// ── COMMENT EDIT / DELETE ─────────────────────────────────────────────────────
+window.startEditComment=(id)=>{
+  const area=document.getElementById(`edit-area-${id}`);
+  const textEl=document.getElementById(`comment-text-${id}`);
+  if(!area||!textEl)return;
+  area.style.display='flex';
+  textEl.style.display='none';
+  // Hide the edit/delete buttons while editing
+  const row=document.getElementById(`comment-row-${id}`);
+  const actions=row?.querySelector('.comment-actions');
+  if(actions)actions.classList.add('editing-active');
+  const ta=document.getElementById(`edit-input-${id}`);
+  if(ta){ta.focus();ta.setSelectionRange(ta.value.length,ta.value.length);}
+};
+window.cancelEditComment=(id)=>{
+  const area=document.getElementById(`edit-area-${id}`);
+  const textEl=document.getElementById(`comment-text-${id}`);
+  if(area)area.style.display='none';
+  if(textEl)textEl.style.display='';
+  const row=document.getElementById(`comment-row-${id}`);
+  const actions=row?.querySelector('.comment-actions');
+  if(actions)actions.classList.remove('editing-active');
+};
+window.saveEditComment=async(id)=>{
+  const ta=document.getElementById(`edit-input-${id}`);
+  if(!ta)return;
+  const newMsg=ta.value.trim();
+  if(!newMsg){showToast('Note cannot be empty','error');return;}
+  try{
+    await updateDoc(doc(db,'job_comments',id),{message:newMsg,editedAt:serverTimestamp()});
+    showToast('Note updated');
+  }catch(e){showToast('Error updating note','error');console.error(e);}
+};
+window.deleteComment=async(id)=>{
+  if(!confirm('Delete this note?'))return;
+  try{
+    await deleteDoc(doc(db,'job_comments',id));
+    showToast('Note deleted');
+  }catch(e){showToast('Error deleting note','error');console.error(e);}
+};
+
+
 async function loadLeads(){
   const snap=await getDocs(collection(db,'leads'));const leads=[];
   snap.forEach(d=>{const data=d.data();if(notArchived(data))leads.push({id:d.id,...data});});
@@ -2154,9 +2225,4 @@ window.saveAd=async()=>{
 };
 
 // Expose globals
-window.loadJobs=loadJobs;window.loadLeads=loadLeads;window.loadSchedule=loadSchedule;
-window.loadInspections=loadInspections;window.loadInvoices=loadInvoices;window.loadReports=loadReports;
-window.loadTasks=loadTasks;window.loadAds=loadAds;window.loadReminders=loadReminders;
-</script>
-</body>
-</html>
+window.loadJobs=loadJobs;window.loadLeads=loadLeads;window.load
