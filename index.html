@@ -199,6 +199,24 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
 .tab-btn{flex:1;padding:.5rem;border:none;background:none;color:var(--text-2);font-family:var(--font-body);font-size:.82rem;border-radius:5px;cursor:pointer;transition:all .15s;white-space:nowrap}
 .tab-btn.active{background:var(--card);color:var(--text);border:1px solid var(--border)}
 .tab-content{display:none}.tab-content.active{display:block}
+/* QUICK LAUNCHER */
+.ql-section{margin-bottom:1.5rem}
+.ql-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.85rem}
+.ql-title{font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-2)}
+.ql-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:.65rem}
+.ql-tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.45rem;padding:.85rem .5rem;background:var(--card);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--text);cursor:pointer;transition:border-color .15s,background .15s,transform .1s;user-select:none}
+.ql-tile:hover{border-color:var(--rust);background:rgba(192,90,46,.07);transform:translateY(-2px)}
+.ql-tile:active{transform:translateY(0)}
+.ql-tile-logo{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;overflow:hidden}
+.ql-tile-logo img{width:100%;height:100%;object-fit:contain;border-radius:8px}
+.ql-tile-name{font-size:.7rem;font-weight:500;color:var(--text-2);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:80px}
+.ql-add-tile{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.45rem;padding:.85rem .5rem;background:transparent;border:1px dashed var(--border);border-radius:10px;cursor:pointer;transition:border-color .15s,background .15s;color:var(--text-3);font-size:.7rem;text-align:center}
+.ql-add-tile:hover{border-color:var(--rust);color:var(--rust);background:rgba(192,90,46,.05)}
+/* ADMIN LAUNCHER LIST */
+.ql-admin-item{display:flex;align-items:center;gap:.75rem;padding:.6rem 0;border-bottom:1px solid var(--border)}
+.ql-admin-item:last-child{border-bottom:none}
+.ql-admin-logo{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;overflow:hidden;background:var(--surface)}
+.ql-admin-logo img{width:100%;height:100%;object-fit:contain;border-radius:6px}
 .admin-only{display:none}
 /* MOBILE OPTIMISATION */
 @media(max-width:768px){
@@ -302,6 +320,16 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
           <div class="stat-card"><div class="stat-label">Open Leads</div><div class="stat-value" id="statLeads">—</div><div class="stat-sub">Awaiting follow-up</div></div>
           <div class="stat-card"><div class="stat-label">This Week</div><div class="stat-value" id="statWeek">—</div><div class="stat-sub">Scheduled events</div></div>
           <div class="stat-card"><div class="stat-label">Unpaid Invoices</div><div class="stat-value" id="statUnpaid">—</div><div class="stat-sub">Awaiting payment</div></div>
+        </div>
+        <!-- QUICK LAUNCHER -->
+        <div class="ql-section">
+          <div class="ql-header">
+            <span class="ql-title">Quick Launcher</span>
+            <button class="btn btn-xs btn-secondary" id="qlAdminBtn" style="display:none" onclick="nav('admin');setTimeout(()=>document.getElementById('qlAdminSection')?.scrollIntoView({behavior:'smooth'}),300)">⚙️ Manage</button>
+          </div>
+          <div class="ql-grid" id="qlGrid">
+            <div style="grid-column:1/-1;color:var(--text-3);font-size:.82rem;padding:.5rem 0">Loading…</div>
+          </div>
         </div>
         <div class="grid-2">
           <div class="card"><div class="card-title">Recent Jobs</div><div id="dashRecentJobs"><div class="empty-state"><div class="empty-icon">🔨</div><p>No jobs yet</p></div></div></div>
@@ -552,6 +580,15 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
           <div style="font-size:.75rem;color:var(--text-3);margin-top:.5rem">Adding a panel creates a task column for a new team member.</div>
         </div>
 
+        <!-- Quick Launcher Management -->
+        <div class="card mb-2" id="qlAdminSection">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
+            <div class="card-title" style="margin-bottom:0">Quick Launcher Apps</div>
+            <button class="btn btn-primary btn-sm" onclick="openModal('qlModal')">+ Add App</button>
+          </div>
+          <div id="qlAdminList"><div style="color:var(--text-3);font-size:.82rem">Loading…</div></div>
+        </div>
+
         <!-- Job Counter -->
         <div class="card mb-2">
           <div class="card-title">Job Number Counter</div>
@@ -577,6 +614,33 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(255,255,255,.02)
 </div>
 
 <!-- MODALS -->
+<div class="modal-overlay" id="qlModal">
+  <div class="modal" style="max-width:460px">
+    <div class="modal-header"><div class="modal-title">Add App to Launcher</div><button class="modal-close" onclick="closeModal('qlModal')">✕</button></div>
+    <div class="form-grid">
+      <div class="form-field full"><label>App Name</label><input id="qlAppName" placeholder="e.g. Xero, Slack, Google Drive" autocomplete="off"></div>
+      <div class="form-field full"><label>URL <span style="color:var(--text-3);font-weight:400;font-size:.7rem">(full URL including https://)</span></label><input id="qlAppUrl" placeholder="https://go.xero.com" type="url"></div>
+      <div class="form-field full">
+        <label>Icon <span style="color:var(--text-3);font-weight:400;font-size:.7rem">(emoji or leave blank to auto-fetch favicon)</span></label>
+        <input id="qlAppIcon" placeholder="e.g. 📊 — or leave blank for auto logo" maxlength="4">
+      </div>
+      <div class="form-field full">
+        <label>Preset Apps</label>
+        <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.25rem">
+          <button type="button" class="btn btn-secondary btn-xs" onclick="qlPreset('Claude','https://claude.ai','🤖')">🤖 Claude</button>
+          <button type="button" class="btn btn-secondary btn-xs" onclick="qlPreset('Gemini','https://gemini.google.com','✨')">✨ Gemini</button>
+          <button type="button" class="btn btn-secondary btn-xs" onclick="qlPreset('Gmail','https://mail.google.com','📧')">📧 Gmail</button>
+          <button type="button" class="btn btn-secondary btn-xs" onclick="qlPreset('Xero','https://go.xero.com','💼')">💼 Xero</button>
+          <button type="button" class="btn btn-secondary btn-xs" onclick="qlPreset('Teams','https://teams.microsoft.com','💬')">💬 Teams</button>
+          <button type="button" class="btn btn-secondary btn-xs" onclick="qlPreset('Drive','https://drive.google.com','📁')">📁 Drive</button>
+          <button type="button" class="btn btn-secondary btn-xs" onclick="qlPreset('WhatsApp','https://web.whatsapp.com','💚')">💚 WhatsApp</button>
+          <button type="button" class="btn btn-secondary btn-xs" onclick="qlPreset('Slack','https://slack.com','#')">📢 Slack</button>
+        </div>
+      </div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('qlModal')">Cancel</button><button class="btn btn-primary" onclick="saveQLApp()">Add App</button></div>
+  </div>
+</div>
 <div class="modal-overlay" id="jobModal">
   <div class="modal">
     <div class="modal-header"><div class="modal-title" id="jobModalTitle">New Job</div><button class="modal-close" onclick="closeModal('jobModal')">✕</button></div>
@@ -876,7 +940,7 @@ window.toggleSidebar=()=>{
   document.getElementById('mobileOverlay').classList.toggle('open');
 };
 
-async function loadAll(){await Promise.all([loadJobs(),loadLeads(),loadSchedule(),loadInspections(),loadInvoices(),loadReports(),loadAds(),loadReminders(),loadTasks()]);}
+async function loadAll(){await Promise.all([loadJobs(),loadLeads(),loadSchedule(),loadInspections(),loadInvoices(),loadReports(),loadAds(),loadReminders(),loadTasks(),loadQuickLauncher()]);}
 
 // ── SOFT DELETE ───────────────────────────────────────────────────────────────
 window.archiveItem=async(col,id,reload)=>{
@@ -905,7 +969,119 @@ async function getNextJobNumber(){
 // Keep old name as alias so saveLead still works
 const getNextLeadNumber=getNextJobNumber;
 
-// ── PERMISSIONS SYSTEM (Per-User) ─────────────────────────────────────────────
+// ── QUICK LAUNCHER ─────────────────────────────────────────────────────────────
+const QL_DEFAULTS=[
+  {name:'Claude', url:'https://claude.ai',        icon:'🤖', order:0},
+  {name:'Gemini', url:'https://gemini.google.com',icon:'✨', order:1},
+  {name:'Gmail',  url:'https://mail.google.com',  icon:'📧', order:2},
+  {name:'Xero',   url:'https://go.xero.com',      icon:'💼', order:3},
+  {name:'Teams',  url:'https://teams.microsoft.com',icon:'💬',order:4},
+];
+let qlApps=[];
+let qlSeeded=false;
+
+function qlFaviconUrl(url){
+  try{const h=new URL(url).hostname;return `https://www.google.com/s2/favicons?sz=64&domain=${h}`;}
+  catch(e){return null;}
+}
+
+function qlLogoHtml(app){
+  if(app.icon&&app.icon.trim()&&!app.iconIsEmoji===false){
+    // emoji check: if icon is a single emoji, render as text
+  }
+  if(app.icon&&[...app.icon].length<=2&&app.icon.trim()){
+    return `<div class="ql-tile-logo" style="background:var(--surface)">${app.icon}</div>`;
+  }
+  const fav=qlFaviconUrl(app.url);
+  return fav
+    ?`<div class="ql-tile-logo"><img src="${fav}" alt="${app.name}" onerror="this.parentElement.innerHTML='🔗'"></div>`
+    :`<div class="ql-tile-logo" style="background:var(--surface)">🔗</div>`;
+}
+
+async function loadQuickLauncher(){
+  try{
+    const snap=await getDocs(collection(db,'quick_launcher'));
+    qlApps=[];
+    snap.forEach(d=>{if(!d.data().archived)qlApps.push({id:d.id,...d.data()});});
+    // Seed defaults on very first load
+    if(!qlApps.length&&!qlSeeded){
+      qlSeeded=true;
+      for(const app of QL_DEFAULTS){
+        const ref=await addDoc(collection(db,'quick_launcher'),{...app,createdBy:'system',created:new Date().toISOString()});
+        qlApps.push({id:ref.id,...app});
+      }
+    }
+    qlApps.sort((a,b)=>(a.order??99)-(b.order??99));
+  }catch(e){console.warn('loadQuickLauncher:',e);}
+  renderQLDash();
+  renderQLAdmin();
+}
+
+function renderQLDash(){
+  const grid=document.getElementById('qlGrid');
+  if(!grid)return;
+  if(!qlApps.length){
+    grid.innerHTML='<div style="color:var(--text-3);font-size:.82rem;grid-column:1/-1">No apps added yet.</div>';
+    return;
+  }
+  grid.innerHTML=qlApps.map(app=>`
+    <a class="ql-tile" href="${app.url}" target="_blank" rel="noopener" title="${app.name}">
+      ${qlLogoHtml(app)}
+      <span class="ql-tile-name">${app.name}</span>
+    </a>`).join('');
+  // Show manage button for admin
+  const btn=document.getElementById('qlAdminBtn');
+  if(btn)btn.style.display=isAdmin?'':'none';
+}
+
+function renderQLAdmin(){
+  const el=document.getElementById('qlAdminList');
+  if(!el)return;
+  if(!qlApps.length){el.innerHTML='<div style="color:var(--text-3);font-size:.82rem">No apps yet — click + Add App to get started.</div>';return;}
+  el.innerHTML=qlApps.map(app=>`
+    <div class="ql-admin-item">
+      ${qlLogoHtml(app).replace('ql-tile-logo','ql-admin-logo')}
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:500;font-size:.88rem">${app.name}</div>
+        <div style="font-size:.75rem;color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${app.url}</div>
+      </div>
+      <a href="${app.url}" target="_blank" rel="noopener" class="btn btn-xs btn-secondary" style="flex-shrink:0">Open</a>
+      <button class="btn btn-xs btn-danger" style="flex-shrink:0" onclick="removeQLApp('${app.id}')">Remove</button>
+    </div>`).join('');
+}
+
+window.qlPreset=(name,url,icon)=>{
+  document.getElementById('qlAppName').value=name;
+  document.getElementById('qlAppUrl').value=url;
+  document.getElementById('qlAppIcon').value=icon;
+};
+
+window.saveQLApp=async()=>{
+  if(!isAdmin){showToast('Admin only','error');return;}
+  const name=document.getElementById('qlAppName').value.trim();
+  const url=document.getElementById('qlAppUrl').value.trim();
+  const icon=document.getElementById('qlAppIcon').value.trim();
+  if(!name||!url){showToast('Name and URL are required','error');return;}
+  try{
+    await addDoc(collection(db,'quick_launcher'),{
+      name,url,icon,order:qlApps.length,
+      createdBy:currentUser?.uid,created:new Date().toISOString()
+    });
+    closeModal('qlModal');
+    ['qlAppName','qlAppUrl','qlAppIcon'].forEach(i=>document.getElementById(i).value='');
+    await loadQuickLauncher();
+    showToast(`${name} added to launcher`);
+  }catch(e){showToast('Error adding app','error');console.error(e);}
+};
+
+window.removeQLApp=async(id)=>{
+  if(!confirm('Remove this app from the launcher?'))return;
+  try{
+    await updateDoc(doc(db,'quick_launcher',id),{archived:true});
+    await loadQuickLauncher();
+    showToast('App removed');
+  }catch(e){showToast('Error removing app','error');}
+};
 const USER_PERMS=['manage_tasks','manage_leads','manage_jobs','view_reports','manage_finance','admin_access'];
 const USER_PERM_LABELS={manage_tasks:'Manage Tasks',manage_leads:'Manage Leads',manage_jobs:'Manage Jobs',view_reports:'View Reports',manage_finance:'Manage Finance',admin_access:'Admin Access'};
 // Default permissions per team member
