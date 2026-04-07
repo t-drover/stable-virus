@@ -231,24 +231,99 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
 .admin-only{display:none}
 /* MOBILE OPTIMISATION */
 @media(max-width:768px){
+  /* Layout */
   .layout{grid-template-columns:1fr}
   .sidebar{position:fixed;left:-220px;width:220px;height:100vh;z-index:200;transition:left .25s}
   .sidebar.open{left:0}
   .mobile-header{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1rem;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100}
-  .mobile-menu-btn{background:none;border:none;color:var(--text);font-size:1.4rem;cursor:pointer;padding:.25rem}
+  .mobile-menu-btn{background:none;border:none;color:var(--text);font-size:1.5rem;cursor:pointer;padding:.4rem .5rem;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center}
   .mobile-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:150}
   .mobile-overlay.open{display:block}
+  /* Main content */
+  .main{padding:.75rem}
+  .page-header{margin-bottom:1.25rem}
+  .page-header h1{font-size:1.3rem}
+  .page-actions{flex-wrap:wrap;gap:.5rem}
+  /* Forms — large touch targets, no zoom on focus */
   .form-grid,.grid-2,.grid-3{grid-template-columns:1fr}
-  .stat-grid{grid-template-columns:1fr 1fr}
-  .main{padding:1rem}
-  .form-field input,.form-field select,.form-field textarea{font-size:16px;padding:.8rem 1rem}
-  .upload-zone{padding:2rem 1rem}
-  .tab-btn{font-size:.75rem;padding:.4rem .3rem}
-  .attach-list{grid-template-columns:repeat(auto-fill,minmax(100px,1fr))}
-  .attach-thumb,.attach-file{height:80px}
-  .btn{padding:.6rem 1rem}
+  .form-field input,.form-field select,.form-field textarea{font-size:16px!important;padding:.85rem 1rem;min-height:48px}
+  .form-field label{font-size:.8rem;margin-bottom:.35rem;display:block}
+  .form-field textarea{min-height:90px}
+  /* Stats */
+  .stat-grid{grid-template-columns:1fr 1fr;gap:.6rem}
+  .stat-card{padding:.9rem}
+  .stat-value{font-size:1.4rem}
+  /* Buttons — min 44px touch target */
+  .btn{padding:.7rem 1.1rem;font-size:.88rem;min-height:44px}
+  .btn-sm{padding:.55rem .9rem;min-height:40px}
+  .btn-xs{padding:.4rem .7rem;font-size:.75rem;min-height:36px}
+  /* Modal — full screen on mobile */
+  .modal-overlay{padding:0;align-items:flex-end}
+  .modal{border-radius:16px 16px 0 0;max-height:92vh;max-width:100%;width:100%;padding:1.25rem 1rem 2rem;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  .modal-header{margin-bottom:1.1rem;padding-bottom:.75rem;border-bottom:1px solid var(--border)}
+  .modal-title{font-size:1rem}
+  .modal-actions{flex-direction:column-reverse;gap:.5rem;padding-top:1rem;margin-top:1rem}
+  .modal-actions .btn{width:100%;justify-content:center;text-align:center}
+  /* Tables — hide on mobile, use card view instead */
+  .table-wrap{display:none!important}
+  .mobile-card-list{display:block}
+  /* Tabs */
+  .tab-bar{overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+  .tab-btn{font-size:.78rem;padding:.5rem .6rem;white-space:nowrap;min-height:40px}
+  /* Attachments */
+  .upload-zone{padding:1.5rem .75rem}
+  .attach-list{grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:.5rem}
+  .attach-thumb,.attach-file{height:72px}
+  /* Task panels */
+  .task-panels{grid-template-columns:1fr!important}
+  /* Job detail */
+  .job-stage-track{gap:.3rem}
+  /* Quick launcher */
+  .ql-grid{grid-template-columns:repeat(4,1fr)!important;gap:.5rem}
+  .ql-tile{padding:.6rem .3rem}
+  .ql-tile-name{font-size:.65rem}
+  /* Permissions table — scrollable */
+  #permUserTable{display:block;overflow-x:auto}
+  /* Mobile quick-action FAB area */
+  .mobile-fab-bar{display:flex!important}
 }
-@media(min-width:769px){.mobile-header{display:none}.mobile-overlay{display:none}}
+@media(min-width:769px){
+  .mobile-header{display:none}
+  .mobile-overlay{display:none}
+  .mobile-card-list{display:none}
+  .mobile-fab-bar{display:none!important}
+}
+
+/* Mobile card list styles (always defined, shown/hidden by media query) */
+.mobile-card-list{display:none}
+.m-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.9rem 1rem;margin-bottom:.6rem;position:relative}
+.m-card-title{font-weight:600;font-size:.92rem;color:var(--text);margin-bottom:.25rem}
+.m-card-sub{font-size:.78rem;color:var(--text-2);margin-bottom:.4rem;line-height:1.4}
+.m-card-row{display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap}
+.m-card-actions{display:flex;gap:.4rem;margin-top:.6rem;flex-wrap:wrap}
+/* FAB bar */
+.mobile-fab-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);padding:.6rem 1rem env(safe-area-inset-bottom);gap:.5rem;z-index:100}
+.fab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:.5rem .25rem;border:none;border-radius:8px;cursor:pointer;font-family:var(--font-body);font-size:.65rem;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--text-2);background:transparent;min-height:52px;transition:background .15s,color .15s}
+.fab-btn:hover,.fab-btn:active{background:rgba(184,78,34,.1);color:var(--rust)}
+.fab-btn.primary{background:var(--rust);color:white;border-radius:10px}
+.fab-btn.primary:hover{background:var(--rust-lt)}
+.fab-btn-icon{font-size:1.3rem;line-height:1}
+/* Inspection section headers on mobile */
+@media(max-width:768px){
+  .inspection-section h4{font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;color:var(--rust-lt);margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
+  /* Report modal big textarea */
+  #rptWork,#rptIssues{min-height:100px}
+  /* Messaging mobile: show thread list, hide chat; back button to return */
+  .msg-layout{grid-template-columns:1fr;height:auto;min-height:calc(100vh - 140px)}
+  .msg-sidebar{display:flex!important}
+  .msg-layout.thread-open .msg-sidebar{display:none!important}
+  .msg-layout.thread-open .msg-main{display:flex!important}
+  .msg-main{display:none}
+  .msg-back-btn{display:flex!important}
+  .msg-body{min-height:300px;max-height:calc(100vh - 320px)}
+  .msg-footer{position:sticky;bottom:0}
+}
+.msg-back-btn{display:none;align-items:center;gap:.5rem;padding:.6rem 1rem;border-bottom:1px solid var(--border);background:var(--surface);cursor:pointer;border:none;width:100%;font-family:var(--font-body);font-size:.85rem;color:var(--rust);font-weight:500}
 
 
 /* ── MESSAGING ──────────────────────────────────────────────────── */
@@ -312,9 +387,20 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
 <!-- MOBILE HEADER -->
 <div class="mobile-header">
   <div style="font-family:var(--font-head);font-weight:700;font-size:1rem">RDU <span style="color:var(--rust)">Command</span></div>
-  <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+  <div style="display:flex;align-items:center;gap:.25rem">
+    <button class="mobile-menu-btn" onclick="openReportModal()" title="Quick Report" style="font-size:1.1rem">📋</button>
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+  </div>
 </div>
 <div class="mobile-overlay" id="mobileOverlay" onclick="toggleSidebar()"></div>
+<!-- MOBILE FAB BAR — crew quick actions -->
+<div class="mobile-fab-bar" id="mobileFabBar">
+  <button class="fab-btn" onclick="nav('dashboard')"><span class="fab-btn-icon">🏠</span>Home</button>
+  <button class="fab-btn primary" onclick="openReportModal()"><span class="fab-btn-icon">📋</span>Report</button>
+  <button class="fab-btn primary" onclick="openInspectionModal()"><span class="fab-btn-icon">🔍</span>Inspect</button>
+  <button class="fab-btn" onclick="nav('jobs')"><span class="fab-btn-icon">🔨</span>Jobs</button>
+  <button class="fab-btn" onclick="nav('messages')"><span class="fab-btn-icon">💬</span>Msgs</button>
+</div>
 
 <!-- AUTH -->
 <div id="authScreen">
@@ -415,6 +501,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
           <thead><tr><th>Job #</th><th>Client</th><th>Type</th><th>Location</th><th>Assigned</th><th>Stage</th><th>Value</th><th>Actions</th></tr></thead>
           <tbody id="jobsTable"><tr><td colspan="8" style="text-align:center;color:var(--text-2);padding:2rem">No jobs yet</td></tr></tbody>
         </table></div>
+        <div class="mobile-card-list" id="jobsMobileList"><div style="padding:2rem;text-align:center;color:var(--text-2);font-size:.85rem">No jobs yet</div></div>
       </div>
 
       <!-- JOB DETAIL -->
@@ -521,6 +608,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
           <thead><tr><th>#</th><th>Name</th><th>Service</th><th>Location</th><th>Contact</th><th>Source</th><th>Status</th><th>Actions</th></tr></thead>
           <tbody id="leadsTable"><tr><td colspan="8" style="text-align:center;color:var(--text-2);padding:2rem">No leads yet</td></tr></tbody>
         </table></div>
+        <div class="mobile-card-list" id="leadsMobileList"><div style="padding:2rem;text-align:center;color:var(--text-2);font-size:.85rem">No leads yet</div></div>
       </div>
 
       <!-- BOOKING -->
@@ -628,6 +716,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
               <div style="font-size:.8rem">Choose a team member to start messaging</div>
             </div>
             <div id="msgChatArea" style="display:none;flex-direction:column;flex:1;overflow:hidden">
+              <button class="msg-back-btn" id="msgBackBtn" onclick="closeMsgThread()">← Back to conversations</button>
               <div class="msg-header">
                 <div class="msg-header-avatar" id="msgHeaderAvatar">?</div>
                 <div class="msg-header-info">
@@ -954,16 +1043,22 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
 </div>
 <div class="modal-overlay" id="reportModal">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title">Daily Report</div><button class="modal-close" onclick="closeModal('reportModal')">✕</button></div>
+    <div class="modal-header"><div class="modal-title">📋 Daily Report</div><button class="modal-close" onclick="closeModal('reportModal')">✕</button></div>
     <input type="hidden" id="rptJobId">
     <div class="form-grid">
       <div class="form-field full" id="rptJobFieldWrap"><label>Job</label><select id="rptJobSelect"></select></div>
       <div class="form-field"><label>Date</label><input type="date" id="rptDate"></div>
-      <div class="form-field"><label>Crew Member</label><select id="rptCrew"><option>Harry</option><option>Pauly</option><option>Josh</option><option>Ronny</option></select></div>
-      <div class="form-field full"><label>Work Done</label><textarea id="rptWork" placeholder="Describe work completed today..."></textarea></div>
-      <div class="form-field full"><label>Issues / Delays</label><textarea id="rptIssues" placeholder="Any issues, delays, or variations..."></textarea></div>
+      <div class="form-field"><label>Crew Member</label><select id="rptCrew"><option>Harry</option><option>Pauly</option><option>Josh</option><option>Ronny</option><option>Myla</option><option>Toneth</option></select></div>
+      <div class="form-field full">
+        <label>✅ Work Done Today <span style="color:var(--text-3);font-weight:400;font-size:.75rem">— what was completed on site</span></label>
+        <textarea id="rptWork" placeholder="e.g. Stripped old iron roof, installed new Colorbond sheets on north slope, sealed ridgeline..." style="min-height:110px"></textarea>
+      </div>
+      <div class="form-field full">
+        <label>⚠️ Issues / Delays <span style="color:var(--text-3);font-weight:400;font-size:.75rem">— leave blank if none</span></label>
+        <textarea id="rptIssues" placeholder="e.g. Rain delay 11am–1pm, missing 4x valley iron, client requested extra gutter run..." style="min-height:80px"></textarea>
+      </div>
     </div>
-    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('reportModal')">Cancel</button><button class="btn btn-primary" onclick="saveReport()">Save Report</button></div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('reportModal')">Cancel</button><button class="btn btn-primary" style="min-width:140px" onclick="saveReport()">💾 Save Report</button></div>
   </div>
 </div>
 <div class="modal-overlay" id="poModal">
@@ -2115,11 +2210,27 @@ function renderReport(r){
   const jn=r.jobNumber?`<span class="job-number-badge" style="font-size:.68rem;padding:1px 6px">#${r.jobNumber}</span> `:'';
   return `<div class="report-card"><div class="report-card-header"><span class="report-date">${r.date?new Date(r.date+'T00:00:00').toLocaleDateString('en-AU',{weekday:'short',day:'numeric',month:'short'}):'—'}</span><span class="report-crew">${jn}${r.crew||'—'}</span></div><div class="report-work">${r.workDone||''}</div>${r.issues?`<div class="report-issue">⚠️ ${r.issues}</div>`:''}<div style="text-align:right;margin-top:.5rem"><button class="btn btn-xs btn-danger" onclick="archiveItem('daily_reports','${r.id}',loadReports)">✕</button></div></div>`;
 }
-window.openReportModal=()=>{document.getElementById('rptJobId').value=currentJobId||'';document.getElementById('rptJobFieldWrap').style.display='none';document.getElementById('rptDate').value=new Date().toISOString().slice(0,10);document.getElementById('rptWork').value='';document.getElementById('rptIssues').value='';openModal('reportModal');};
+window.openReportModal=()=>{
+  document.getElementById('rptJobId').value=currentJobId||'';
+  document.getElementById('rptJobFieldWrap').style.display='none';
+  document.getElementById('rptDate').value=new Date().toISOString().slice(0,10);
+  document.getElementById('rptWork').value='';
+  document.getElementById('rptIssues').value='';
+  // Auto-select logged-in crew member
+  const crewSel=document.getElementById('rptCrew');
+  if(crewSel&&currentUserInfo?.name){
+    const opt=[...crewSel.options].find(o=>o.value===currentUserInfo.name);
+    if(opt)crewSel.value=currentUserInfo.name;
+  }
+  openModal('reportModal');
+};
 window.openReportModalStandalone=()=>{
   document.getElementById('rptJobId').value='';document.getElementById('rptJobFieldWrap').style.display='flex';
   document.getElementById('rptJobSelect').innerHTML=allJobs.map(j=>`<option value="${j.id}" data-jobnum="${j.jobNumber||''}">${j.client||'Unnamed'}${j.jobNumber?' — #'+j.jobNumber:' — #'+j.id.slice(-4).toUpperCase()}</option>`).join('');
-  document.getElementById('rptDate').value=new Date().toISOString().slice(0,10);document.getElementById('rptWork').value='';document.getElementById('rptIssues').value='';openModal('reportModal');
+  document.getElementById('rptDate').value=new Date().toISOString().slice(0,10);document.getElementById('rptWork').value='';document.getElementById('rptIssues').value='';
+  const crewSel2=document.getElementById('rptCrew');
+  if(crewSel2&&currentUserInfo?.name){const opt=[...crewSel2.options].find(o=>o.value===currentUserInfo.name);if(opt)crewSel2.value=currentUserInfo.name;}
+  openModal('reportModal');
 };
 window.saveReport=async()=>{
   let jobId=document.getElementById('rptJobId').value;
@@ -2778,6 +2889,10 @@ window.openThread = async function openThread(threadId) {
     footer.innerHTML = `<div class="msg-blocked-banner" style="flex:1">🔒 ${blockedMsg}</div>`;
   }
 
+  // Mobile: mark layout as thread-open for back-button UI
+  const msgLayout = document.getElementById('msgLayout');
+  if (msgLayout) msgLayout.classList.add('thread-open');
+
   // Subscribe to messages
   if (msgUnsubscribe) msgUnsubscribe();
   const col = collection(db, 'msg_threads', threadId, 'msgs');
@@ -2958,6 +3073,84 @@ window.saveMsgRules = async () => {
     showToast('Messaging rules saved ✅');
   } catch(e) { showToast('Error saving rules', 'error'); }
 };
+
+
+// ── MOBILE CARD LISTS ────────────────────────────────────────────────────────
+function renderJobsMobile(jobs) {
+  const el = document.getElementById('jobsMobileList');
+  if (!el) return;
+  if (!jobs.length) { el.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--text-2);font-size:.85rem">No jobs yet</div>'; return; }
+  el.innerHTML = jobs.map(j => `
+    <div class="m-card" onclick="openJobDetail('${j.id}')" style="cursor:pointer">
+      <div class="m-card-row">
+        <div>
+          ${j.jobNumber ? `<span class="job-number-badge" style="font-size:.72rem;padding:2px 7px;margin-right:.35rem">#${j.jobNumber}</span>` : ''}
+          <span class="m-card-title" style="display:inline">${j.client || 'Unnamed'}</span>
+        </div>
+        ${badge(j.status || 'active')}
+      </div>
+      <div class="m-card-sub" style="margin-top:.3rem">${j.type || ''} ${j.location ? '· ' + j.location : ''}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.35rem">
+        <span style="font-size:.75rem;color:var(--text-3)">${j.assigned || ''} ${j.stage ? '· ' + j.stage : ''}</span>
+        <span style="font-size:.82rem;font-weight:600;color:var(--rust-lt)">${j.value ? fmt$(j.value) : ''}</span>
+      </div>
+    </div>`).join('');
+}
+
+function renderLeadsMobile(leads) {
+  const el = document.getElementById('leadsMobileList');
+  if (!el) return;
+  if (!leads.length) { el.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--text-2);font-size:.85rem">No leads yet</div>'; return; }
+  el.innerHTML = leads.map(l => `
+    <div class="m-card">
+      <div class="m-card-row">
+        <div>
+          ${l.jobNumber ? `<span class="job-number-badge" style="font-size:.72rem;padding:2px 7px;margin-right:.35rem">#${l.jobNumber}</span>` : ''}
+          <span class="m-card-title" style="display:inline">${l.name || 'Unnamed'}</span>
+        </div>
+        ${badge(l.status || 'new')}
+      </div>
+      <div class="m-card-sub" style="margin-top:.3rem">${l.service || ''} ${l.location ? '· ' + l.location : ''}</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-top:.35rem">
+        <span style="font-size:.75rem;color:var(--text-3)">${l.phone || ''}</span>
+        <span style="font-size:.75rem;color:var(--text-3)">${l.source || ''}</span>
+      </div>
+      <div class="m-card-actions">
+        <button class="btn btn-xs btn-primary" onclick="event.stopPropagation();openLeadModal(allLeadsCache.find(x=>x.id==='${l.id}'))">Edit</button>
+        <button class="btn btn-xs btn-danger" onclick="event.stopPropagation();archiveItem('leads','${l.id}',loadLeads)">Archive</button>
+      </div>
+    </div>`).join('');
+}
+
+// ── MOBILE MESSAGING BACK BUTTON ─────────────────────────────────────────────
+window.closeMsgThread = () => {
+  const layout = document.getElementById('msgLayout');
+  if (layout) layout.classList.remove('thread-open');
+  document.getElementById('msgEmptyState').style.display = '';
+  const chatArea = document.getElementById('msgChatArea');
+  if (chatArea) chatArea.style.display = 'none';
+  if (msgUnsubscribe) { msgUnsubscribe(); msgUnsubscribe = null; }
+  currentThreadId = null;
+  document.querySelectorAll('.msg-thread-item').forEach(el => el.classList.remove('active'));
+};
+
+// ── MOBILE: thread-open class merged into openThread directly
+
+// ── FAB bar: hide on desktop, show on mobile ─────────────────────────────────
+// FAB bar is CSS-controlled via media query — no JS needed
+
+// ── Adjust main padding on mobile to account for FAB bar ─────────────────────
+function applyMobilePadding() {
+  const main = document.querySelector('.main');
+  if (!main) return;
+  if (window.innerWidth <= 768) {
+    main.style.paddingBottom = '80px'; // room for FAB bar
+  } else {
+    main.style.paddingBottom = '';
+  }
+}
+window.addEventListener('resize', applyMobilePadding);
+applyMobilePadding();
 
 // Expose globals
 window.loadJobs=loadJobs;window.loadLeads=loadLeads;window.loadSchedule=loadSchedule;window.loadInspections=loadInspections;window.loadInvoices=loadInvoices;window.loadReports=loadReports;window.loadAds=loadAds;window.loadReminders=loadReminders;window.loadTasks=loadTasks;window.loadAllFiles=loadAllFiles;
