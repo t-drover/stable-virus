@@ -2688,7 +2688,7 @@ function renderMsgThreadList(threads) {
   if (!el) return;
   if (!threads.length) { el.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--text-3);font-size:.82rem">No conversations yet</div>'; return; }
   el.innerHTML = threads.map(t => `
-    <div class="msg-thread-item ${t.id === currentThreadId ? 'active' : ''} ${t.unread ? 'has-unread' : ''}" onclick="openThread('${t.id}')">
+    <div class="msg-thread-item ${t.id === currentThreadId ? 'active' : ''} ${t.unread ? 'has-unread' : ''}" data-threadid="${t.id}">
       <div class="msg-thread-avatar ${t.isBroadcast ? 'broadcast' : ''}">${t.isBroadcast ? '📢' : t.avatar}</div>
       <div class="msg-thread-info">
         <div class="msg-thread-name">${t.name}</div>
@@ -2699,6 +2699,12 @@ function renderMsgThreadList(threads) {
         ${t.unread ? '<div class="msg-unread-dot"></div>' : ''}
       </div>
     </div>`).join('');
+
+  // Attach click via event delegation — reliable, no inline handler quoting issues
+  el.onclick = e => {
+    const item = e.target.closest('[data-threadid]');
+    if (item) openThread(item.dataset.threadid);
+  };
 }
 
 function filterMsgThreads() {
@@ -2711,11 +2717,12 @@ function escHtml(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-async function openThread(threadId) {
+window.openThread = async function openThread(threadId) {
   currentThreadId = threadId;
   // Highlight active
-  document.querySelectorAll('.msg-thread-item').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.msg-thread-item').forEach(el => { if (el.onclick?.toString().includes(`'${threadId}'`)) el.classList.add('active'); });
+  document.querySelectorAll('.msg-thread-item').forEach(el => {
+    el.classList.toggle('active', el.dataset.threadid === threadId);
+  });
 
   document.getElementById('msgEmptyState').style.display = 'none';
   const chatArea = document.getElementById('msgChatArea');
