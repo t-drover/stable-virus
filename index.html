@@ -787,6 +787,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
     <input type="hidden" id="invJobId"><input type="hidden" id="invId">
     <div class="form-grid">
       <div class="form-field full" id="invJobFieldWrap"><label>Job</label><select id="invJobSelect"></select></div>
+      <div class="form-field"><label>Invoice Number (Xero)</label><input id="invNumber" placeholder="e.g. INV-0042"></div>
       <div class="form-field"><label>Invoice Type</label><select id="invType"><option value="deposit">Deposit (10%)</option><option value="materials">Materials (40%)</option><option value="progress">Progress (30%)</option><option value="retention">Retention (20%)</option><option value="other">Other</option></select></div>
       <div class="form-field"><label>Amount ($)</label><input type="number" id="invAmount" placeholder="0"></div>
       <div class="form-field"><label>Status</label><select id="invStatus"><option value="pending">Pending</option><option value="sent">Sent</option><option value="paid">Paid</option><option value="overdue">Overdue</option></select></div>
@@ -1818,25 +1819,25 @@ async function loadInvoices(){
   invs.forEach(i=>{const amt=Number(i.amount||0);total+=amt;if(i.status!=='paid')outstanding+=amt;else if(i.paidAt){const p=new Date(i.paidAt);if(p.getMonth()===now.getMonth()&&p.getFullYear()===now.getFullYear())paidMonth+=amt;}});
   document.getElementById('invOutstanding').textContent=fmt$(outstanding);document.getElementById('invPaidMonth').textContent=fmt$(paidMonth);document.getElementById('invTotal').textContent=fmt$(total);
   const tb=document.getElementById('invoicesTable');
-  tb.innerHTML=invs.length?invs.map(i=>`<tr><td style="font-family:var(--font-head);color:var(--rust-lt);font-size:.8rem">#INV-${i.id.slice(-4).toUpperCase()}</td><td>${i.jobNumber?`<span class="job-number-badge" style="font-size:.68rem;padding:1px 6px;margin-right:.35rem">#${i.jobNumber}</span>`:''}${i.jobClient||'—'}</td><td style="font-size:.82rem">${INV_LABELS[i.type]||i.type||'—'}</td><td style="font-weight:500;color:var(--rust-lt)">${fmt$(i.amount)}</td><td style="font-size:.82rem;color:var(--text-2)">${i.issuedAt?new Date(i.issuedAt).toLocaleDateString('en-AU'):'—'}</td><td>${badge(i.status||'pending')}</td><td><div style="display:flex;gap:.5rem">${i.status!=='paid'?`<button class="btn btn-xs btn-success" onclick="markInvoicePaid('${i.id}')">Mark Paid</button>`:''}<button class="btn btn-xs btn-danger" onclick="archiveItem('invoices','${i.id}',loadInvoices)">Archive</button></div></td></tr>`).join(''):`<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No invoices yet</td></tr>`;
+  tb.innerHTML=invs.length?invs.map(i=>`<tr><td style="font-family:var(--font-head);color:var(--rust-lt);font-size:.8rem">${i.xeroInvoiceNumber||'—'}</td><td>${i.jobNumber?`<span class="job-number-badge" style="font-size:.68rem;padding:1px 6px;margin-right:.35rem">#${i.jobNumber}</span>`:''}${i.jobClient||'—'}</td><td style="font-size:.82rem">${INV_LABELS[i.type]||i.type||'—'}</td><td style="font-weight:500;color:var(--rust-lt)">${fmt$(i.amount)}</td><td style="font-size:.82rem;color:var(--text-2)">${i.issuedAt?new Date(i.issuedAt).toLocaleDateString('en-AU'):'—'}</td><td>${badge(i.status||'pending')}</td><td><div style="display:flex;gap:.5rem">${i.status!=='paid'?`<button class="btn btn-xs btn-success" onclick="markInvoicePaid('${i.id}')">Mark Paid</button>`:''}<button class="btn btn-xs btn-danger" onclick="archiveItem('invoices','${i.id}',loadInvoices)">Archive</button></div></td></tr>`).join(''):`<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No invoices yet</td></tr>`;
 }
 async function loadJobInvoices(jobId){
   const snap=await getDocs(collection(db,'invoices'));const invs=[];
   snap.forEach(d=>{const data=d.data();if(data.jobId===jobId&&notArchived(data))invs.push({id:d.id,...data});});
   const el=document.getElementById('jobInvoicesList');
-  el.innerHTML=invs.length?invs.map(i=>`<div class="invoice-card ${i.status==='paid'?'paid':''}"><div class="invoice-info"><div class="inv-type">${INV_LABELS[i.type]||i.type||'Invoice'}</div><div class="inv-meta">#INV-${i.id.slice(-4).toUpperCase()} · ${i.issuedAt?new Date(i.issuedAt).toLocaleDateString('en-AU'):'—'} · ${badge(i.status)}</div></div><div style="display:flex;align-items:center;gap:.75rem"><div class="invoice-amount ${i.status==='paid'?'paid':''}">${fmt$(i.amount)}</div>${i.status!=='paid'?`<button class="btn btn-xs btn-success" onclick="markInvoicePaid('${i.id}')">Paid</button>`:''}<button class="btn btn-xs btn-danger" onclick="archiveItem('invoices','${i.id}',()=>{loadInvoices();loadJobInvoices('${jobId}');})">✕</button></div></div>`).join(''):'<div class="empty-state"><div class="empty-icon">💰</div><p>No invoices yet</p></div>';
+  el.innerHTML=invs.length?invs.map(i=>`<div class="invoice-card ${i.status==='paid'?'paid':''}"><div class="invoice-info"><div class="inv-type">${INV_LABELS[i.type]||i.type||'Invoice'}</div><div class="inv-meta">${i.xeroInvoiceNumber||'—'} · ${i.issuedAt?new Date(i.issuedAt).toLocaleDateString('en-AU'):'—'} · ${badge(i.status)}</div></div><div style="display:flex;align-items:center;gap:.75rem"><div class="invoice-amount ${i.status==='paid'?'paid':''}">${fmt$(i.amount)}</div>${i.status!=='paid'?`<button class="btn btn-xs btn-success" onclick="markInvoicePaid('${i.id}')">Paid</button>`:''}<button class="btn btn-xs btn-danger" onclick="archiveItem('invoices','${i.id}',()=>{loadInvoices();loadJobInvoices('${jobId}');})">✕</button></div></div>`).join(''):'<div class="empty-state"><div class="empty-icon">💰</div><p>No invoices yet</p></div>';
 }
 window.markInvoicePaid=async(id)=>{
   try{await updateDoc(doc(db,'invoices',id),{status:'paid',paidAt:new Date().toISOString()});await loadInvoices();if(currentJobId)await loadJobInvoices(currentJobId);showToast('Marked as paid');}catch(e){showToast('Error','error');}
 };
 window.openInvoiceModal=()=>{
   document.getElementById('invId').value='';document.getElementById('invJobId').value=currentJobId||'';
-  document.getElementById('invJobFieldWrap').style.display='none';document.getElementById('invAmount').value='';document.getElementById('invNotes').value='';
+  document.getElementById('invJobFieldWrap').style.display='none';document.getElementById('invNumber').value='';document.getElementById('invAmount').value='';document.getElementById('invNotes').value='';
   document.getElementById('invIssued').value=new Date().toISOString().slice(0,10);document.getElementById('invoiceModalTitle').textContent='New Invoice';openModal('invoiceModal');
 };
 window.openInvoiceModalStandalone=async()=>{
   document.getElementById('invId').value='';document.getElementById('invJobId').value='';document.getElementById('invJobFieldWrap').style.display='flex';
-  document.getElementById('invAmount').value='';document.getElementById('invNotes').value='';document.getElementById('invIssued').value=new Date().toISOString().slice(0,10);
+  document.getElementById('invNumber').value='';document.getElementById('invAmount').value='';document.getElementById('invNotes').value='';document.getElementById('invIssued').value=new Date().toISOString().slice(0,10);
   document.getElementById('invoiceModalTitle').textContent='New Invoice';
   document.getElementById('invJobSelect').innerHTML=allJobs.map(j=>`<option value="${j.id}" data-client="${j.client||''}" data-jobnum="${j.jobNumber||''}">${j.client||'Unnamed'}${j.jobNumber?' — #'+j.jobNumber:' — #'+j.id.slice(-4).toUpperCase()}</option>`).join('');
   openModal('invoiceModal');
@@ -1853,7 +1854,7 @@ window.saveInvoice=async()=>{
     jobClient=job?.client||'';
     jobNumber=job?.jobNumber||'';
   }
-  const data={jobId,jobClient,jobNumber,type:document.getElementById('invType').value,amount:document.getElementById('invAmount').value,status:document.getElementById('invStatus').value,issuedAt:new Date(document.getElementById('invIssued').value||Date.now()).toISOString(),notes:document.getElementById('invNotes').value,created:new Date().toISOString()};
+  const data={jobId,jobClient,jobNumber,xeroInvoiceNumber:document.getElementById('invNumber').value.trim(),type:document.getElementById('invType').value,amount:document.getElementById('invAmount').value,status:document.getElementById('invStatus').value,issuedAt:new Date(document.getElementById('invIssued').value||Date.now()).toISOString(),notes:document.getElementById('invNotes').value,created:new Date().toISOString()};
   try{await addDoc(collection(db,'invoices'),data);closeModal('invoiceModal');await loadInvoices();if(currentJobId)await loadJobInvoices(currentJobId);showToast('Invoice saved');}catch(e){showToast('Error saving invoice','error');}
 };
 
