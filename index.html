@@ -783,6 +783,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
           <div class="page-actions" id="workflowAdminActions" style="display:none">
             <button class="btn btn-secondary btn-sm" onclick="toggleWorkflowEdit()" id="workflowEditBtn">✏️ Edit Mode</button>
             <button class="btn btn-primary btn-sm" onclick="saveWorkflow()" id="workflowSaveBtn" style="display:none">💾 Save Changes</button>
+            <button class="btn btn-secondary btn-sm" onclick="resetWorkflowToDefault()" id="workflowResetBtn">🔄 Reset to Default</button>
           </div>
         </div>
         <div id="workflowContent"></div>
@@ -2539,7 +2540,13 @@ let workflowData=[];
 let workflowEditMode=false;
 
 const DEFAULT_WORKFLOW=[
-  {id:'s1',phase:'1. Lead → Quote',color:'var(--blue)',steps:[
+  {id:'s0',phase:'1. Networking',color:'var(--purple)',steps:[
+    {title:'Build Referral Network',desc:'Attend BNI, industry events and community groups. Log all contacts in the Networking module.'},
+    {title:'Nurture Key Relationships',desc:'Regular one-to-ones with referral partners, builders and real estate agents. Log meetings in Networking.'},
+    {title:'Track Referrals',desc:'Record every referral sent and received in the Networking module. Note estimated value and linked lead.'},
+    {title:'Follow Up Warm Contacts',desc:'Reach out to past clients and referral partners regularly. A consistent pipeline starts here.'},
+  ]},
+  {id:'s1',phase:'2. Lead → Quote',color:'var(--blue)',steps:[
     {title:'Capture Lead',desc:'Email, WhatsApp, referral etc. Log immediately in Leads module with source tagged.'},
     {title:'Qualify Lead & Collect Details',desc:'Collect project details, client contact, site address, urgency.'},
     {title:'Site Measurement',desc:'Roof or onsite inspection. Harry or Ronny attends within 48hrs.'},
@@ -2549,7 +2556,7 @@ const DEFAULT_WORKFLOW=[
     {title:'Send Quote via Xero',desc:'Send quote via Xero (temporary pricing by Ronny). Negotiate as needed.'},
     {title:'Quote Decision',desc:'Quote accepted → Move to Job Setup. Quote declined → Close lead.'},
   ]},
-  {id:'s2',phase:'2. Job Setup (Contract + Work Order)',color:'var(--green)',steps:[
+  {id:'s2',phase:'3. Job Setup (Contract + Work Order)',color:'var(--green)',steps:[
     {title:'Receive PO / Letter of Engagement',desc:'Receive contract with project amount, payment terms, confirmed specs/brand.'},
     {title:'Identify Contract Type',desc:'Direct Client or Builder-referred job. Different payment flows apply.'},
     {title:'Verify Compliance',desc:'Permits, Insurance, Licences — all must be verified before proceeding.'},
@@ -2559,35 +2566,35 @@ const DEFAULT_WORKFLOW=[
     {title:'Send Jotform to Collect Subcontractor Data',desc:'Collect SWMS, agreements and other compliance docs via Jotform.'},
     {title:'Issue PO to Subcontractor',desc:'Purchase Order issued — includes mud map and cut list.'},
   ]},
-  {id:'s3',phase:'3. Payment Gate System (Hard Blockers)',color:'var(--red)',steps:[
+  {id:'s3',phase:'4. Payment Gate System (Hard Blockers)',color:'var(--red)',steps:[
     {title:'10% Deposit',desc:'Work cannot start until deposit received. Builder exception: Harry/team can prepare cut list & mud map.'},
     {title:'40% Materials Payment',desc:'No ordering of materials without this payment. Hard blocker.'},
     {title:'30% Progress Claim',desc:'Issued at 95% physical completion. Must be paid before final stage.'},
     {title:'20% Final Payment',desc:'Issued with completion report. No exceptions.'},
   ]},
-  {id:'s4',phase:'4. Procurement & Mobilisation',color:'var(--amber)',steps:[
+  {id:'s4',phase:'5. Procurement & Mobilisation',color:'var(--amber)',steps:[
     {title:'Order Materials (Supplier PO)',desc:'Place supplier PO for all confirmed materials.'},
     {title:'Confirm Delivery',desc:'Confirm delivery schedule with supplier.'},
     {title:'Book Equipment & Site Access',desc:'Safety rail, scaffold, tipper/skip — book in advance.'},
     {title:'Confirm Subcontractor Readiness',desc:'SWMS uploaded, agreements signed before mobilisation.'},
     {title:'Change Orders (Parallel Path)',desc:'Identify change → Prepare separate quote → Get client approval → Update NOA + PO and invoice separately. No approval = no work on variation.'},
   ]},
-  {id:'s5',phase:'5. Execution (On-Site Work)',color:'var(--rust-lt)',steps:[
+  {id:'s5',phase:'6. Execution (On-Site Work)',color:'var(--rust-lt)',steps:[
     {title:'Work Starts When Materials On-Site',desc:'Do not start until materials are confirmed on-site.'},
     {title:'Track Progress & Milestones',desc:'Harry files Daily Activity Reports. Progress photos uploaded at each milestone.'},
     {title:'Pre-Completion Check (95%)',desc:'Ensure compliance: SWMS submitted, photos captured. Issue 30% Progress Invoice.'},
   ]},
-  {id:'s6',phase:'6. Pre-Completion (95% Physical Completion)',color:'var(--purple)',steps:[
+  {id:'s6',phase:'7. Pre-Completion (95% Physical Completion)',color:'var(--purple)',steps:[
     {title:'Issue 30% Progress Invoice',desc:'Issued at 95% physical completion.'},
     {title:'Ensure Compliance',desc:'SWMS submitted, photos captured, site documentation complete.'},
   ]},
-  {id:'s7',phase:'7. Completion & Handover',color:'var(--green)',steps:[
+  {id:'s7',phase:'8. Completion & Handover',color:'var(--green)',steps:[
     {title:'Site Cleanup',desc:'Leave site clean and safe.'},
     {title:'Remove Scaffold / Safety Rail',desc:'Only after payment conditions are met.'},
     {title:'Prepare Handover Documentation',desc:'Completion Report, Handover Form, Warranty Certificates.'},
     {title:'Client Sign-Off',desc:'Walkthrough with client. Collect signature. Request Google review.'},
   ]},
-  {id:'s8',phase:'8. Final Billing',color:'var(--amber)',steps:[
+  {id:'s8',phase:'9. Final Billing',color:'var(--amber)',steps:[
     {title:'Send 20% Final Invoice with Completion Report',desc:'Must be sent together. No report = cannot issue invoice.'},
     {title:'Close Job',desc:'Mark job as completed in the system. Archive all documents.'},
   ]},
@@ -2664,6 +2671,22 @@ window.addWorkflowStep=(pi)=>{
 window.removeWorkflowStep=(pi,si)=>{
   if(!confirm('Remove this step?'))return;
   workflowData[pi].steps.splice(si,1);renderWorkflow();
+};
+
+window.resetWorkflowToDefault=async()=>{
+  if(!isAdmin){showToast('Admin only','error');return;}
+  if(!confirm('Reset workflow to the latest default? This will overwrite any custom edits saved in Firestore.'))return;
+  try{
+    workflowData=JSON.parse(JSON.stringify(DEFAULT_WORKFLOW));
+    await setDoc(doc(db,'settings','workflow'),{phases:workflowData,updatedAt:new Date().toISOString()});
+    workflowEditMode=false;
+    const editBtn=document.getElementById('workflowEditBtn');
+    const saveBtn=document.getElementById('workflowSaveBtn');
+    if(editBtn){editBtn.textContent='✏️ Edit Mode';editBtn.className='btn btn-secondary btn-sm';}
+    if(saveBtn)saveBtn.style.display='none';
+    renderWorkflow();
+    showToast('Workflow reset to default ✅');
+  }catch(e){showToast('Error resetting workflow','error');console.error(e);}
 };
 
 window.saveWorkflow=async()=>{
