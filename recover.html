@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RDU Task Recovery</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#1a1714;color:#f5f0e8;padding:1.5rem;min-height:100vh}
+h1{font-size:1.3rem;color:#e8a234;margin-bottom:.2rem}
+.sub{font-size:.82rem;color:#9a8e82;margin-bottom:1.5rem}
+.login-box{background:#221f1b;border:1px solid #2e2a25;border-radius:10px;padding:1.5rem;max-width:420px;margin-bottom:1.5rem}
+.login-box h2{font-size:.95rem;margin-bottom:1rem;color:#d4703f}
+.field{display:flex;flex-direction:column;gap:.35rem;margin-bottom:.9rem}
+.field label{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:#9a8e82}
+.field input{background:#1a1714;border:1px solid #2e2a25;border-radius:6px;padding:.6rem .85rem;color:#f5f0e8;font-size:.9rem;outline:none}
+.field input:focus{border-color:#c05a2e}
+.btn{background:#c05a2e;color:white;border:none;border-radius:6px;padding:.65rem 1.2rem;font-size:.85rem;cursor:pointer;width:100%}
+.btn:hover{background:#d4703f}
+.btn:disabled{background:#3a3530;cursor:not-allowed}
+.status{padding:.75rem 1rem;border-radius:8px;margin-bottom:1rem;font-size:.83rem}
+.loading{background:rgba(232,162,52,.1);color:#e8a234;border:1px solid rgba(232,162,52,.3)}
+.ok{background:rgba(76,175,125,.1);color:#4caf7d;border:1px solid rgba(76,175,125,.3)}
+.err{background:rgba(224,82,82,.1);color:#e05252;border:1px solid rgba(224,82,82,.3)}
+.card{background:#221f1b;border:1px solid #2e2a25;border-radius:10px;padding:1.1rem;margin-bottom:.85rem}
+.card-title{font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9a8e82;margin-bottom:.65rem}
+.task-row{display:flex;align-items:flex-start;gap:.65rem;padding:.45rem 0;border-bottom:1px solid #2e2a25}
+.task-row:last-child{border-bottom:none}
+.tick{width:15px;height:15px;border-radius:3px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;font-size:9px}
+.done-tick{background:#4caf7d}
+.open-tick{border:1px solid #5c544c}
+.task-text{flex:1;font-size:.85rem;line-height:1.4}
+.strikethrough{text-decoration:line-through;color:#5c544c}
+.orphan-label{font-size:.68rem;color:#e8a234;background:rgba(232,162,52,.15);border:1px solid rgba(232,162,52,.3);padding:1px 6px;border-radius:4px;margin-left:.5rem}
+.section-h{font-size:.92rem;font-weight:700;color:#e8a234;margin:1.25rem 0 .65rem;padding-bottom:.4rem;border-bottom:1px solid #2e2a25}
+.summary{background:#221f1b;border:1px solid #2e2a25;border-radius:8px;padding:.9rem 1rem;margin-bottom:1.25rem;font-size:.83rem;line-height:2;color:#9a8e82}
+.summary strong{color:#f5f0e8}
+.export-row{display:flex;gap:.75rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.export-btn{background:#2e2a25;color:#f5f0e8;border:1px solid #3a3530;border-radius:6px;padding:.55rem 1rem;font-size:.82rem;cursor:pointer}
+.export-btn:hover{border-color:#c05a2e;color:#d4703f}
+</style>
+</head>
+<body>
+<h1>🔧 RDU Task Recovery Tool</h1>
+<p class="sub">Upload this file to your GitHub repo, then open it from team.roofingdownunder.com/recover.html</p>
+<div class="login-box">
+  <h2>Sign in with your RDU account</h2>
+  <div class="field"><label>Email</label><input type="email" id="email" placeholder="toneth@roofingdownunder.com" autocomplete="email"></div>
+  <div class="field"><label>Password</label><input type="password" id="pass" placeholder="••••••••"></div>
+  <button class="btn" onclick="recover()" id="loginBtn">Load All Tasks</button>
+</div>
+<div id="statusEl" style="display:none" class="status"></div>
+<div id="summaryEl" style="display:none" class="summary"></div>
+<div id="exportRow" style="display:none" class="export-row">
+  <button class="export-btn" onclick="exportCSV()">⬇ Export as CSV</button>
+  <button class="export-btn" onclick="window.print()">🖨 Print / Save PDF</button>
+</div>
+<div id="outputEl"></div>
+<script>
+const API_KEY='AIzaSyC1ur8rYfmjYzdAeU7h7sAM3AAA3mte-LE';
+const PROJECT='rdu-dashboard';
+const DB='https://firestore.googleapis.com/v1/projects/'+PROJECT+'/databases/(default)/documents';
+let allActive=[],allPanels={};
+
+function setStatus(msg,type){
+  const el=document.getElementById('statusEl');
+  el.textContent=msg;el.className='status '+type;el.style.display='';
+}
+
+async function recover(){
+  const email=document.getElementById('email').value.trim();
+  const pass=document.getElementById('pass').value;
+  const btn=document.getElementById('loginBtn');
+  if(!email||!pass){setStatus('Please enter email and password.','err');return;}
+  btn.disabled=true;btn.textContent='Loading…';
+  setStatus('Signing in…','loading');
+  try{
+    // Auth via REST
+    const ar=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key='+API_KEY,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email,password:pass,returnSecureToken:true})
+    });
+    const ad=await ar.json();
+    if(ad.error)throw new Error(ad.error.message);
+    const tok=ad.idToken;
+    setStatus('Signed in — loading panels…','loading');
+
+    // Load panels
+    const pr=await fetch(DB+'/task_panels',{headers:{Authorization:'Bearer '+tok}});
+    const pd=await pr.json();
+    allPanels={};
+    if(pd.documents){
+      pd.documents.forEach(d=>{
+        const id=d.name.split('/').pop();
+        const f=d.fields||{};
+        allPanels[id]={id,name:f.name?.stringValue||'Unnamed',archived:f.archived?.booleanValue||false};
+      });
+    }
+    setStatus('Found '+Object.keys(allPanels).length+' panels — loading tasks…','loading');
+
+    // Load all tasks (paginated)
+    let tasks=[],nextPage=null;
+    do{
+      let url=DB+'/tasks?pageSize=300'+(nextPage?'&pageToken='+nextPage:'');
+      const tr=await fetch(url,{headers:{Authorization:'Bearer '+tok}});
+      const td=await tr.json();
+      if(td.documents){
+        td.documents.forEach(d=>{
+          const id=d.name.split('/').pop();
+          const f=d.fields||{};
+          tasks.push({
+            id,
+            title:f.title?.stringValue||'(no title)',
+            panelId:f.panelId?.stringValue||'',
+            completed:f.completed?.booleanValue||false,
+            archived:f.archived?.booleanValue||false
+          });
+        });
+      }
+      nextPage=td.nextPageToken||null;
+    }while(nextPage);
+
+    const active=tasks.filter(t=>!t.archived);
+    const archived=tasks.filter(t=>t.archived);
+    const byPanel={};const orphaned=[];
+    active.forEach(t=>{
+      if(allPanels[t.panelId]){if(!byPanel[t.panelId])byPanel[t.panelId]=[];byPanel[t.panelId].push(t);}
+      else orphaned.push(t);
+    });
+    allActive=active;
+
+    // Summary
+    document.getElementById('summaryEl').style.display='';
+    document.getElementById('summaryEl').innerHTML=
+      '<div>Total task docs in Firestore: <strong>'+tasks.length+'</strong></div>'+
+      '<div>Active tasks: <strong>'+active.length+'</strong></div>'+
+      '<div>Archived tasks: <strong>'+archived.length+'</strong></div>'+
+      '<div>Task panels: <strong>'+Object.keys(allPanels).length+'</strong></div>'+
+      '<div>Orphaned tasks (panel deleted): <strong style="color:'+(orphaned.length?'#e8a234':'#4caf7d')+'">'+orphaned.length+'</strong></div>';
+    document.getElementById('exportRow').style.display='';
+
+    let html='';
+    if(orphaned.length){
+      html+='<div class="section-h">⚠️ ORPHANED TASKS — Panel was deleted ('+orphaned.length+')</div><div class="card"><div class="card-title">These tasks still exist in Firestore — their panel column was removed</div>'+
+        orphaned.map(t=>'<div class="task-row"><div class="tick '+(t.completed?'done-tick':'open-tick')+'">'+(t.completed?'✓':'')+'</div><span class="task-text '+(t.completed?'strikethrough':'')+'">'+t.title+'<span class="orphan-label">orphaned</span></span></div>').join('')+'</div>';
+    }
+    html+='<div class="section-h">📋 TASKS BY PANEL</div>';
+    const sorted=Object.values(allPanels);
+    if(!sorted.length&&!active.length){
+      html+='<div class="card"><div style="color:#e8a234;font-size:.85rem">No active tasks or panels found in Firestore.</div></div>';
+    }else{
+      sorted.forEach(panel=>{
+        const pts=byPanel[panel.id]||[];
+        const done=pts.filter(t=>t.completed).length;
+        html+='<div class="card"><div class="card-title">'+panel.name+' ('+done+'/'+pts.length+' done)</div>'+
+          (pts.length?pts.map(t=>'<div class="task-row"><div class="tick '+(t.completed?'done-tick':'open-tick')+'">'+(t.completed?'✓':'')+'</div><span class="task-text '+(t.completed?'strikethrough':'')+'">'+t.title+'</span></div>').join(''):
+          '<div style="color:#5c544c;font-size:.8rem;padding:.35rem 0">No tasks</div>')+'</div>';
+      });
+    }
+    document.getElementById('outputEl').innerHTML=html;
+    setStatus('Recovery complete — '+active.length+' active tasks, '+orphaned.length+' orphaned.','ok');
+    btn.textContent='Reload';btn.disabled=false;
+  }catch(e){
+    setStatus('Error: '+e.message,'err');
+    btn.textContent='Try Again';btn.disabled=false;
+    console.error(e);
+  }
+}
+
+function exportCSV(){
+  const rows=[['Panel','Task Title','Status','Orphaned']];
+  allActive.filter(t=>!allPanels[t.panelId]).forEach(t=>rows.push(['PANEL DELETED',t.title,t.completed?'Done':'Open','Yes']));
+  allActive.filter(t=>allPanels[t.panelId]).forEach(t=>rows.push([allPanels[t.panelId]?.name||'?',t.title,t.completed?'Done':'Open','No']));
+  const csv=rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='rdu-tasks-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();URL.revokeObjectURL(url);
+}
+document.getElementById('pass').addEventListener('keydown',e=>{if(e.key==='Enter')recover();});
+</script>
+</body>
+</html>
