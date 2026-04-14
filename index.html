@@ -1320,7 +1320,6 @@ const QL_DEFAULTS=[
   {name:'Teams',  url:'https://teams.microsoft.com',icon:'💬',order:4},
 ];
 let qlApps=[];
-let qlSeeded=false;
 
 function qlFaviconUrl(url){
   try{const h=new URL(url).hostname;return `https://www.google.com/s2/favicons?sz=64&domain=${h}`;}
@@ -1345,9 +1344,8 @@ async function loadQuickLauncher(){
     const snap=await getDocs(collection(db,'quick_launcher'));
     qlApps=[];
     snap.forEach(d=>{if(!d.data().archived)qlApps.push({id:d.id,...d.data()});});
-    // Seed defaults on very first load
-    if(!qlApps.length&&!qlSeeded){
-      qlSeeded=true;
+    // Only seed if the collection is truly empty (no docs at all, not just all archived)
+    if(snap.empty){
       for(const app of QL_DEFAULTS){
         const ref=await addDoc(collection(db,'quick_launcher'),{...app,createdBy:'system',created:new Date().toISOString()});
         qlApps.push({id:ref.id,...app});
@@ -2282,7 +2280,8 @@ async function loadTaskPanels() {
   const snap = await getDocs(collection(db, 'task_panels'));
   allTaskPanels = [];
   snap.forEach(d => { if (!d.data().archived) allTaskPanels.push({ id: d.id, ...d.data() }); });
-  if (!allTaskPanels.length) {
+  // Only seed defaults if the collection has never had any docs at all
+  if (snap.empty) {
     const defaults = ['Ronny','Harry','Pauly','Josh','Myla','Toneth'];
     for (let i = 0; i < defaults.length; i++) {
       const ref = await addDoc(collection(db, 'task_panels'), { name: defaults[i], order: i });
