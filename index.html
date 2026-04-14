@@ -381,6 +381,20 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
 .msg-rules-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 @media(max-width:700px){.msg-layout{grid-template-columns:1fr}.msg-sidebar{display:none}.msg-layout.thread-open .msg-sidebar{display:none}.msg-layout.thread-open .msg-main{display:flex}}
 
+
+/* TEAM WORKFLOWS */
+.team-wf-accordion{border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:.75rem;background:var(--card)}
+.team-wf-header{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;cursor:pointer;user-select:none;background:var(--surface);transition:background .15s}
+.team-wf-header:hover{background:var(--card)}
+.team-wf-header-left{display:flex;align-items:center;gap:.85rem}
+.team-wf-avatar{width:34px;height:34px;border-radius:50%;background:var(--rust-dk);color:white;font-family:var(--font-head);font-size:.85rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.team-wf-name{font-family:var(--font-head);font-size:.95rem;font-weight:600;color:var(--text)}
+.team-wf-role{font-size:.72rem;color:var(--text-3);margin-top:1px}
+.team-wf-chevron{font-size:.9rem;color:var(--text-3);transition:transform .2s;flex-shrink:0}
+.team-wf-chevron.open{transform:rotate(180deg)}
+.team-wf-body{display:none;padding:1.25rem;border-top:1px solid var(--border)}
+.team-wf-body.open{display:block}
+.team-wf-actions{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -787,6 +801,17 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
           </div>
         </div>
         <div id="workflowContent"></div>
+
+        <!-- TEAM WORKFLOWS -->
+        <div style="margin-top:2.5rem">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.75rem">
+            <div>
+              <h2 style="font-family:var(--font-head);font-size:1.2rem;font-weight:700;color:var(--text);margin-bottom:.25rem">Team Workflows</h2>
+              <p style="font-size:.82rem;color:var(--text-2)">Individual workflows for each team member. Visible to all, editable by admin.</p>
+            </div>
+          </div>
+          <div id="teamWorkflowsContent"></div>
+        </div>
       </div>
 
 
@@ -1208,7 +1233,7 @@ const STAGES=['lead','inspection','quoted','approved','deposit_paid','in_progres
 const STAGE_LABELS={lead:'Lead',inspection:'Inspection',quoted:'Quoted',approved:'Approved',deposit_paid:'Deposit Paid',in_progress:'In Progress',progress_claim:'Progress Claim',completed:'Completed',retention_released:'Retention Released'};
 const VALID_TRANSITIONS={lead:['inspection'],inspection:['quoted'],quoted:['approved','lead'],approved:['deposit_paid'],deposit_paid:['in_progress'],in_progress:['progress_claim','completed'],progress_claim:['completed'],completed:['retention_released'],retention_released:[]};
 const STAGE_INVOICE_TRIGGERS={approved:{type:'deposit',label:'Deposit Invoice (10%)',pct:0.10},in_progress:{type:'materials',label:'Materials Invoice (40%)',pct:0.40},progress_claim:{type:'progress',label:'Progress Invoice (30%)',pct:0.30},completed:{type:'retention',label:'Retention Invoice (20%)',pct:0.20}};
-const TEAM={'ronny@roofingdownunder.com':{name:'Ronny',role:'Owner'},'harry@roofingdownunder.com':{name:'Harry',role:'Site Lead'},'pauly@roofingdownunder.com':{name:'Pauly',role:'Crew'},'myla@roofingdownunder.com':{name:'Myla',role:'Operations'},'toneth@roofingdownunder.com':{name:'Toneth',role:'Admin'}};
+const TEAM={'ronny@roofingdownunder.com':{name:'Ronny',role:'Owner'},'harry@roofingdownunder.com':{name:'Harry',role:'Site Lead'},'pauly@roofingdownunder.com':{name:'Pauly',role:'Operations'},'myla@roofingdownunder.com':{name:'Myla',role:'Operations'},'toneth@roofingdownunder.com':{name:'Toneth',role:'Admin'}};
 const TEAM_NAMES=Object.values(TEAM).map(t=>t.name);
 const ROLE_OPTIONS=['Owner','Admin','Site Lead','Operations','Crew','Subcontractor','Estimator','Accounts','Other'];
 let userRoleCache={};  // email -> role string, loaded from Firestore user_roles/
@@ -1583,15 +1608,22 @@ function renderAdminTeam(){
       }
     </div>`;
   }).join('');
-  // Show any extra panels from Firestore that aren't in TEAM
+  // Show remove button for any panel not matching a current TEAM member
   const teamNames=Object.values(TEAM).map(t=>t.name);
   const extraPanels=allTaskPanels.filter(p=>!teamNames.includes(p.name));
   const extraRows=extraPanels.map(p=>`
     <div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--border)">
-      <div><div style="font-weight:500;font-size:.88rem">${p.name}</div><div style="font-size:.75rem;color:var(--text-3)">Custom panel</div></div>
+      <div><div style="font-weight:500;font-size:.88rem">${p.name}</div><div style="font-size:.75rem;color:var(--text-3)">${teamNames.includes(p.name)?'Team member':'Removed / custom panel'}</div></div>
       <button class="btn btn-xs btn-danger" onclick="removeTaskPanel('${p.id}','${p.name}')">Remove Panel</button>
     </div>`).join('');
-  el.innerHTML=teamRows+extraRows;
+  // Also show current team panels with a remove option for admin
+  const teamPanels=allTaskPanels.filter(p=>teamNames.includes(p.name));
+  const teamPanelRows=teamPanels.map(p=>`
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px solid var(--border)">
+      <div><div style="font-weight:500;font-size:.88rem">${p.name}</div><div style="font-size:.75rem;color:var(--text-3)">Task panel</div></div>
+      <button class="btn btn-xs btn-danger" onclick="removeTaskPanel('${p.id}','${p.name}')">Remove Panel</button>
+    </div>`).join('');
+  el.innerHTML=teamRows+'<div style="margin-top:1rem"><div style="font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin-bottom:.5rem">Task Panels</div>'+teamPanelRows+extraRows+'</div>';
 }
 
 window.removeTaskPanel=async(id,name)=>{
@@ -2605,6 +2637,7 @@ async function loadWorkflow(){
     workflowData=snap.exists()&&snap.data().phases?.length?snap.data().phases:JSON.parse(JSON.stringify(DEFAULT_WORKFLOW));
   }catch(e){workflowData=JSON.parse(JSON.stringify(DEFAULT_WORKFLOW));}
   renderWorkflow();
+  loadTeamWorkflows();
 }
 
 function renderWorkflow(){
@@ -2700,6 +2733,234 @@ window.saveWorkflow=async()=>{
     renderWorkflow();
     showToast('Workflow saved ✅');
   }catch(e){showToast('Error saving workflow','error');console.error(e);}
+};
+
+
+// ── TEAM WORKFLOWS ────────────────────────────────────────────────────────────
+const TEAM_WF_MEMBERS = [
+  { key:'ronny',  name:'Ronny',  role:'Owner',     color:'#B84E22' },
+  { key:'harry',  name:'Harry',  role:'Site Lead',  color:'#2E7D55' },
+  { key:'pauly',  name:'Pauly',  role:'Operations', color:'#2463A0' },
+  { key:'myla',   name:'Myla',   role:'Operations', color:'#6B4FA8' },
+  { key:'toneth', name:'Toneth', role:'Admin',      color:'#C47D0A' },
+];
+
+// teamWorkflowData: { [memberKey]: { phases: [...], editMode: bool } }
+let teamWorkflowData = {};
+let teamWorkflowEditMode = {}; // memberKey -> bool
+
+const TEAM_WF_DEFAULT = () => ([
+  { id:'tw1', phase:'1. Networking',          color:'var(--purple)', steps:[
+    { title:'Attend BNI / Events',    desc:'Attend scheduled networking events and log contacts.' },
+    { title:'Follow Up Contacts',     desc:'Follow up new contacts within 48hrs of meeting.' },
+  ]},
+  { id:'tw2', phase:'2. Lead → Quote',        color:'var(--blue)',   steps:[
+    { title:'Review New Leads',       desc:'Check leads assigned to you and action within 24hrs.' },
+    { title:'Site Visit / Measure',   desc:'Attend site, take measurements, photos.' },
+    { title:'Prepare Quote Input',    desc:'Provide required info to complete the quote.' },
+  ]},
+  { id:'tw3', phase:'3. Job Setup',           color:'var(--green)',  steps:[
+    { title:'Review Job Brief',       desc:'Read job scope, materials list, timeline.' },
+    { title:'Confirm Availability',   desc:'Confirm you are available for scheduled dates.' },
+  ]},
+  { id:'tw4', phase:'4. On-Site Execution',   color:'var(--rust-lt)',steps:[
+    { title:'Daily Activity Report',  desc:'Submit DAR at end of each day on site.' },
+    { title:'Progress Photos',        desc:'Upload photos at each milestone.' },
+    { title:'Flag Issues Early',      desc:'Report any site issues to Harry / Ronny immediately.' },
+  ]},
+  { id:'tw5', phase:'5. Completion',          color:'var(--amber)',  steps:[
+    { title:'Site Cleanup',           desc:'Leave site clean, safe and tidy.' },
+    { title:'Final Photos',           desc:'Upload final completion photos.' },
+    { title:'Sign Off',               desc:'Confirm job complete in system.' },
+  ]},
+]);
+
+async function loadTeamWorkflows() {
+  const el = document.getElementById('teamWorkflowsContent');
+  if (!el) return;
+  try {
+    for (const member of TEAM_WF_MEMBERS) {
+      const snap = await getDoc(doc(db, 'team_workflows', member.key));
+      const phases = snap.exists() && snap.data().phases?.length
+        ? snap.data().phases
+        : TEAM_WF_DEFAULT();
+      teamWorkflowData[member.key] = phases;
+      teamWorkflowEditMode[member.key] = false;
+    }
+  } catch(e) {
+    console.error('loadTeamWorkflows error:', e);
+  }
+  renderTeamWorkflows();
+}
+
+function renderTeamWorkflows() {
+  const el = document.getElementById('teamWorkflowsContent');
+  if (!el) return;
+  el.innerHTML = TEAM_WF_MEMBERS.map(member => {
+    const phases = teamWorkflowData[member.key] || TEAM_WF_DEFAULT();
+    const editActive = isAdmin && teamWorkflowEditMode[member.key];
+    const initials = member.name.slice(0,1).toUpperCase();
+    return `
+    <div class="team-wf-accordion" id="twAccordion-${member.key}">
+      <div class="team-wf-header" onclick="toggleTeamWfAccordion('${member.key}')">
+        <div class="team-wf-header-left">
+          <div class="team-wf-avatar" style="background:${member.color}">${initials}</div>
+          <div>
+            <div class="team-wf-name">${member.name}</div>
+            <div class="team-wf-role">${member.role}</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:.75rem">
+          <span style="font-size:.75rem;color:var(--text-3)">${phases.length} phases</span>
+          <span class="team-wf-chevron" id="twChevron-${member.key}">▾</span>
+        </div>
+      </div>
+      <div class="team-wf-body" id="twBody-${member.key}">
+        ${isAdmin ? `
+        <div class="team-wf-actions">
+          <button class="btn btn-secondary btn-sm" id="twEditBtn-${member.key}" onclick="toggleTeamWfEdit('${member.key}')">${editActive ? '👁 View Mode' : '✏️ Edit Mode'}</button>
+          <button class="btn btn-primary btn-sm" id="twSaveBtn-${member.key}" onclick="saveTeamWorkflow('${member.key}')" style="display:${editActive ? 'inline-flex' : 'none'}">💾 Save</button>
+          <button class="btn btn-secondary btn-sm" onclick="resetTeamWorkflow('${member.key}')">🔄 Reset</button>
+        </div>` : ''}
+        ${editActive ? `<div style="background:rgba(232,162,52,.1);border:1px solid rgba(232,162,52,.3);border-radius:8px;padding:.65rem 1rem;margin-bottom:1rem;font-size:.82rem;color:var(--amber)">
+          ✏️ <strong>Edit Mode</strong> — Edit phases and steps directly. Click <strong>💾 Save</strong> when done.
+          <button class="btn btn-xs btn-secondary" style="margin-left:.75rem" onclick="addTeamWfPhase('${member.key}')">+ Add Phase</button>
+        </div>` : ''}
+        ${phases.map((phase, pi) => `
+          <div class="card mb-2" style="padding:1rem">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;flex-wrap:wrap;gap:.5rem">
+              <div style="display:flex;align-items:center;gap:.6rem;flex:1">
+                <div style="width:10px;height:10px;border-radius:50%;background:${phase.color};flex-shrink:0"></div>
+                ${editActive
+                  ? `<input value="${(phase.phase||'').replace(/"/g,'&quot;')}" oninput="updateTWPhase('${member.key}',${pi},'phase',this.value)" style="font-family:var(--font-head);font-size:.9rem;font-weight:700;color:var(--text);background:var(--surface);border:1px solid var(--rust);border-radius:6px;padding:.3rem .6rem;outline:none;flex:1;max-width:360px">`
+                  : `<h4 style="font-family:var(--font-head);font-size:.9rem;font-weight:700;color:var(--text);margin:0">${phase.phase}</h4>`
+                }
+              </div>
+              ${editActive ? `
+                <button class="btn btn-xs btn-primary" onclick="addTeamWfStep('${member.key}',${pi})">+ Step</button>
+                <button class="btn btn-xs btn-danger" onclick="removeTeamWfPhase('${member.key}',${pi})">✕ Phase</button>
+              ` : ''}
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.6rem">
+              ${phase.steps.map((step, si) => `
+                <div class="workflow-step" style="border-left:3px solid ${phase.color};margin-bottom:0;${editActive ? 'padding-top:1.5rem;position:relative' : ''}">
+                  ${editActive ? `<button onclick="removeTeamWfStep('${member.key}',${pi},${si})" style="position:absolute;top:.4rem;right:.4rem;background:rgba(224,82,82,.15);color:var(--red);border:1px solid rgba(224,82,82,.3);border-radius:4px;cursor:pointer;font-size:.7rem;padding:1px 6px">✕</button>` : ''}
+                  <div class="workflow-step-header">
+                    <div class="workflow-num">${si+1}</div>
+                    ${editActive
+                      ? `<input value="${(step.title||'').replace(/"/g,'&quot;')}" oninput="updateTWStep('${member.key}',${pi},${si},'title',this.value)" style="font-weight:600;font-size:.85rem;color:var(--text);background:var(--surface);border:1px solid var(--rust);border-radius:5px;padding:.2rem .45rem;outline:none;flex:1;width:100%">`
+                      : `<div class="workflow-step-title">${step.title}</div>`
+                    }
+                  </div>
+                  ${editActive
+                    ? `<textarea oninput="updateTWStep('${member.key}',${pi},${si},'desc',this.value)" style="width:100%;background:var(--surface);border:1px solid var(--rust);border-radius:5px;padding:.35rem .55rem;color:var(--text-2);font-family:var(--font-body);font-size:.8rem;resize:vertical;min-height:60px;outline:none;margin-top:.4rem;line-height:1.5">${(step.desc||'').replace(/</g,'&lt;')}</textarea>`
+                    : `<p style="font-size:.8rem">${step.desc}</p>`
+                  }
+                </div>`).join('')}
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.toggleTeamWfAccordion = (key) => {
+  const body = document.getElementById('twBody-' + key);
+  const chevron = document.getElementById('twChevron-' + key);
+  if (!body) return;
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  if (chevron) chevron.classList.toggle('open', !isOpen);
+};
+
+window.toggleTeamWfEdit = (key) => {
+  if (!isAdmin) return;
+  teamWorkflowEditMode[key] = !teamWorkflowEditMode[key];
+  renderTeamWorkflows();
+  // Re-open the accordion
+  const body = document.getElementById('twBody-' + key);
+  const chevron = document.getElementById('twChevron-' + key);
+  if (body) body.classList.add('open');
+  if (chevron) chevron.classList.add('open');
+  if (teamWorkflowEditMode[key]) showToast(key.charAt(0).toUpperCase()+key.slice(1) + ' workflow — edit mode on');
+};
+
+window.updateTWPhase = (key, pi, field, val) => { if(teamWorkflowData[key]) teamWorkflowData[key][pi][field] = val; };
+window.updateTWStep  = (key, pi, si, field, val) => { if(teamWorkflowData[key]) teamWorkflowData[key][pi].steps[si][field] = val; };
+
+window.addTeamWfPhase = (key) => {
+  if (!teamWorkflowData[key]) return;
+  teamWorkflowData[key].push({ id:'tw'+Date.now(), phase:'New Phase', color:'var(--border)', steps:[{ title:'New Step', desc:'Describe this step...' }] });
+  renderTeamWorkflows();
+  const body = document.getElementById('twBody-' + key);
+  const chevron = document.getElementById('twChevron-' + key);
+  if (body) body.classList.add('open');
+  if (chevron) chevron.classList.add('open');
+};
+
+window.removeTeamWfPhase = (key, pi) => {
+  if (!confirm('Remove this phase?')) return;
+  teamWorkflowData[key].splice(pi, 1);
+  renderTeamWorkflows();
+  const body = document.getElementById('twBody-' + key);
+  const chevron = document.getElementById('twChevron-' + key);
+  if (body) body.classList.add('open');
+  if (chevron) chevron.classList.add('open');
+};
+
+window.addTeamWfStep = (key, pi) => {
+  teamWorkflowData[key][pi].steps.push({ title:'New Step', desc:'Describe this step...' });
+  renderTeamWorkflows();
+  const body = document.getElementById('twBody-' + key);
+  const chevron = document.getElementById('twChevron-' + key);
+  if (body) body.classList.add('open');
+  if (chevron) chevron.classList.add('open');
+};
+
+window.removeTeamWfStep = (key, pi, si) => {
+  if (!confirm('Remove this step?')) return;
+  teamWorkflowData[key][pi].steps.splice(si, 1);
+  renderTeamWorkflows();
+  const body = document.getElementById('twBody-' + key);
+  const chevron = document.getElementById('twChevron-' + key);
+  if (body) body.classList.add('open');
+  if (chevron) chevron.classList.add('open');
+};
+
+window.saveTeamWorkflow = async (key) => {
+  if (!isAdmin) { showToast('Admin only', 'error'); return; }
+  try {
+    await setDoc(doc(db, 'team_workflows', key), {
+      phases: teamWorkflowData[key],
+      updatedAt: new Date().toISOString(),
+      updatedBy: currentUser?.email
+    });
+    teamWorkflowEditMode[key] = false;
+    renderTeamWorkflows();
+    const body = document.getElementById('twBody-' + key);
+    const chevron = document.getElementById('twChevron-' + key);
+    if (body) body.classList.add('open');
+    if (chevron) chevron.classList.add('open');
+    showToast(key.charAt(0).toUpperCase()+key.slice(1) + ' workflow saved ✅');
+  } catch(e) { showToast('Error saving workflow', 'error'); console.error(e); }
+};
+
+window.resetTeamWorkflow = async (key) => {
+  if (!isAdmin) { showToast('Admin only', 'error'); return; }
+  const name = TEAM_WF_MEMBERS.find(m => m.key === key)?.name || key;
+  if (!confirm('Reset ' + name + "'s workflow to default? This will overwrite any saved edits.")) return;
+  try {
+    const phases = TEAM_WF_DEFAULT();
+    teamWorkflowData[key] = phases;
+    await setDoc(doc(db, 'team_workflows', key), { phases, updatedAt: new Date().toISOString() });
+    teamWorkflowEditMode[key] = false;
+    renderTeamWorkflows();
+    const body = document.getElementById('twBody-' + key);
+    const chevron = document.getElementById('twChevron-' + key);
+    if (body) body.classList.add('open');
+    if (chevron) chevron.classList.add('open');
+    showToast(name + ' workflow reset ✅');
+  } catch(e) { showToast('Error resetting workflow', 'error'); console.error(e); }
 };
 
 // ── UPDATED saveSchedule with Google Calendar push ────────────────────────────
