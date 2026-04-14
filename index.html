@@ -98,6 +98,24 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
 .workflow-step-header{display:flex;align-items:center;gap:.75rem;margin-bottom:.5rem}
 .workflow-num{width:28px;height:28px;border-radius:50%;background:rgba(192,90,46,.15);color:var(--rust-lt);font-family:var(--font-head);font-size:.78rem;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .workflow-step-title{font-weight:500;font-size:.9rem;color:var(--text)}.workflow-step p{font-size:.82rem;color:var(--text-2);line-height:1.6;padding-left:2.5rem}
+/* User workflow cards */
+.user-wf-card{background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1rem}
+.user-wf-header{background:var(--surface);border-bottom:1px solid var(--border);padding:.85rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap}
+.user-wf-name{font-family:var(--font-head);font-size:.95rem;font-weight:700;color:var(--text)}
+.user-wf-role{font-size:.72rem;color:var(--text-2);background:var(--card);border:1px solid var(--border);padding:2px 8px;border-radius:10px}
+.user-wf-body{padding:1rem}
+.user-wf-empty{color:var(--text-3);font-size:.83rem;font-style:italic;padding:.25rem 0}
+/* Networking item */
+.net-item{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:.75rem;position:relative}
+.net-item-title{font-weight:600;font-size:.9rem;color:var(--text);margin-bottom:.35rem}
+.net-item-desc{font-size:.83rem;color:var(--text-2);line-height:1.6}
+/* Workflow step grid — responsive */
+.wf-steps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.75rem}
+@media(max-width:768px){
+  .wf-steps-grid{grid-template-columns:1fr}
+  .user-wf-header{padding:.7rem .85rem}
+  .user-wf-body{padding:.75rem}
+}
 .job-detail-header{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:1.5rem}
 .job-stage-track{display:flex;align-items:center;margin:1rem 0;overflow-x:auto;padding-bottom:.5rem}
 .stage-dot{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0}
@@ -785,13 +803,30 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
       <div class="page" id="page-workflow">
         <div class="page-header">
           <h1>RDU Workflow</h1>
-          <p>Standard operating process for every job.</p>
+          <p>Standard operating process, networking and team member workflows.</p>
           <div class="page-actions" id="workflowAdminActions" style="display:none">
             <button class="btn btn-secondary btn-sm" onclick="toggleWorkflowEdit()" id="workflowEditBtn">✏️ Edit Mode</button>
             <button class="btn btn-primary btn-sm" onclick="saveWorkflow()" id="workflowSaveBtn" style="display:none">💾 Save Changes</button>
           </div>
         </div>
-        <div id="workflowContent"></div>
+        <!-- Workflow tabs -->
+        <div class="tab-bar" style="margin-bottom:1.25rem">
+          <button class="tab-btn active" onclick="switchTab('wf-tab-job',this)">📋 Job Workflow</button>
+          <button class="tab-btn" onclick="switchTab('wf-tab-network',this)">🤝 Networking</button>
+          <button class="tab-btn" onclick="switchTab('wf-tab-users',this)">👤 Team Workflows</button>
+        </div>
+        <!-- Job Workflow -->
+        <div class="tab-content active" id="wf-tab-job">
+          <div id="workflowContent"></div>
+        </div>
+        <!-- Networking -->
+        <div class="tab-content" id="wf-tab-network">
+          <div id="networkingContent"></div>
+        </div>
+        <!-- Per-User Workflows -->
+        <div class="tab-content" id="wf-tab-users">
+          <div id="userWorkflowContent"></div>
+        </div>
       </div>
 
       <!-- ADMIN -->
@@ -1282,7 +1317,13 @@ window.toggleSidebar=()=>{
   document.getElementById('mobileOverlay').classList.toggle('open');
 };
 
-async function loadAll(){await Promise.all([loadJobs(),loadLeads(),loadSchedule(),loadInspections(),loadInvoices(),loadReports(),loadAds(),loadReminders(),loadTasks(),loadQuickLauncher()]);await loadAllFiles();}
+async function loadAll(){
+  await Promise.all([loadJobs(),loadLeads(),loadSchedule(),loadInspections(),loadInvoices(),loadReports(),loadAds(),loadReminders()]);
+  // Run these sequentially — they have seeding logic that breaks under concurrent execution
+  await loadTasks();
+  await loadQuickLauncher();
+  await loadAllFiles();
+}
 
 // ── SOFT DELETE ───────────────────────────────────────────────────────────────
 window.archiveItem=async(col,id,reload)=>{
@@ -1339,20 +1380,40 @@ function qlLogoHtml(app){
     :`<div class="ql-tile-logo" style="background:var(--surface)">🔗</div>`;
 }
 
+let qlSeeding=false;
+
 async function loadQuickLauncher(){
   try{
     const snap=await getDocs(collection(db,'quick_launcher'));
     qlApps=[];
-    snap.forEach(d=>{if(!d.data().archived)qlApps.push({id:d.id,...d.data()});});
-    // Only seed if the collection is truly empty (no docs at all, not just all archived)
-    if(snap.empty){
+    const allDocs=[];
+    snap.forEach(d=>{allDocs.push({id:d.id,...d.data()});});
+
+    // Deduplicate: if same name appears more than once, delete extras
+    const seen={};
+    for(const d of allDocs){
+      const key=(d.name||'').toLowerCase();
+      if(seen[key]){
+        // duplicate — delete it
+        await deleteDoc(doc(db,'quick_launcher',d.id));
+      }else{
+        seen[key]=true;
+        if(!d.archived)qlApps.push(d);
+      }
+    }
+
+    // Only seed defaults if collection is truly empty (never had any docs)
+    if(snap.empty&&!qlSeeding){
+      qlSeeding=true;
       for(const app of QL_DEFAULTS){
         const ref=await addDoc(collection(db,'quick_launcher'),{...app,createdBy:'system',created:new Date().toISOString()});
         qlApps.push({id:ref.id,...app});
       }
+      qlSeeding=false;
     }
+
     qlApps.sort((a,b)=>(a.order??99)-(b.order??99));
-  }catch(e){console.warn('loadQuickLauncher:',e);}
+  }catch(e){console.warn('loadQuickLauncher:',e);qlSeeding=false;}
   renderQLDash();
   renderQLAdmin();
 }
@@ -1417,10 +1478,10 @@ window.saveQLApp=async()=>{
 window.removeQLApp=async(id)=>{
   if(!confirm('Remove this app from the launcher?'))return;
   try{
-    await updateDoc(doc(db,'quick_launcher',id),{archived:true});
+    await deleteDoc(doc(db,'quick_launcher',id));
     await loadQuickLauncher();
     showToast('App removed');
-  }catch(e){showToast('Error removing app','error');}
+  }catch(e){showToast('Error removing app','error');console.error(e);}
 };
 const USER_PERMS=['manage_tasks','manage_leads','manage_jobs','view_reports','manage_finance','admin_access'];
 const USER_PERM_LABELS={manage_tasks:'Manage Tasks',manage_leads:'Manage Leads',manage_jobs:'Manage Jobs',view_reports:'View Reports',manage_finance:'Manage Finance',admin_access:'Admin Access'};
@@ -1544,16 +1605,19 @@ function renderAdminTeam(){
 }
 
 window.removeTaskPanel=async(id,name)=>{
-  if(!confirm(`Remove task panel for ${name}? Their tasks will also be removed.`))return;
+  if(!confirm(`Remove panel for ${name}? All tasks in this panel will also be deleted.`))return;
   try{
-    // Archive all tasks in this panel
+    // Hard delete all tasks in this panel
     const snap=await getDocs(collection(db,'tasks'));
-    const batch=[];
-    snap.forEach(d=>{if(d.data().panelId===id&&!d.data().archived)batch.push(updateDoc(doc(db,'tasks',d.id),{archived:true}));});
-    await Promise.all(batch);
-    await updateDoc(doc(db,'task_panels',id),{archived:true});
-    await loadTasks();renderAdminTeam();showToast(`Panel for ${name} removed`);
-  }catch(e){showToast('Error removing panel','error');}
+    const deletes=[];
+    snap.forEach(d=>{if(d.data().panelId===id)deletes.push(deleteDoc(doc(db,'tasks',d.id)));});
+    await Promise.all(deletes);
+    // Hard delete the panel itself
+    await deleteDoc(doc(db,'task_panels',id));
+    await loadTasks();
+    renderAdminTeam();
+    showToast(`Panel "${name}" removed`);
+  }catch(e){showToast('Error removing panel','error');console.error(e);}
 };
 
 // ── DRIVE FILE LINKS ──────────────────────────────────────────────────────────
@@ -2276,18 +2340,37 @@ window.saveReminder=async()=>{
 // ── TASKS (Panel System — all users see all, all can interact) ─────────────────
 let allTaskPanels = [];
 
+let panelSeeding=false;
+
 async function loadTaskPanels() {
   const snap = await getDocs(collection(db, 'task_panels'));
   allTaskPanels = [];
-  snap.forEach(d => { if (!d.data().archived) allTaskPanels.push({ id: d.id, ...d.data() }); });
-  // Only seed defaults if the collection has never had any docs at all
-  if (snap.empty) {
+  const allDocs = [];
+  snap.forEach(d => { allDocs.push({ id: d.id, ...d.data() }); });
+
+  // Deduplicate: if same name appears more than once, delete the extras
+  const seen = {};
+  for (const d of allDocs) {
+    const key = (d.name || '').toLowerCase();
+    if (seen[key]) {
+      await deleteDoc(doc(db, 'task_panels', d.id));
+    } else {
+      seen[key] = true;
+      if (!d.archived) allTaskPanels.push(d);
+    }
+  }
+
+  // Only seed defaults if collection is truly empty (never had any docs)
+  if (snap.empty && !panelSeeding) {
+    panelSeeding = true;
     const defaults = ['Ronny','Harry','Pauly','Josh','Myla','Toneth'];
     for (let i = 0; i < defaults.length; i++) {
       const ref = await addDoc(collection(db, 'task_panels'), { name: defaults[i], order: i });
       allTaskPanels.push({ id: ref.id, name: defaults[i], order: i });
     }
+    panelSeeding = false;
   }
+
   allTaskPanels.sort((a, b) => (a.order || 0) - (b.order || 0));
 }
 
@@ -2381,7 +2464,7 @@ window.toggleTask = async (id, completed) => {
 
 window.removeTask = async (id) => {
   if (!confirm('Remove this task?')) return;
-  try { await updateDoc(doc(db, 'tasks', id), { archived: true }); await loadTasks(); showToast('Task removed'); }
+  try { await deleteDoc(doc(db, 'tasks', id)); await loadTasks(); showToast('Task removed'); }
   catch (e) { showToast('Error removing task', 'error'); }
 };
 
@@ -2490,6 +2573,8 @@ async function pushEventToGCal(title,date,time,notes){
 // ── WORKFLOW (Editable, Firestore-backed) ─────────────────────────────────────
 let workflowData=[];
 let workflowEditMode=false;
+let networkingData=[];
+let userWorkflowData={};
 
 const DEFAULT_WORKFLOW=[
   {id:'s1',phase:'1. Lead → Quote',color:'var(--blue)',steps:[
@@ -2546,39 +2631,58 @@ const DEFAULT_WORKFLOW=[
   ]},
 ];
 
+// ── LOAD ALL WORKFLOW DATA ────────────────────────────────────────────────────
 async function loadWorkflow(){
   try{
     const snap=await getDoc(doc(db,'settings','workflow'));
-    workflowData=snap.exists()&&snap.data().phases?.length?snap.data().phases:JSON.parse(JSON.stringify(DEFAULT_WORKFLOW));
-  }catch(e){workflowData=JSON.parse(JSON.stringify(DEFAULT_WORKFLOW));}
+    if(snap.exists()&&snap.data().phases?.length){
+      workflowData=snap.data().phases;
+      networkingData=snap.data().networking||[];
+      userWorkflowData=snap.data().userWorkflows||{};
+    }else{
+      workflowData=JSON.parse(JSON.stringify(DEFAULT_WORKFLOW));
+      networkingData=[];
+      userWorkflowData={};
+    }
+  }catch(e){
+    workflowData=JSON.parse(JSON.stringify(DEFAULT_WORKFLOW));
+    networkingData=[];userWorkflowData={};
+  }
   renderWorkflow();
+  renderNetworking();
+  renderUserWorkflows();
 }
 
+// ── JOB WORKFLOW RENDER ───────────────────────────────────────────────────────
 function renderWorkflow(){
   const el=document.getElementById('workflowContent');if(!el)return;
   const editActive=isAdmin&&workflowEditMode;
   let html='';
   if(editActive){
-    html+=`<div style="background:rgba(232,162,52,.1);border:1px solid rgba(232,162,52,.3);border-radius:8px;padding:.75rem 1rem;margin-bottom:1rem;font-size:.85rem;color:var(--amber)">
-      ✏️ <strong>Edit Mode active</strong> — Edit phase names, step titles and descriptions directly. Click <strong>💾 Save Changes</strong> when done.
-    </div>`;
+    html+=`<div style="background:rgba(196,125,10,.1);border:1px solid rgba(196,125,10,.3);border-radius:8px;padding:.75rem 1rem;margin-bottom:1rem;font-size:.85rem;color:var(--amber)">
+      ✏️ <strong>Edit Mode active</strong> — Edit fields directly. Click <strong>💾 Save Changes</strong> when done.
+    </div>
+    <button class="btn btn-secondary btn-sm" style="margin-bottom:1rem" onclick="addWorkflowPhase()">+ Add Phase</button>`;
   }
   html+=workflowData.map((phase,pi)=>`
     <div class="card mb-2">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem">
-        <div style="display:flex;align-items:center;gap:.75rem;flex:1">
+        <div style="display:flex;align-items:center;gap:.75rem;flex:1;min-width:0">
           <div style="width:12px;height:12px;border-radius:50%;background:${phase.color};flex-shrink:0"></div>
           ${editActive
-            ?`<input value="${(phase.phase||'').replace(/"/g,'&quot;')}" oninput="updateWorkflowPhase(${pi},'phase',this.value)" style="font-family:var(--font-head);font-size:1rem;font-weight:700;color:var(--text);background:var(--surface);border:1px solid var(--rust);border-radius:6px;padding:.35rem .7rem;outline:none;flex:1;max-width:400px">`
+            ?`<input value="${(phase.phase||'').replace(/"/g,'&quot;')}" oninput="updateWorkflowPhase(${pi},'phase',this.value)" style="font-family:var(--font-head);font-size:1rem;font-weight:700;color:var(--text);background:var(--surface);border:1px solid var(--rust);border-radius:6px;padding:.35rem .7rem;outline:none;flex:1;min-width:0;max-width:400px">`
             :`<h3 style="font-family:var(--font-head);font-size:1rem;font-weight:700;color:var(--text);margin:0">${phase.phase}</h3>`
           }
         </div>
-        ${editActive?`<button class="btn btn-xs btn-primary" onclick="addWorkflowStep(${pi})">+ Add Step</button>`:''}
+        ${editActive?`<div style="display:flex;gap:.4rem">
+          <button class="btn btn-xs btn-primary" onclick="addWorkflowStep(${pi})">+ Step</button>
+          <button class="btn btn-xs btn-danger" onclick="removeWorkflowPhase(${pi})">✕ Phase</button>
+        </div>`:''}
       </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.75rem">
+      <div class="wf-steps-grid">
         ${phase.steps.map((step,si)=>`
           <div class="workflow-step" style="border-left:3px solid ${phase.color};margin-bottom:0;position:relative;${editActive?'padding-top:1.75rem':''}">
-            ${editActive?`<button onclick="removeWorkflowStep(${pi},${si})" style="position:absolute;top:.5rem;right:.5rem;background:rgba(224,82,82,.15);color:var(--red);border:1px solid rgba(224,82,82,.3);border-radius:4px;cursor:pointer;font-size:.75rem;padding:2px 7px;line-height:1.4">✕ Remove</button>`:''}
+            ${editActive?`<button onclick="removeWorkflowStep(${pi},${si})" style="position:absolute;top:.5rem;right:.5rem;background:rgba(192,57,43,.1);color:var(--red);border:1px solid rgba(192,57,43,.25);border-radius:4px;cursor:pointer;font-size:.72rem;padding:2px 6px;line-height:1.4">✕</button>`:''}
             <div class="workflow-step-header">
               <div class="workflow-num" style="flex-shrink:0">${si+1}</div>
               ${editActive
@@ -2596,8 +2700,95 @@ function renderWorkflow(){
   el.innerHTML=html;
 }
 
+// ── NETWORKING RENDER ─────────────────────────────────────────────────────────
+function renderNetworking(){
+  const el=document.getElementById('networkingContent');if(!el)return;
+  const editActive=isAdmin&&workflowEditMode;
+  let html='';
+  if(editActive){
+    html+=`<div style="background:rgba(196,125,10,.1);border:1px solid rgba(196,125,10,.3);border-radius:8px;padding:.75rem 1rem;margin-bottom:1rem;font-size:.85rem;color:var(--amber)">
+      ✏️ <strong>Edit Mode active</strong> — Add and edit networking items manually.
+    </div>
+    <button class="btn btn-primary btn-sm" style="margin-bottom:1rem" onclick="addNetworkingItem()">+ Add Networking Item</button>`;
+  }
+  if(!networkingData.length){
+    html+=`<div class="card" style="text-align:center;padding:2.5rem;color:var(--text-3)">
+      <div style="font-size:2rem;margin-bottom:.75rem">🤝</div>
+      <div style="font-weight:500;margin-bottom:.35rem">Networking section coming soon</div>
+      <div style="font-size:.82rem">${editActive?'Click "+ Add Networking Item" above to start building this section.':'Admin is still drafting this section.'}</div>
+    </div>`;
+  }else{
+    html+=networkingData.map((item,i)=>`
+      <div class="net-item">
+        ${editActive?`<button onclick="removeNetworkingItem(${i})" style="position:absolute;top:.75rem;right:.75rem;background:rgba(192,57,43,.1);color:var(--red);border:1px solid rgba(192,57,43,.25);border-radius:4px;cursor:pointer;font-size:.72rem;padding:2px 6px">✕</button>`:''}
+        ${editActive
+          ?`<input value="${(item.title||'').replace(/"/g,'&quot;')}" oninput="updateNetworking(${i},'title',this.value)" placeholder="Item title..." style="font-weight:600;font-size:.9rem;color:var(--text);background:var(--surface);border:1px solid var(--rust);border-radius:5px;padding:.3rem .6rem;outline:none;width:100%;margin-bottom:.5rem">`
+          :`<div class="net-item-title">${item.title||''}</div>`
+        }
+        ${editActive
+          ?`<textarea oninput="updateNetworking(${i},'desc',this.value)" placeholder="Describe this networking activity..." style="width:100%;background:var(--surface);border:1px solid var(--rust);border-radius:5px;padding:.4rem .6rem;color:var(--text-2);font-family:var(--font-body);font-size:.82rem;resize:vertical;min-height:80px;outline:none;line-height:1.5">${(item.desc||'').replace(/</g,'&lt;')}</textarea>`
+          :`<div class="net-item-desc">${item.desc||''}</div>`
+        }
+      </div>`).join('');
+  }
+  el.innerHTML=html;
+}
+
+// ── PER-USER WORKFLOW RENDER ──────────────────────────────────────────────────
+function renderUserWorkflows(){
+  const el=document.getElementById('userWorkflowContent');if(!el)return;
+  const editActive=isAdmin&&workflowEditMode;
+  const members=Object.values(TEAM).map(t=>t.name);
+  let html='';
+  if(editActive){
+    html+=`<div style="background:rgba(196,125,10,.1);border:1px solid rgba(196,125,10,.3);border-radius:8px;padding:.75rem 1rem;margin-bottom:1rem;font-size:.85rem;color:var(--amber)">
+      ✏️ <strong>Edit Mode active</strong> — Edit each team member's workflow below.
+    </div>`;
+  }
+  html+=members.map(name=>{
+    const key=name.toLowerCase();
+    const data=userWorkflowData[key]||{overview:'',steps:[]};
+    const roleInfo=Object.values(TEAM).find(t=>t.name===name);
+    return `<div class="user-wf-card">
+      <div class="user-wf-header">
+        <div style="display:flex;align-items:center;gap:.65rem">
+          <div style="width:32px;height:32px;border-radius:50%;background:var(--rust);color:white;font-family:var(--font-head);font-weight:700;font-size:.82rem;display:flex;align-items:center;justify-content:center;flex-shrink:0">${name.slice(0,2).toUpperCase()}</div>
+          <div>
+            <div class="user-wf-name">${name}</div>
+            <div style="font-size:.72rem;color:var(--text-2)">${roleInfo?.role||''}</div>
+          </div>
+        </div>
+        ${editActive?`<button class="btn btn-xs btn-primary" onclick="addUserWfStep('${key}')">+ Add Step</button>`:''}
+      </div>
+      <div class="user-wf-body">
+        ${editActive
+          ?`<textarea oninput="updateUserWfOverview('${key}',this.value)" placeholder="Overview of ${name}'s responsibilities and daily workflow..." style="width:100%;background:var(--surface);border:1px solid var(--rust);border-radius:6px;padding:.6rem .85rem;color:var(--text);font-family:var(--font-body);font-size:.83rem;resize:vertical;min-height:80px;outline:none;line-height:1.5;margin-bottom:.75rem">${(data.overview||'').replace(/</g,'&lt;')}</textarea>`
+          :data.overview?`<p style="font-size:.83rem;color:var(--text-2);margin-bottom:.75rem;line-height:1.6">${data.overview}</p>`:''
+        }
+        ${data.steps.length?data.steps.map((step,si)=>`
+          <div style="display:flex;align-items:flex-start;gap:.65rem;padding:.6rem 0;border-bottom:1px solid var(--border);position:relative">
+            <div class="workflow-num" style="flex-shrink:0;margin-top:2px">${si+1}</div>
+            <div style="flex:1;min-width:0">
+              ${editActive
+                ?`<input value="${(step.title||'').replace(/"/g,'&quot;')}" oninput="updateUserWfStep('${key}',${si},'title',this.value)" placeholder="Step title..." style="font-weight:600;font-size:.85rem;color:var(--text);background:var(--surface);border:1px solid var(--rust);border-radius:5px;padding:.25rem .5rem;outline:none;width:100%;margin-bottom:.4rem">
+                <textarea oninput="updateUserWfStep('${key}',${si},'desc',this.value)" placeholder="Step description..." style="width:100%;background:var(--surface);border:1px solid var(--rust);border-radius:5px;padding:.3rem .5rem;color:var(--text-2);font-family:var(--font-body);font-size:.8rem;resize:vertical;min-height:55px;outline:none;line-height:1.5">${(step.desc||'').replace(/</g,'&lt;')}</textarea>`
+                :`<div style="font-weight:600;font-size:.85rem;color:var(--text)">${step.title}</div>
+                ${step.desc?`<div style="font-size:.8rem;color:var(--text-2);margin-top:2px;line-height:1.5">${step.desc}</div>`:''}`
+              }
+            </div>
+            ${editActive?`<button onclick="removeUserWfStep('${key}',${si})" style="background:none;border:none;color:var(--text-3);cursor:pointer;font-size:.8rem;padding:2px 5px;flex-shrink:0;margin-top:2px" title="Remove">✕</button>`:''}
+          </div>`).join('')
+          :`<div class="user-wf-empty">${editActive?'No steps yet — click "+ Add Step" to add.':'No workflow defined yet.'}</div>`
+        }
+      </div>
+    </div>`;
+  }).join('');
+  el.innerHTML=html;
+}
+
+// ── EDIT TOGGLE & SAVE ────────────────────────────────────────────────────────
 window.toggleWorkflowEdit=()=>{
-  if(!isAdmin){return;} // silent — button shouldn't be visible anyway
+  if(!isAdmin){return;}
   workflowEditMode=!workflowEditMode;
   const editBtn=document.getElementById('workflowEditBtn');
   const saveBtn=document.getElementById('workflowSaveBtn');
@@ -2605,32 +2796,79 @@ window.toggleWorkflowEdit=()=>{
   if(editBtn)editBtn.className=workflowEditMode?'btn btn-stage btn-sm':'btn btn-secondary btn-sm';
   if(saveBtn)saveBtn.style.display=workflowEditMode?'':'none';
   renderWorkflow();
-  if(workflowEditMode)showToast('Edit mode on — click any field to edit');
+  renderNetworking();
+  renderUserWorkflows();
+  if(workflowEditMode)showToast('Edit mode on — all sections are editable');
 };
 
+window.saveWorkflow=async()=>{
+  if(!isAdmin){showToast('Only admin can save workflow changes','error');return;}
+  try{
+    await setDoc(doc(db,'settings','workflow'),{
+      phases:workflowData,
+      networking:networkingData,
+      userWorkflows:userWorkflowData,
+      updatedAt:new Date().toISOString()
+    });
+    workflowEditMode=false;
+    const editBtn=document.getElementById('workflowEditBtn');
+    const saveBtn=document.getElementById('workflowSaveBtn');
+    if(editBtn){editBtn.textContent='✏️ Edit Mode';editBtn.className='btn btn-secondary btn-sm';}
+    if(saveBtn)saveBtn.style.display='none';
+    renderWorkflow();renderNetworking();renderUserWorkflows();
+    showToast('Workflow saved ✅');
+  }catch(e){showToast('Error saving workflow','error');console.error(e);}
+};
+
+// ── JOB WORKFLOW ACTIONS ──────────────────────────────────────────────────────
 window.updateWorkflowPhase=(pi,key,val)=>{workflowData[pi][key]=val;};
 window.updateWorkflowStep=(pi,si,key,val)=>{workflowData[pi].steps[si][key]=val;};
+window.addWorkflowPhase=()=>{
+  const colors=['var(--blue)','var(--green)','var(--amber)','var(--rust-lt)','var(--purple)','var(--red)'];
+  workflowData.push({id:'s'+Date.now(),phase:'New Phase',color:colors[workflowData.length%colors.length],steps:[{title:'New Step',desc:'Describe this step...'}]});
+  renderWorkflow();
+};
 window.addWorkflowStep=(pi)=>{
   workflowData[pi].steps.push({title:'New Step',desc:'Describe this step...'});
   renderWorkflow();
+};
+window.removeWorkflowPhase=(pi)=>{
+  if(!confirm('Remove this entire phase?'))return;
+  workflowData.splice(pi,1);renderWorkflow();
 };
 window.removeWorkflowStep=(pi,si)=>{
   if(!confirm('Remove this step?'))return;
   workflowData[pi].steps.splice(si,1);renderWorkflow();
 };
 
-window.saveWorkflow=async()=>{
-  if(!isAdmin){showToast('Only admin can save workflow changes','error');return;}
-  try{
-    await setDoc(doc(db,'settings','workflow'),{phases:workflowData,updatedAt:new Date().toISOString()});
-    workflowEditMode=false;
-    const editBtn=document.getElementById('workflowEditBtn');
-    const saveBtn=document.getElementById('workflowSaveBtn');
-    if(editBtn){editBtn.textContent='✏️ Edit Mode';editBtn.className='btn btn-secondary btn-sm';}
-    if(saveBtn)saveBtn.style.display='none';
-    renderWorkflow();
-    showToast('Workflow saved ✅');
-  }catch(e){showToast('Error saving workflow','error');console.error(e);}
+// ── NETWORKING ACTIONS ────────────────────────────────────────────────────────
+window.addNetworkingItem=()=>{
+  networkingData.push({title:'New Networking Item',desc:''});
+  renderNetworking();
+};
+window.updateNetworking=(i,key,val)=>{networkingData[i][key]=val;};
+window.removeNetworkingItem=(i)=>{
+  if(!confirm('Remove this networking item?'))return;
+  networkingData.splice(i,1);renderNetworking();
+};
+
+// ── PER-USER WORKFLOW ACTIONS ─────────────────────────────────────────────────
+window.updateUserWfOverview=(key,val)=>{
+  if(!userWorkflowData[key])userWorkflowData[key]={overview:'',steps:[]};
+  userWorkflowData[key].overview=val;
+};
+window.addUserWfStep=(key)=>{
+  if(!userWorkflowData[key])userWorkflowData[key]={overview:'',steps:[]};
+  userWorkflowData[key].steps.push({title:'New Step',desc:''});
+  renderUserWorkflows();
+};
+window.updateUserWfStep=(key,si,field,val)=>{
+  if(!userWorkflowData[key])userWorkflowData[key]={overview:'',steps:[]};
+  userWorkflowData[key].steps[si][field]=val;
+};
+window.removeUserWfStep=(key,si)=>{
+  if(!confirm('Remove this step?'))return;
+  userWorkflowData[key].steps.splice(si,1);renderUserWorkflows();
 };
 
 // ── UPDATED saveSchedule with Google Calendar push ────────────────────────────
