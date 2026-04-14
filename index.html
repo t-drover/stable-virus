@@ -302,11 +302,12 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
 .m-card-row{display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap}
 .m-card-actions{display:flex;gap:.4rem;margin-top:.6rem;flex-wrap:wrap}
 /* FAB bar */
-.mobile-fab-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);padding:.5rem .5rem env(safe-area-inset-bottom);gap:.25rem;z-index:100;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
-.fab-btn{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:.45rem .55rem;border:none;border-radius:8px;cursor:pointer;font-family:var(--font-body);font-size:.62rem;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--text-2);background:transparent;min-height:50px;min-width:52px;transition:background .15s,color .15s}
+.mobile-fab-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);padding:.6rem 1rem env(safe-area-inset-bottom);gap:.5rem;z-index:100}
+.fab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:.5rem .25rem;border:none;border-radius:8px;cursor:pointer;font-family:var(--font-body);font-size:.65rem;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--text-2);background:transparent;min-height:52px;transition:background .15s,color .15s}
 .fab-btn:hover,.fab-btn:active{background:rgba(184,78,34,.1);color:var(--rust)}
 .fab-btn.primary{background:var(--rust);color:white;border-radius:10px}
 .fab-btn.primary:hover{background:var(--rust-lt)}
+.fab-btn-icon{font-size:1.3rem;line-height:1}
 /* Inspection section headers on mobile */
 @media(max-width:768px){
   .inspection-section h4{font-size:.82rem;letter-spacing:.06em;text-transform:uppercase;color:var(--rust-lt);margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
@@ -392,22 +393,13 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
   </div>
 </div>
 <div class="mobile-overlay" id="mobileOverlay" onclick="toggleSidebar()"></div>
-<!-- MOBILE FAB BAR — full nav matching desktop sidebar -->
+<!-- MOBILE FAB BAR — crew quick actions -->
 <div class="mobile-fab-bar" id="mobileFabBar">
   <button class="fab-btn" onclick="nav('dashboard')"><span class="fab-btn-icon">🏠</span>Home</button>
+  <button class="fab-btn primary" onclick="openReportModal()"><span class="fab-btn-icon">📋</span>Report</button>
+  <button class="fab-btn primary" onclick="openInspectionModal()"><span class="fab-btn-icon">🔍</span>Inspect</button>
   <button class="fab-btn" onclick="nav('jobs')"><span class="fab-btn-icon">🔨</span>Jobs</button>
-  <button class="fab-btn" onclick="nav('leads')"><span class="fab-btn-icon">📋</span>Leads</button>
-  <button class="fab-btn" onclick="nav('schedule')"><span class="fab-btn-icon">📅</span>Booking</button>
-  <button class="fab-btn" onclick="nav('inspections')"><span class="fab-btn-icon">🔍</span>Inspect</button>
-  <button class="fab-btn" onclick="nav('reports')"><span class="fab-btn-icon">📊</span>Reports</button>
-  <button class="fab-btn" onclick="nav('tasks')"><span class="fab-btn-icon">✅</span>Tasks</button>
-  <button class="fab-btn" onclick="nav('invoices')"><span class="fab-btn-icon">💰</span>Invoices</button>
-  <button class="fab-btn" onclick="nav('reminders')"><span class="fab-btn-icon">🔔</span>Reminders</button>
-  <button class="fab-btn" onclick="nav('files')"><span class="fab-btn-icon">🗂️</span>Files</button>
   <button class="fab-btn" onclick="nav('messages')"><span class="fab-btn-icon">💬</span>Msgs</button>
-  <button class="fab-btn" onclick="nav('advertising')"><span class="fab-btn-icon">📢</span>Ads</button>
-  <button class="fab-btn" onclick="nav('workflow')"><span class="fab-btn-icon">📌</span>Workflow</button>
-  <button class="fab-btn admin-only" id="fabAdmin" onclick="nav('admin')"><span class="fab-btn-icon">⚙️</span>Admin</button>
 </div>
 
 <!-- AUTH -->
@@ -1136,7 +1128,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
   </div>
 </div>
 <div class="toast" id="toast"></div>
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, signOut as fbSignOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
@@ -1282,7 +1274,12 @@ window.toggleSidebar=()=>{
   document.getElementById('mobileOverlay').classList.toggle('open');
 };
 
-async function loadAll(){await Promise.all([loadJobs(),loadLeads(),loadSchedule(),loadInspections(),loadInvoices(),loadReports(),loadAds(),loadReminders(),loadTasks(),loadQuickLauncher()]);await loadAllFiles();}
+async function loadAll(){
+  await Promise.all([loadJobs(),loadLeads(),loadSchedule(),loadInspections(),loadInvoices(),loadReports(),loadAds(),loadReminders()]);
+  await loadTasks();
+  await loadQuickLauncher();
+  await loadAllFiles();
+}
 
 // ── SOFT DELETE ───────────────────────────────────────────────────────────────
 window.archiveItem=async(col,id,reload)=>{
@@ -1344,7 +1341,7 @@ async function loadQuickLauncher(){
     const snap=await getDocs(collection(db,'quick_launcher'));
     qlApps=[];
     snap.forEach(d=>{if(!d.data().archived)qlApps.push({id:d.id,...d.data()});});
-    // Only seed if the collection is truly empty (no docs at all, not just all archived)
+    // Only seed if collection has literally never had any documents
     if(snap.empty){
       for(const app of QL_DEFAULTS){
         const ref=await addDoc(collection(db,'quick_launcher'),{...app,createdBy:'system',created:new Date().toISOString()});
@@ -1417,10 +1414,10 @@ window.saveQLApp=async()=>{
 window.removeQLApp=async(id)=>{
   if(!confirm('Remove this app from the launcher?'))return;
   try{
-    await updateDoc(doc(db,'quick_launcher',id),{archived:true});
+    await deleteDoc(doc(db,'quick_launcher',id));
     await loadQuickLauncher();
     showToast('App removed');
-  }catch(e){showToast('Error removing app','error');}
+  }catch(e){showToast('Error removing app','error');console.error(e);}
 };
 const USER_PERMS=['manage_tasks','manage_leads','manage_jobs','view_reports','manage_finance','admin_access'];
 const USER_PERM_LABELS={manage_tasks:'Manage Tasks',manage_leads:'Manage Leads',manage_jobs:'Manage Jobs',view_reports:'View Reports',manage_finance:'Manage Finance',admin_access:'Admin Access'};
@@ -1544,16 +1541,15 @@ function renderAdminTeam(){
 }
 
 window.removeTaskPanel=async(id,name)=>{
-  if(!confirm(`Remove task panel for ${name}? Their tasks will also be removed.`))return;
+  if(!confirm(`Remove panel for ${name}? Their tasks will also be removed.`))return;
   try{
-    // Archive all tasks in this panel
     const snap=await getDocs(collection(db,'tasks'));
-    const batch=[];
-    snap.forEach(d=>{if(d.data().panelId===id&&!d.data().archived)batch.push(updateDoc(doc(db,'tasks',d.id),{archived:true}));});
-    await Promise.all(batch);
-    await updateDoc(doc(db,'task_panels',id),{archived:true});
+    const deletes=[];
+    snap.forEach(d=>{if(d.data().panelId===id)deletes.push(deleteDoc(doc(db,'tasks',d.id)));});
+    await Promise.all(deletes);
+    await deleteDoc(doc(db,'task_panels',id));
     await loadTasks();renderAdminTeam();showToast(`Panel for ${name} removed`);
-  }catch(e){showToast('Error removing panel','error');}
+  }catch(e){showToast('Error removing panel','error');console.error(e);}
 };
 
 // ── DRIVE FILE LINKS ──────────────────────────────────────────────────────────
@@ -2280,7 +2276,7 @@ async function loadTaskPanels() {
   const snap = await getDocs(collection(db, 'task_panels'));
   allTaskPanels = [];
   snap.forEach(d => { if (!d.data().archived) allTaskPanels.push({ id: d.id, ...d.data() }); });
-  // Only seed defaults if the collection has never had any docs at all
+  // Only seed if collection has literally never had any documents
   if (snap.empty) {
     const defaults = ['Ronny','Harry','Pauly','Josh','Myla','Toneth'];
     for (let i = 0; i < defaults.length; i++) {
@@ -2309,10 +2305,7 @@ async function loadTasks() {
     html += `<div class="task-panel">
       <div class="task-panel-header">
         <span class="task-panel-name">${panel.name}</span>
-        <div style="display:flex;align-items:center;gap:.5rem">
-          <span class="task-panel-count">${doneCount}/${tasks.length} done</span>
-          ${isAdmin?`<button onclick="removeTaskPanel('${panel.id}','${panel.name}')" style="background:none;border:none;color:var(--text-3);cursor:pointer;font-size:.75rem;padding:2px 6px;border-radius:4px;line-height:1;transition:color .15s" title="Remove panel" onmouseover="this.style.color='var(--red)'" onmouseout="this.style.color='var(--text-3)'">✕</button>`:''}
-        </div>
+        <span class="task-panel-count">${doneCount}/${tasks.length} done</span>
       </div>
       <div class="task-panel-body">
         ${tasks.length ? tasks.map(t => `
@@ -2381,7 +2374,7 @@ window.toggleTask = async (id, completed) => {
 
 window.removeTask = async (id) => {
   if (!confirm('Remove this task?')) return;
-  try { await updateDoc(doc(db, 'tasks', id), { archived: true }); await loadTasks(); showToast('Task removed'); }
+  try { await deleteDoc(doc(db, 'tasks', id)); await loadTasks(); showToast('Task removed'); }
   catch (e) { showToast('Error removing task', 'error'); }
 };
 
