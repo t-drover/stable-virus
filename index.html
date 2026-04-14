@@ -400,6 +400,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
   <button class="fab-btn primary" onclick="openInspectionModal()"><span class="fab-btn-icon">🔍</span>Inspect</button>
   <button class="fab-btn" onclick="nav('jobs')"><span class="fab-btn-icon">🔨</span>Jobs</button>
   <button class="fab-btn" onclick="nav('messages')"><span class="fab-btn-icon">💬</span>Msgs</button>
+  <button class="fab-btn" onclick="nav('networking')"><span class="fab-btn-icon">🤝</span>Network</button>
 </div>
 
 <!-- AUTH -->
@@ -455,6 +456,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
         <span class="nav-label">Business</span>
         <button class="nav-item" onclick="nav('advertising')"><span class="nav-icon">📢</span> Advertising</button>
         <button class="nav-item" onclick="nav('workflow')"><span class="nav-icon">📌</span> RDU Workflow</button>
+        <button class="nav-item" onclick="nav('networking')"><span class="nav-icon">🤝</span> Networking</button>
         <button class="nav-item admin-only" id="navAdmin" onclick="nav('admin')"><span class="nav-icon">⚙️</span> Admin</button>
       </div>
       <div class="sidebar-bottom">
@@ -681,9 +683,6 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
       <!-- TASKS -->
       <div class="page" id="page-tasks">
         <div class="page-header"><h1>Tasks</h1><p>Type directly into any panel below to add a task. Tick to complete, ✕ to remove.</p>
-          <div class="page-actions">
-            <button class="btn btn-secondary btn-sm admin-only" id="reseedPanelsBtn" onclick="reseedTaskPanels()" style="display:none">🔄 Restore Panels</button>
-          </div>
         </div>
         <div id="tasksPanels" class="task-panels"><div class="empty-state card" style="grid-column:1/-1"><div class="empty-icon">✅</div><p>No tasks assigned yet</p></div></div>
       </div>
@@ -787,6 +786,57 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
           </div>
         </div>
         <div id="workflowContent"></div>
+      </div>
+
+
+      <!-- NETWORKING -->
+      <div class="page" id="page-networking">
+        <div class="page-header">
+          <h1>Networking</h1>
+          <p>Contacts, meetings, BNI events and referral tracking.</p>
+          <div class="page-actions">
+            <button class="btn btn-primary" onclick="openNetContactModal()">+ Add Contact</button>
+            <button class="btn btn-secondary" onclick="openNetMeetingModal()">+ Log Meeting</button>
+            <button class="btn btn-secondary" onclick="openNetReferralModal()">+ Log Referral</button>
+          </div>
+        </div>
+        <!-- Stats -->
+        <div class="stat-grid" style="grid-template-columns:repeat(auto-fit,minmax(140px,1fr));margin-bottom:1.5rem">
+          <div class="stat-card"><div class="stat-label">Contacts</div><div class="stat-value" id="netStatContacts">—</div><div class="stat-sub">In network</div></div>
+          <div class="stat-card"><div class="stat-label">Meetings</div><div class="stat-value" id="netStatMeetings">—</div><div class="stat-sub">Logged</div></div>
+          <div class="stat-card highlight"><div class="stat-label">Referrals In</div><div class="stat-value" id="netStatRefIn">—</div><div class="stat-sub">Received</div></div>
+          <div class="stat-card"><div class="stat-label">Referrals Out</div><div class="stat-value" id="netStatRefOut">—</div><div class="stat-sub">Sent</div></div>
+        </div>
+        <!-- Tabs -->
+        <div class="tab-bar" style="margin-bottom:1rem">
+          <button class="tab-btn active" onclick="switchTab('netTabContacts',this)">👥 Contacts</button>
+          <button class="tab-btn" onclick="switchTab('netTabMeetings',this)">📅 Meetings</button>
+          <button class="tab-btn" onclick="switchTab('netTabReferrals',this)">🔀 Referrals</button>
+        </div>
+        <!-- Contacts tab -->
+        <div class="tab-content active" id="netTabContacts">
+          <div class="table-wrap"><table>
+            <thead><tr><th>Name</th><th>Company</th><th>Type</th><th>Phone</th><th>Email</th><th>Notes</th><th>Actions</th></tr></thead>
+            <tbody id="netContactsTable"><tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No contacts yet</td></tr></tbody>
+          </table></div>
+          <div class="mobile-card-list" id="netContactsMobile"></div>
+        </div>
+        <!-- Meetings tab -->
+        <div class="tab-content" id="netTabMeetings">
+          <div class="table-wrap"><table>
+            <thead><tr><th>Date</th><th>Type</th><th>Contact</th><th>Location</th><th>Notes</th><th>Actions</th></tr></thead>
+            <tbody id="netMeetingsTable"><tr><td colspan="6" style="text-align:center;color:var(--text-2);padding:2rem">No meetings logged yet</td></tr></tbody>
+          </table></div>
+          <div class="mobile-card-list" id="netMeetingsMobile"></div>
+        </div>
+        <!-- Referrals tab -->
+        <div class="tab-content" id="netTabReferrals">
+          <div class="table-wrap"><table>
+            <thead><tr><th>Date</th><th>Direction</th><th>Contact</th><th>Description</th><th>Linked Lead</th><th>Value</th><th>Actions</th></tr></thead>
+            <tbody id="netReferralsTable"><tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No referrals logged yet</td></tr></tbody>
+          </table></div>
+          <div class="mobile-card-list" id="netReferralsMobile"></div>
+        </div>
       </div>
 
       <!-- ADMIN -->
@@ -1131,7 +1181,7 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
   </div>
 </div>
 <div class="toast" id="toast"></div>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://accounts.google.com/gsi/client" async defer></script>
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, signOut as fbSignOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
@@ -1157,7 +1207,7 @@ const STAGES=['lead','inspection','quoted','approved','deposit_paid','in_progres
 const STAGE_LABELS={lead:'Lead',inspection:'Inspection',quoted:'Quoted',approved:'Approved',deposit_paid:'Deposit Paid',in_progress:'In Progress',progress_claim:'Progress Claim',completed:'Completed',retention_released:'Retention Released'};
 const VALID_TRANSITIONS={lead:['inspection'],inspection:['quoted'],quoted:['approved','lead'],approved:['deposit_paid'],deposit_paid:['in_progress'],in_progress:['progress_claim','completed'],progress_claim:['completed'],completed:['retention_released'],retention_released:[]};
 const STAGE_INVOICE_TRIGGERS={approved:{type:'deposit',label:'Deposit Invoice (10%)',pct:0.10},in_progress:{type:'materials',label:'Materials Invoice (40%)',pct:0.40},progress_claim:{type:'progress',label:'Progress Invoice (30%)',pct:0.30},completed:{type:'retention',label:'Retention Invoice (20%)',pct:0.20}};
-const TEAM={'ronny@roofingdownunder.com':{name:'Ronny',role:'Owner'},'harry@roofingdownunder.com':{name:'Harry',role:'Site Lead'},'pauly@roofingdownunder.com':{name:'Pauly',role:'Operation'},'josh@roofingdownunder.com':{name:'Josh',role:'Crew'},'myla@roofingdownunder.com':{name:'Myla',role:'Operations'},'toneth@roofingdownunder.com':{name:'Toneth',role:'Admin'}};
+const TEAM={'ronny@roofingdownunder.com':{name:'Ronny',role:'Owner'},'harry@roofingdownunder.com':{name:'Harry',role:'Site Lead'},'pauly@roofingdownunder.com':{name:'Pauly',role:'Crew'},'josh@roofingdownunder.com':{name:'Josh',role:'Crew'},'myla@roofingdownunder.com':{name:'Myla',role:'Operations'},'toneth@roofingdownunder.com':{name:'Toneth',role:'Admin'}};
 const TEAM_NAMES=Object.values(TEAM).map(t=>t.name);
 const ROLE_OPTIONS=['Owner','Admin','Site Lead','Operations','Crew','Subcontractor','Estimator','Accounts','Other'];
 let userRoleCache={};  // email -> role string, loaded from Firestore user_roles/
@@ -1250,6 +1300,7 @@ window.closeModal=id=>document.getElementById(id).classList.remove('open');
 
 window.nav=id=>{
   showPage(id);
+  if(id==='networking')loadNetworking();
   // close mobile sidebar if open
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('mobileOverlay').classList.remove('open');
@@ -2276,49 +2327,31 @@ window.saveReminder=async()=>{
 let allTaskPanels = [];
 
 async function loadTaskPanels() {
-  try {
-    const snap = await getDocs(collection(db, 'task_panels'));
-    allTaskPanels = [];
-    snap.forEach(d => { if (!d.data().archived) allTaskPanels.push({ id: d.id, ...d.data() }); });
-    // Seed if collection is completely empty
-    if (snap.empty) {
-      const defaults = ['Ronny','Harry','Pauly','Josh','Myla','Toneth'];
-      for (let i = 0; i < defaults.length; i++) {
-        const ref = await addDoc(collection(db, 'task_panels'), { name: defaults[i], order: i });
-        allTaskPanels.push({ id: ref.id, name: defaults[i], order: i });
-      }
+  const snap = await getDocs(collection(db, 'task_panels'));
+  allTaskPanels = [];
+  snap.forEach(d => { if (!d.data().archived) allTaskPanels.push({ id: d.id, ...d.data() }); });
+  // Only seed if collection has literally never had any documents
+  if (snap.empty) {
+    const defaults = ['Ronny','Harry','Pauly','Josh','Myla','Toneth'];
+    for (let i = 0; i < defaults.length; i++) {
+      const ref = await addDoc(collection(db, 'task_panels'), { name: defaults[i], order: i });
+      allTaskPanels.push({ id: ref.id, name: defaults[i], order: i });
     }
-    allTaskPanels.sort((a, b) => (a.order || 0) - (b.order || 0));
-  } catch(e) {
-    console.error('loadTaskPanels error:', e);
-    allTaskPanels = [];
   }
+  allTaskPanels.sort((a, b) => (a.order || 0) - (b.order || 0));
 }
 
 async function loadTasks() {
-  try {
-    await loadTaskPanels();
-  } catch(e) { console.error('loadTaskPanels failed:', e); }
-
-  const el = document.getElementById('tasksPanels');
-  if (!el) return;
-
-  // If panels failed to load, show error state instead of blank
-  if (!allTaskPanels.length) {
-    el.innerHTML = '<div class="empty-state card" style="grid-column:1/-1"><div class="empty-icon">✅</div><p>No panels found — if this persists, contact admin.</p></div>';
-    return;
-  }
-
-  let allTasks = [];
-  try {
-    const snap = await getDocs(collection(db, 'tasks'));
-    snap.forEach(d => { const data = d.data(); if (!data.archived) allTasks.push({ id: d.id, ...data }); });
-  } catch(e) { console.error('loadTasks fetch error:', e); }
+  await loadTaskPanels();
+  const snap = await getDocs(collection(db, 'tasks'));
+  const allTasks = [];
+  snap.forEach(d => { const data = d.data(); if (!data.archived) allTasks.push({ id: d.id, ...data }); });
 
   const byPanel = {};
   allTaskPanels.forEach(p => { byPanel[p.id] = []; });
   allTasks.forEach(t => { if (byPanel[t.panelId] !== undefined) byPanel[t.panelId].push(t); });
 
+  const el = document.getElementById('tasksPanels');
   let html = '';
   allTaskPanels.forEach(panel => {
     const tasks = byPanel[panel.id] || [];
@@ -2343,7 +2376,7 @@ async function loadTasks() {
     </div>`;
   });
 
-  el.innerHTML = html;
+  el.innerHTML = html || '<div class="empty-state card" style="grid-column:1/-1"><div class="empty-icon">✅</div><p>No panels yet — add one in Admin Settings</p></div>';
 
   // Sync dropdown in assign modal
   const sel = document.getElementById('taskAssignTo');
@@ -2413,27 +2446,6 @@ window.addTaskPanel = async () => {
 
 // Quick Launcher removed — stub to avoid loadAll errors
 async function loadQuickLinks() {}
-
-window.reseedTaskPanels = async () => {
-  if (!isAdmin) { showToast('Admin only', 'error'); return; }
-  if (!confirm('This will re-create the default panels (Ronny, Harry, Pauly, Josh, Myla, Toneth). Existing panels will NOT be deleted. Continue?')) return;
-  const defaults = ['Ronny','Harry','Pauly','Josh','Myla','Toneth'];
-  try {
-    // Check which names already exist
-    const snap = await getDocs(collection(db, 'task_panels'));
-    const existingNames = [];
-    snap.forEach(d => { if (!d.data().archived) existingNames.push((d.data().name||'').toLowerCase()); });
-    let added = 0;
-    for (let i = 0; i < defaults.length; i++) {
-      if (!existingNames.includes(defaults[i].toLowerCase())) {
-        await addDoc(collection(db, 'task_panels'), { name: defaults[i], order: i });
-        added++;
-      }
-    }
-    await loadTasks();
-    showToast(added > 0 ? `Restored ${added} missing panel(s) ✅` : 'All panels already exist');
-  } catch(e) { showToast('Error restoring panels', 'error'); console.error(e); }
-};
 
 
 
@@ -3198,7 +3210,354 @@ window.addEventListener('resize', applyMobilePadding);
 applyMobilePadding();
 
 // Expose globals
+
+
+// ── NETWORKING MODULE ─────────────────────────────────────────────────────────
+let allNetContacts = [];
+
+const NET_TYPE_LABELS = {
+  bni:'BNI Member', referral_partner:'Referral Partner', supplier:'Supplier',
+  builder:'Builder', architect:'Architect', real_estate:'Real Estate Agent', other:'Other'
+};
+const NET_MEETING_LABELS = {
+  bni:'BNI Meeting', one_to_one:'One-to-One', networking_event:'Networking Event',
+  coffee:'Coffee Catch-up', site_visit:'Site Visit', other:'Other'
+};
+
+async function loadNetworking() {
+  try {
+    // Load contacts
+    const cSnap = await getDocs(collection(db, 'net_contacts'));
+    allNetContacts = [];
+    cSnap.forEach(d => { if (!d.data().archived) allNetContacts.push({ id: d.id, ...d.data() }); });
+    allNetContacts.sort((a, b) => (a.name||'').localeCompare(b.name||''));
+
+    // Load meetings
+    const mSnap = await getDocs(collection(db, 'net_meetings'));
+    const meetings = [];
+    mSnap.forEach(d => { if (!d.data().archived) meetings.push({ id: d.id, ...d.data() }); });
+    meetings.sort((a, b) => (b.date||'').localeCompare(a.date||''));
+
+    // Load referrals
+    const rSnap = await getDocs(collection(db, 'net_referrals'));
+    const referrals = [];
+    rSnap.forEach(d => { if (!d.data().archived) referrals.push({ id: d.id, ...d.data() }); });
+    referrals.sort((a, b) => (b.date||'').localeCompare(a.date||''));
+
+    // Stats
+    const refIn = referrals.filter(r => r.direction === 'received').length;
+    const refOut = referrals.filter(r => r.direction === 'sent').length;
+    document.getElementById('netStatContacts').textContent = allNetContacts.length;
+    document.getElementById('netStatMeetings').textContent = meetings.length;
+    document.getElementById('netStatRefIn').textContent = refIn;
+    document.getElementById('netStatRefOut').textContent = refOut;
+
+    // Render contacts table
+    const ctb = document.getElementById('netContactsTable');
+    if (ctb) ctb.innerHTML = allNetContacts.length ? allNetContacts.map(c => `
+      <tr>
+        <td style="font-weight:500">${c.name||''}</td>
+        <td>${c.company||''}</td>
+        <td><span style="background:var(--surface);padding:2px 8px;border-radius:4px;font-size:.75rem">${NET_TYPE_LABELS[c.type]||c.type||''}</span></td>
+        <td>${c.phone||''}</td>
+        <td>${c.email||''}</td>
+        <td style="font-size:.82rem;color:var(--text-2);max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${c.notes||''}</td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-xs btn-secondary" onclick="editNetContact('${c.id}')">Edit</button>
+          <button class="btn btn-xs btn-danger" onclick="archiveItem('net_contacts','${c.id}',loadNetworking)">Archive</button>
+        </td>
+      </tr>`).join('') : '<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No contacts yet</td></tr>';
+
+    // Contacts mobile
+    const cmob = document.getElementById('netContactsMobile');
+    if (cmob) cmob.innerHTML = allNetContacts.length ? allNetContacts.map(c => `
+      <div class="m-card">
+        <div class="m-card-row">
+          <div class="m-card-title">${c.name||''}</div>
+          <span style="background:var(--surface);padding:2px 8px;border-radius:4px;font-size:.72rem">${NET_TYPE_LABELS[c.type]||c.type||''}</span>
+        </div>
+        <div class="m-card-sub">${c.company||''} ${c.location ? '· '+c.location : ''}</div>
+        <div class="m-card-sub">${c.phone||''} ${c.email ? '· '+c.email : ''}</div>
+        <div class="m-card-actions">
+          <button class="btn btn-xs btn-secondary" onclick="editNetContact('${c.id}')">Edit</button>
+          <button class="btn btn-xs btn-danger" onclick="archiveItem('net_contacts','${c.id}',loadNetworking)">Archive</button>
+        </div>
+      </div>`).join('') : '<div style="padding:2rem;text-align:center;color:var(--text-2);font-size:.85rem">No contacts yet</div>';
+
+    // Meetings table
+    const mtb = document.getElementById('netMeetingsTable');
+    if (mtb) mtb.innerHTML = meetings.length ? meetings.map(m => {
+      const contact = allNetContacts.find(c => c.id === m.contactId);
+      return `<tr>
+        <td>${m.date ? new Date(m.date+'T00:00:00').toLocaleDateString('en-AU') : ''}</td>
+        <td><span style="background:var(--surface);padding:2px 8px;border-radius:4px;font-size:.75rem">${NET_MEETING_LABELS[m.type]||m.type||''}</span></td>
+        <td>${contact ? contact.name : (m.contactName||'—')}</td>
+        <td>${m.location||''}</td>
+        <td style="font-size:.82rem;color:var(--text-2);max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${m.notes||''}</td>
+        <td><button class="btn btn-xs btn-danger" onclick="archiveItem('net_meetings','${m.id}',loadNetworking)">Archive</button></td>
+      </tr>`;
+    }).join('') : '<tr><td colspan="6" style="text-align:center;color:var(--text-2);padding:2rem">No meetings logged yet</td></tr>';
+
+    // Meetings mobile
+    const mmob = document.getElementById('netMeetingsMobile');
+    if (mmob) mmob.innerHTML = meetings.length ? meetings.map(m => {
+      const contact = allNetContacts.find(c => c.id === m.contactId);
+      return `<div class="m-card">
+        <div class="m-card-row">
+          <div class="m-card-title">${NET_MEETING_LABELS[m.type]||m.type||''}</div>
+          <span style="font-size:.75rem;color:var(--text-3)">${m.date ? new Date(m.date+'T00:00:00').toLocaleDateString('en-AU') : ''}</span>
+        </div>
+        <div class="m-card-sub">${contact ? contact.name : ''} ${m.location ? '· '+m.location : ''}</div>
+        ${m.notes ? `<div class="m-card-sub">${m.notes}</div>` : ''}
+        <div class="m-card-actions"><button class="btn btn-xs btn-danger" onclick="archiveItem('net_meetings','${m.id}',loadNetworking)">Archive</button></div>
+      </div>`;
+    }).join('') : '<div style="padding:2rem;text-align:center;color:var(--text-2);font-size:.85rem">No meetings yet</div>';
+
+    // Referrals table
+    const rtb = document.getElementById('netReferralsTable');
+    if (rtb) rtb.innerHTML = referrals.length ? referrals.map(r => {
+      const contact = allNetContacts.find(c => c.id === r.contactId);
+      const dirBadge = r.direction === 'received'
+        ? '<span style="background:rgba(76,175,125,.15);color:var(--green);padding:2px 10px;border-radius:12px;font-size:.72rem;font-weight:500">↓ Received</span>'
+        : '<span style="background:rgba(91,155,213,.15);color:var(--blue);padding:2px 10px;border-radius:12px;font-size:.72rem;font-weight:500">↑ Sent</span>';
+      return `<tr>
+        <td>${r.date ? new Date(r.date+'T00:00:00').toLocaleDateString('en-AU') : ''}</td>
+        <td>${dirBadge}</td>
+        <td>${contact ? contact.name : (r.contactName||'—')}</td>
+        <td style="font-size:.82rem;color:var(--text-2)">${r.desc||''}</td>
+        <td style="font-size:.82rem">${r.leadRef||'—'}</td>
+        <td style="font-weight:500;color:var(--rust-lt)">${r.value ? fmt$(r.value) : '—'}</td>
+        <td><button class="btn btn-xs btn-danger" onclick="archiveItem('net_referrals','${r.id}',loadNetworking)">Archive</button></td>
+      </tr>`;
+    }).join('') : '<tr><td colspan="7" style="text-align:center;color:var(--text-2);padding:2rem">No referrals logged yet</td></tr>';
+
+    // Referrals mobile
+    const rmob = document.getElementById('netReferralsMobile');
+    if (rmob) rmob.innerHTML = referrals.length ? referrals.map(r => {
+      const contact = allNetContacts.find(c => c.id === r.contactId);
+      const dirLabel = r.direction === 'received' ? '↓ Received' : '↑ Sent';
+      const dirColor = r.direction === 'received' ? 'var(--green)' : 'var(--blue)';
+      return `<div class="m-card">
+        <div class="m-card-row">
+          <div class="m-card-title">${contact ? contact.name : ''}</div>
+          <span style="color:${dirColor};font-size:.78rem;font-weight:600">${dirLabel}</span>
+        </div>
+        <div class="m-card-sub">${r.desc||''}</div>
+        <div class="m-card-row" style="margin-top:.35rem">
+          <span style="font-size:.75rem;color:var(--text-3)">${r.date ? new Date(r.date+'T00:00:00').toLocaleDateString('en-AU') : ''} ${r.leadRef ? '· '+r.leadRef : ''}</span>
+          <span style="font-size:.82rem;font-weight:600;color:var(--rust-lt)">${r.value ? fmt$(r.value) : ''}</span>
+        </div>
+        <div class="m-card-actions"><button class="btn btn-xs btn-danger" onclick="archiveItem('net_referrals','${r.id}',loadNetworking)">Archive</button></div>
+      </div>`;
+    }).join('') : '<div style="padding:2rem;text-align:center;color:var(--text-2);font-size:.85rem">No referrals yet</div>';
+
+  } catch(e) { console.error('loadNetworking error:', e); showToast('Error loading networking data', 'error'); }
+}
+
+// ── CONTACTS ─────────────────────────────────────────────────────────────────
+window.openNetContactModal = () => {
+  document.getElementById('netContactModalTitle').textContent = 'Add Contact';
+  document.getElementById('netContactId').value = '';
+  ['netCName','netCCompany','netCPhone','netCEmail','netCLocation','netCNotes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('netCType').value = 'bni';
+  openModal('netContactModal');
+};
+
+window.editNetContact = (id) => {
+  const c = allNetContacts.find(x => x.id === id);
+  if (!c) return;
+  document.getElementById('netContactModalTitle').textContent = 'Edit Contact';
+  document.getElementById('netContactId').value = id;
+  document.getElementById('netCName').value = c.name || '';
+  document.getElementById('netCCompany').value = c.company || '';
+  document.getElementById('netCType').value = c.type || 'other';
+  document.getElementById('netCPhone').value = c.phone || '';
+  document.getElementById('netCEmail').value = c.email || '';
+  document.getElementById('netCLocation').value = c.location || '';
+  document.getElementById('netCNotes').value = c.notes || '';
+  openModal('netContactModal');
+};
+
+window.saveNetContact = async () => {
+  const name = document.getElementById('netCName').value.trim();
+  if (!name) { showToast('Name is required', 'error'); return; }
+  const id = document.getElementById('netContactId').value;
+  const data = {
+    name, company: document.getElementById('netCCompany').value.trim(),
+    type: document.getElementById('netCType').value,
+    phone: document.getElementById('netCPhone').value.trim(),
+    email: document.getElementById('netCEmail').value.trim(),
+    location: document.getElementById('netCLocation').value.trim(),
+    notes: document.getElementById('netCNotes').value.trim(),
+    updatedAt: new Date().toISOString()
+  };
+  try {
+    if (id) {
+      await updateDoc(doc(db, 'net_contacts', id), data);
+      showToast('Contact updated');
+    } else {
+      data.created = new Date().toISOString();
+      await addDoc(collection(db, 'net_contacts'), data);
+      showToast('Contact added');
+    }
+    closeModal('netContactModal');
+    await loadNetworking();
+  } catch(e) { showToast('Error saving contact', 'error'); console.error(e); }
+};
+
+// ── MEETINGS ─────────────────────────────────────────────────────────────────
+function populateNetContactDropdowns() {
+  const opts = '<option value="">— Select contact —</option>' +
+    allNetContacts.map(c => `<option value="${c.id}">${c.name}${c.company ? ' · '+c.company : ''}</option>`).join('');
+  ['netMContact','netRContact'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.innerHTML = opts;
+  });
+}
+
+window.openNetMeetingModal = async () => {
+  if (!allNetContacts.length) await loadNetworking();
+  populateNetContactDropdowns();
+  document.getElementById('netMDate').value = new Date().toISOString().slice(0,10);
+  document.getElementById('netMType').value = 'bni';
+  document.getElementById('netMLocation').value = '';
+  document.getElementById('netMNotes').value = '';
+  openModal('netMeetingModal');
+};
+
+window.saveNetMeeting = async () => {
+  const date = document.getElementById('netMDate').value;
+  if (!date) { showToast('Date is required', 'error'); return; }
+  const contactId = document.getElementById('netMContact').value;
+  const contact = allNetContacts.find(c => c.id === contactId);
+  const data = {
+    date, type: document.getElementById('netMType').value,
+    contactId, contactName: contact ? contact.name : '',
+    location: document.getElementById('netMLocation').value.trim(),
+    notes: document.getElementById('netMNotes').value.trim(),
+    created: new Date().toISOString(), createdBy: currentUser?.email
+  };
+  try {
+    await addDoc(collection(db, 'net_meetings'), data);
+    closeModal('netMeetingModal');
+    await loadNetworking();
+    showToast('Meeting logged');
+  } catch(e) { showToast('Error saving meeting', 'error'); console.error(e); }
+};
+
+// ── REFERRALS ─────────────────────────────────────────────────────────────────
+window.openNetReferralModal = async () => {
+  if (!allNetContacts.length) await loadNetworking();
+  populateNetContactDropdowns();
+  // Populate leads dropdown
+  const leads = allLeadsCache || [];
+  const leadEl = document.getElementById('netRLead');
+  if (leadEl) {
+    leadEl.innerHTML = '<option value="">— No lead linked —</option>' +
+      leads.filter(l => l.jobNumber).map(l => `<option value="#${l.jobNumber} — ${l.name||''}">#${l.jobNumber} — ${l.name||''}</option>`).join('');
+  }
+  document.getElementById('netRDate').value = new Date().toISOString().slice(0,10);
+  document.getElementById('netRDirection').value = 'received';
+  document.getElementById('netRValue').value = '';
+  document.getElementById('netRDesc').value = '';
+  openModal('netReferralModal');
+};
+
+window.saveNetReferral = async () => {
+  const date = document.getElementById('netRDate').value;
+  if (!date) { showToast('Date is required', 'error'); return; }
+  const contactId = document.getElementById('netRContact').value;
+  const contact = allNetContacts.find(c => c.id === contactId);
+  const data = {
+    date, direction: document.getElementById('netRDirection').value,
+    contactId, contactName: contact ? contact.name : '',
+    leadRef: document.getElementById('netRLead').value,
+    value: document.getElementById('netRValue').value || 0,
+    desc: document.getElementById('netRDesc').value.trim(),
+    created: new Date().toISOString(), createdBy: currentUser?.email
+  };
+  try {
+    await addDoc(collection(db, 'net_referrals'), data);
+    closeModal('netReferralModal');
+    await loadNetworking();
+    showToast('Referral logged');
+  } catch(e) { showToast('Error saving referral', 'error'); console.error(e); }
+};
+
+window.loadNetworking = loadNetworking;
+
 window.loadJobs=loadJobs;window.loadLeads=loadLeads;window.loadSchedule=loadSchedule;window.loadInspections=loadInspections;window.loadInvoices=loadInvoices;window.loadReports=loadReports;window.loadAds=loadAds;window.loadReminders=loadReminders;window.loadTasks=loadTasks;window.loadAllFiles=loadAllFiles;
 </script>
+
+<!-- NETWORKING MODALS -->
+<div class="modal-overlay" id="netContactModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title" id="netContactModalTitle">Add Contact</div><button class="modal-close" onclick="closeModal('netContactModal')">✕</button></div>
+    <input type="hidden" id="netContactId">
+    <div class="form-grid">
+      <div class="form-field"><label>Full Name</label><input id="netCName" placeholder="e.g. John Smith"></div>
+      <div class="form-field"><label>Company</label><input id="netCCompany" placeholder="e.g. Smith Builders"></div>
+      <div class="form-field"><label>Relationship Type</label>
+        <select id="netCType">
+          <option value="bni">BNI Member</option>
+          <option value="referral_partner">Referral Partner</option>
+          <option value="supplier">Supplier</option>
+          <option value="builder">Builder</option>
+          <option value="architect">Architect</option>
+          <option value="real_estate">Real Estate Agent</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-field"><label>Phone</label><input id="netCPhone" placeholder="04xx xxx xxx" type="tel"></div>
+      <div class="form-field"><label>Email</label><input id="netCEmail" placeholder="john@example.com" type="email"></div>
+      <div class="form-field"><label>Location / Suburb</label><input id="netCLocation" placeholder="e.g. Sutherland"></div>
+      <div class="form-field full"><label>Notes</label><textarea id="netCNotes" placeholder="How we met, what they do, anything useful…"></textarea></div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('netContactModal')">Cancel</button><button class="btn btn-primary" onclick="saveNetContact()">Save Contact</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="netMeetingModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Log Meeting / Event</div><button class="modal-close" onclick="closeModal('netMeetingModal')">✕</button></div>
+    <div class="form-grid">
+      <div class="form-field"><label>Date</label><input type="date" id="netMDate"></div>
+      <div class="form-field"><label>Meeting Type</label>
+        <select id="netMType">
+          <option value="bni">BNI Meeting</option>
+          <option value="one_to_one">One-to-One</option>
+          <option value="networking_event">Networking Event</option>
+          <option value="coffee">Coffee Catch-up</option>
+          <option value="site_visit">Site Visit</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+      <div class="form-field"><label>Contact</label><select id="netMContact"><option value="">— Select contact —</option></select></div>
+      <div class="form-field"><label>Location / Venue</label><input id="netMLocation" placeholder="e.g. Miranda BNI Chapter"></div>
+      <div class="form-field full"><label>Notes / Outcome</label><textarea id="netMNotes" placeholder="What was discussed, follow-ups needed…"></textarea></div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('netMeetingModal')">Cancel</button><button class="btn btn-primary" onclick="saveNetMeeting()">Save Meeting</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="netReferralModal">
+  <div class="modal">
+    <div class="modal-header"><div class="modal-title">Log Referral</div><button class="modal-close" onclick="closeModal('netReferralModal')">✕</button></div>
+    <div class="form-grid">
+      <div class="form-field"><label>Date</label><input type="date" id="netRDate"></div>
+      <div class="form-field"><label>Direction</label>
+        <select id="netRDirection">
+          <option value="received">Received (someone referred to us)</option>
+          <option value="sent">Sent (we referred someone)</option>
+        </select>
+      </div>
+      <div class="form-field"><label>Contact (who referred / who we referred to)</label><select id="netRContact"><option value="">— Select contact —</option></select></div>
+      <div class="form-field"><label>Linked Lead (optional)</label><select id="netRLead"><option value="">— No lead linked —</option></select></div>
+      <div class="form-field"><label>Estimated Value ($)</label><input type="number" id="netRValue" placeholder="0"></div>
+      <div class="form-field full"><label>Description</label><textarea id="netRDesc" placeholder="Who was referred, what for, outcome…"></textarea></div>
+    </div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal('netReferralModal')">Cancel</button><button class="btn btn-primary" onclick="saveNetReferral()">Save Referral</button></div>
+  </div>
+</div>
 </body>
 </html>
