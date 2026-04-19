@@ -334,7 +334,16 @@
       -webkit-appearance:none;
       appearance:none;
     }
+    input::placeholder,
+    textarea::placeholder{
+      color:transparent!important;
+      opacity:0!important;
+    }
+    ::-webkit-input-placeholder{color:transparent!important;opacity:0!important}
+    ::-moz-placeholder{color:transparent!important;opacity:0!important}
+    :-ms-input-placeholder{color:transparent!important;opacity:0!important}
     textarea{overflow:hidden}
+    select{color:#111}
 
     .field-row{gap:8px;margin-bottom:6px}
 
@@ -850,7 +859,42 @@
   }
 
   function printReport() {
-    window.print();
+    // Strip placeholders from all unfilled inputs and textareas
+    const inputs = document.querySelectorAll('input[placeholder], textarea[placeholder]');
+    const placeholderMap = [];
+    inputs.forEach(function(el) {
+      placeholderMap.push({ el: el, val: el.getAttribute('placeholder') });
+      el.setAttribute('placeholder', '');
+      // Also clear value if it only contains placeholder-like text
+    });
+
+    // Hide empty select default option text
+    const selects = document.querySelectorAll('select');
+    const selectMap = [];
+    selects.forEach(function(sel) {
+      const firstOpt = sel.options[0];
+      if (firstOpt && sel.value === '') {
+        selectMap.push({ opt: firstOpt, text: firstOpt.text });
+        firstOpt.text = '';
+      }
+    });
+
+    // Wait for DOM to repaint before triggering print
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        window.print();
+
+        // Restore everything after print dialog closes
+        setTimeout(function() {
+          placeholderMap.forEach(function(item) {
+            item.el.setAttribute('placeholder', item.val);
+          });
+          selectMap.forEach(function(item) {
+            item.opt.text = item.text;
+          });
+        }, 1000);
+      });
+    });
   }
 </script>
 </body>
