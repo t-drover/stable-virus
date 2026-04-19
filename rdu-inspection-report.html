@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RDU Site Inspection Report</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=DM+Sans:wght@400;500&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --rust:#8B4513;
+    --mocha:#5C3D2E;
+    --beige:#F5EFE6;
+    --cream:#FAF7F2;
+    --border:#D4C5B0;
+    --text:#2C1810;
+    --muted:#7A6055;
+    --accent:#A0522D;
+    --high:#8B1A1A;
+    --high-bg:#FFF0F0;
+    --med:#7A5A00;
+    --med-bg:#FFFBE6;
+    --low:#2A5C3F;
+    --low-bg:#EFF7F2;
+  }
+
+  body{
+    font-family:'DM Sans',sans-serif;
+    background:var(--cream);
+    color:var(--text);
+    font-size:15px;
+    line-height:1.6;
+  }
+
+  .form-wrap{
+    max-width:900px;
+    margin:0 auto;
+    padding:2rem 1.5rem 5rem;
+  }
+
+  /* ── SCREEN HEADER ── */
+  .screen-header{
+    text-align:center;
+    padding:2rem 1rem 1.5rem;
+    border-bottom:2px solid var(--border);
+    margin-bottom:2rem;
+  }
+  .rdu-logo{
+    font-family:'Cormorant Garamond',serif;
+    font-size:2.2rem;
+    font-weight:600;
+    color:var(--mocha);
+    letter-spacing:0.04em;
+  }
+  .rdu-tagline{
+    font-size:11px;
+    color:var(--muted);
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    margin-top:5px;
+  }
+  .rdu-licence{
+    font-family:'DM Mono',monospace;
+    font-size:11px;
+    color:var(--muted);
+    margin-top:6px;
+  }
+
+  /* ── CARDS ── */
+  .section-card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:1.5rem;
+    margin-bottom:1.4rem;
+  }
+  .section-title{
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.3rem;
+    font-weight:600;
+    color:var(--mocha);
+    margin-bottom:1.2rem;
+    padding-bottom:0.5rem;
+    border-bottom:1px solid var(--border);
+  }
+
+  /* ── FIELDS ── */
+  .field-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:1rem;
+    margin-bottom:1rem;
+  }
+  .field-row.full{grid-template-columns:1fr}
+  .field-row.three{grid-template-columns:1fr 1fr 1fr}
+  .field-group{display:flex;flex-direction:column;gap:4px}
+  label{
+    font-size:11px;
+    font-weight:500;
+    color:var(--muted);
+    letter-spacing:0.07em;
+    text-transform:uppercase;
+  }
+  input[type=text],
+  input[type=date],
+  input[type=tel],
+  input[type=email],
+  textarea,
+  select{
+    width:100%;
+    padding:8px 12px;
+    border:1px solid var(--border);
+    border-radius:6px;
+    font-family:'DM Sans',sans-serif;
+    font-size:14px;
+    color:var(--text);
+    background:var(--cream);
+    outline:none;
+    transition:border-color 0.2s,background 0.2s;
+  }
+  input:focus,textarea:focus,select:focus{
+    border-color:var(--accent);
+    background:#fff;
+  }
+  textarea{resize:vertical;min-height:72px}
+
+  /* ── ISSUE SECTION ── */
+  .issue-card{
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:1.5rem;
+    margin-bottom:1.4rem;
+    border-left:4px solid var(--rust);
+  }
+  .issue-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:1.2rem;
+    padding-bottom:0.5rem;
+    border-bottom:1px solid var(--border);
+  }
+  .issue-label{
+    font-family:'Cormorant Garamond',serif;
+    font-size:1.25rem;
+    font-weight:600;
+    color:var(--rust);
+  }
+  .btn-remove{
+    background:none;
+    border:1px solid #e0b0b0;
+    color:#a04040;
+    padding:4px 12px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:12px;
+    font-family:'DM Sans',sans-serif;
+    transition:background 0.15s;
+  }
+  .btn-remove:hover{background:#fff0f0}
+
+  /* Priority badge colors on select */
+  select.pri-high{border-color:#d08080;background:var(--high-bg);color:var(--high)}
+  select.pri-med{border-color:#c8b060;background:var(--med-bg);color:var(--med)}
+  select.pri-low{border-color:#80b09a;background:var(--low-bg);color:var(--low)}
+
+  /* ── PHOTO ZONE ── */
+  .photo-zone{
+    border:2px dashed var(--border);
+    border-radius:8px;
+    padding:1rem;
+    margin-top:0.8rem;
+    background:var(--beige);
+  }
+  .photo-zone-label{
+    font-size:11px;
+    color:var(--muted);
+    margin-bottom:0.7rem;
+    font-weight:500;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+  }
+  .photo-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-bottom:0.8rem;
+  }
+  .photo-thumb{
+    position:relative;
+    border-radius:6px;
+    overflow:hidden;
+    border:1px solid var(--border);
+    background:var(--beige);
+    aspect-ratio:4/3;
+  }
+  .photo-thumb img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .del-photo{
+    position:absolute;
+    top:3px;
+    right:3px;
+    background:rgba(0,0,0,0.65);
+    color:#fff;
+    border:none;
+    border-radius:50%;
+    width:20px;
+    height:20px;
+    font-size:11px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'DM Sans',sans-serif;
+    font-weight:500;
+    line-height:1;
+  }
+  .del-photo:hover{background:rgba(160,40,40,0.85)}
+  .btn-add-photo{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:7px 14px;
+    background:#fff;
+    border:1px solid var(--border);
+    border-radius:6px;
+    font-size:13px;
+    color:var(--mocha);
+    cursor:pointer;
+    font-family:'DM Sans',sans-serif;
+    font-weight:500;
+    transition:background 0.15s,border-color 0.15s;
+  }
+  .btn-add-photo:hover{background:var(--beige);border-color:var(--accent)}
+  .hidden-file{display:none}
+
+  /* ── ADD SECTION BTN ── */
+  .btn-add-section{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    width:100%;
+    padding:11px 20px;
+    background:#fff;
+    border:1.5px dashed var(--accent);
+    border-radius:8px;
+    color:var(--accent);
+    font-family:'DM Sans',sans-serif;
+    font-size:14px;
+    font-weight:500;
+    cursor:pointer;
+    margin-bottom:1.4rem;
+    transition:background 0.15s;
+  }
+  .btn-add-section:hover{background:var(--beige)}
+
+  /* ── SIGNATURE ── */
+  .sig-line{
+    border-bottom:1px solid var(--border);
+    margin-top:0.6rem;
+    height:44px;
+  }
+
+  /* ── ACTIONS ── */
+  .actions{text-align:center;padding:1.5rem 0 0.5rem}
+  .btn-print{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:13px 32px;
+    background:var(--mocha);
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    font-family:'DM Sans',sans-serif;
+    font-size:15px;
+    font-weight:500;
+    cursor:pointer;
+    transition:background 0.15s;
+  }
+  .btn-print:hover{background:var(--rust)}
+  .print-note{
+    font-size:12px;
+    color:var(--muted);
+    margin-top:0.6rem;
+  }
+
+  /* ── PRINT STYLES ── */
+  @media print{
+    body{background:#fff;font-size:12px;color:#111}
+    .screen-header,
+    .btn-add-section,
+    .btn-remove,
+    .btn-add-photo,
+    .del-photo,
+    .photo-zone,
+    .actions,
+    .print-note,
+    .screen-only{display:none!important}
+
+    .form-wrap{padding:0;max-width:100%}
+
+    .print-header{display:table!important;width:100%;margin-bottom:12px}
+    .print-header td{vertical-align:bottom}
+
+    .section-card,
+    .issue-card{
+      border:1px solid #bbb;
+      border-radius:0;
+      padding:10px 12px;
+      margin-bottom:10px;
+      page-break-inside:avoid;
+    }
+    .issue-card{border-left:3px solid #8B4513}
+
+    .section-title,.issue-label{
+      font-family:'Cormorant Garamond',serif;
+      color:#5C3D2E;
+      page-break-after:avoid;
+    }
+
+    input,textarea,select{
+      border:none;
+      background:transparent;
+      padding:0 2px;
+      font-size:12px;
+      color:#111;
+      -webkit-appearance:none;
+      appearance:none;
+    }
+    textarea{overflow:hidden}
+
+    .field-row{gap:8px;margin-bottom:6px}
+
+    /* Photos print inline */
+    .print-photo-section{display:block!important}
+    .print-photo-grid{
+      display:grid!important;
+      grid-template-columns:1fr 1fr;
+      gap:6px;
+      margin:6px 0 0;
+    }
+    .print-photo-grid img{
+      width:100%;
+      height:auto;
+      aspect-ratio:4/3;
+      object-fit:cover;
+      border:1px solid #ccc;
+      border-radius:3px;
+      display:block;
+    }
+    .print-photo-label{
+      font-size:10px;
+      color:#7A6055;
+      font-weight:500;
+      text-transform:uppercase;
+      letter-spacing:0.06em;
+      margin-top:8px;
+      margin-bottom:4px;
+      border-top:1px solid #ddd;
+      padding-top:6px;
+    }
+
+    select.pri-high{color:#8B1A1A!important}
+    select.pri-med{color:#7A5A00!important}
+    select.pri-low{color:#2A5C3F!important}
+    .sig-canvas{display:none!important}
+    .sig-clear{display:none!important}
+    .sig-actions{display:none!important}
+    .sig-print-img{display:block!important;width:100%!important;height:auto!important;border:1px solid #ccc;border-radius:4px;min-height:60px}
+
+    @page{margin:16mm 14mm;size:A4}
+    hr.print-rule{border:1px solid #444;margin:8px 0}
+  }
+  /* ── SIGNATURE PAD ── */
+  .sig-pad-wrap{margin-top:6px}
+  .sig-canvas{
+    width:100%;
+    height:120px;
+    border:1px solid var(--border);
+    border-radius:6px;
+    background:#fff;
+    cursor:crosshair;
+    display:block;
+    touch-action:none;
+  }
+  .sig-actions{display:flex;gap:8px;margin-top:5px}
+  .sig-clear{
+    font-size:11px;
+    color:var(--muted);
+    background:none;
+    border:1px solid var(--border);
+    border-radius:5px;
+    padding:3px 10px;
+    cursor:pointer;
+    font-family:'DM Sans',sans-serif;
+  }
+  .sig-clear:hover{background:var(--beige)}
+</style>
+</head>
+<body>
+
+<div class="form-wrap" id="mainForm">
+
+  <!-- SCREEN HEADER -->
+  <div class="screen-header screen-only">
+    <div class="rdu-logo">Inspection Report</div>
+  </div>
+
+  <!-- PRINT HEADER -->
+  <table class="print-header" style="display:none;margin-bottom:14px">
+    <tr>
+      <td style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:#5C3D2E;padding-bottom:2px">Inspection Report</td>
+    </tr>
+  </table>
+  <hr class="print-header" style="display:none;border:1.5px solid #444;margin-bottom:12px">
+
+  <!-- JOB DETAILS -->
+  <div class="section-card">
+    <div class="section-title">Job Details</div>
+    <div class="field-row">
+      <div class="field-group">
+        <label>Inspection Reference</label>
+        <input type="text" id="inspRef" placeholder="e.g. RDU-INSP-2026-001">
+      </div>
+      <div class="field-group">
+        <label>Inspection Date</label>
+        <input type="date" id="inspDate">
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field-group">
+        <label>Inspected By</label>
+        <input type="text" id="inspector" placeholder="Inspector full name">
+      </div>
+      <div class="field-group">
+        <label>Client Name</label>
+        <input type="text" id="clientName" placeholder="Client full name">
+      </div>
+    </div>
+      <div class="field-group">
+        <label>Property Address</label>
+        <input type="text" id="address" placeholder="Full site address">
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field-group">
+        <label>Contact Phone</label>
+        <input type="tel" id="contactPhone" placeholder="Phone number">
+      </div>
+      <div class="field-group">
+        <label>Contact Email</label>
+        <input type="email" id="contactEmail" placeholder="Email address">
+      </div>
+    </div>
+  </div>
+
+  <!-- ISSUES CONTAINER -->
+  <div id="issuesContainer"></div>
+
+  <!-- ADD ISSUE BUTTON -->
+  <button class="btn-add-section screen-only" onclick="addIssue()">
+    <span style="font-size:20px;font-weight:300;line-height:1">+</span> Add Concern / Issue Section
+  </button>
+
+  <!-- ADDITIONAL PHOTOS -->
+  <div class="section-card" id="otherPhotosCard">
+    <div class="section-title">Additional Site Photos</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:0.8rem">General site photos not tied to a specific concern.</p>
+    <div class="photo-zone screen-only" id="zone-other">
+      <div class="photo-zone-label">Upload photos</div>
+      <div class="photo-grid" id="grid-other"></div>
+      <button class="btn-add-photo" onclick="triggerPhoto('other')">+ Add Photos</button>
+      <input type="file" class="hidden-file" id="file-other" accept="image/*,.heic,.heif,image/heic,image/heif" multiple onchange="handlePhotos(this,'other')">
+    </div>
+    <!-- Print version of additional photos -->
+    <div class="print-photo-section" style="display:none">
+      <div class="print-photo-label">Additional site photos</div>
+      <div class="print-photo-grid" id="print-grid-other"></div>
+    </div>
+  </div>
+
+  <!-- GENERAL NOTES -->
+  <div class="section-card">
+    <div class="section-title">General Notes / Recommendations</div>
+    <div class="field-group">
+      <textarea id="generalNotes" rows="4" placeholder="Overall site assessment, summary of findings, recommended next steps..."></textarea>
+    </div>
+  </div>
+
+  <!-- SIGN-OFF -->
+  <div class="section-card">
+    <div class="section-title">Sign-off</div>
+    <div class="field-row">
+      <div class="field-group">
+        <label>Inspector Signature</label>
+        <div class="sig-pad-wrap">
+          <canvas class="sig-canvas" id="sig-inspector" width="800" height="240"></canvas>
+          <img class="sig-print-img" id="sig-inspector-img" src="" alt="Inspector signature" style="display:none;width:100%;height:auto;border:1px solid #ccc;border-radius:4px">
+          <div class="sig-actions">
+            <button class="sig-clear" onclick="clearSig('sig-inspector')">Clear</button>
+          </div>
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Inspector Name &amp; Date</label>
+        <input type="text" placeholder="Print full name" style="margin-bottom:8px">
+        <input type="date" id="sigDateInspector">
+      </div>
+    </div>
+    <div class="field-row" style="margin-top:1.2rem">
+      <div class="field-group">
+        <label>Client Signature (if present)</label>
+        <div class="sig-pad-wrap">
+          <canvas class="sig-canvas" id="sig-client" width="800" height="240"></canvas>
+          <img class="sig-print-img" id="sig-client-img" src="" alt="Client signature" style="display:none;width:100%;height:auto;border:1px solid #ccc;border-radius:4px">
+          <div class="sig-actions">
+            <button class="sig-clear" onclick="clearSig('sig-client')">Clear</button>
+          </div>
+        </div>
+      </div>
+      <div class="field-group">
+        <label>Client Name &amp; Date</label>
+        <input type="text" placeholder="Print full name" style="margin-bottom:8px">
+        <input type="date" id="sigDateClient">
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div class="actions screen-only">
+    <button class="btn-print" onclick="printReport()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 6 2 18 2 18 9"/>
+        <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+        <rect x="6" y="14" width="12" height="8"/>
+      </svg>
+      Save as PDF / Print Report
+    </button>
+    <div class="print-note">In the print dialog, choose <strong>Save as PDF</strong> and set paper to A4.</div>
+  </div>
+
+</div>
+
+<script>
+  let issueCount = 0;
+  const photoStore = {};
+
+  function addIssue() {
+    issueCount++;
+    const id = 'iss' + issueCount;
+    const num = issueCount;
+    photoStore[id] = [];
+
+    const card = document.createElement('div');
+    card.className = 'issue-card';
+    card.id = 'card-' + id;
+
+    card.innerHTML = `
+      <div class="issue-header">
+        <div class="issue-label" id="lbl-${id}">Concern / Issue ${num}</div>
+        <button class="btn-remove screen-only" onclick="removeIssue('${id}')">&#x2715; Remove</button>
+      </div>
+
+      <div class="field-row full">
+        <div class="field-group">
+          <label>Description of Concern</label>
+          <textarea id="desc-${id}" placeholder="Describe the issue observed on site..." rows="3"></textarea>
+        </div>
+      </div>
+
+      <div class="field-row three">
+        <div class="field-group">
+          <label>Materials Involved</label>
+          <input type="text" id="mat-${id}" placeholder="e.g. Colorbond, decromastic, Zincalume...">
+        </div>
+        <div class="field-group">
+          <label>Measurement / Area</label>
+          <input type="text" id="meas-${id}" placeholder="e.g. 4.2m x 3.1m, 12 lin. metres...">
+        </div>
+        <div class="field-group">
+          <label>Priority</label>
+          <select id="pri-${id}" onchange="updatePriStyle(this)">
+            <option value="">Select priority</option>
+            <option value="HIGH">HIGH - Immediate attention</option>
+            <option value="MEDIUM">MEDIUM - Within 30 days</option>
+            <option value="LOW">LOW - Monitor / cosmetic</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-row full">
+        <div class="field-group">
+          <label>Recommended Action</label>
+          <input type="text" id="action-${id}" placeholder="e.g. Full Colorbond re-roof, replace valley flashing, re-point ridge capping...">
+        </div>
+      </div>
+
+      <!-- SCREEN photo zone -->
+      <div class="photo-zone screen-only" id="zone-${id}">
+        <div class="photo-zone-label">Photos for this concern</div>
+        <div class="photo-grid" id="grid-${id}"></div>
+        <button class="btn-add-photo" onclick="triggerPhoto('${id}')">+ Add Photos</button>
+        <input type="file" class="hidden-file" id="file-${id}" accept="image/*,.heic,.heif,image/heic,image/heif" multiple onchange="handlePhotos(this,'${id}')">
+      </div>
+
+      <!-- PRINT photo grid (hidden on screen) -->
+      <div class="print-photo-section" style="display:none">
+        <div class="print-photo-label">Photos - Concern / Issue ${num}</div>
+        <div class="print-photo-grid" id="print-grid-${id}"></div>
+      </div>
+    `;
+
+    document.getElementById('issuesContainer').appendChild(card);
+    renumber();
+  }
+
+  function removeIssue(id) {
+    const card = document.getElementById('card-' + id);
+    if (card) card.remove();
+    delete photoStore[id];
+    renumber();
+  }
+
+  function renumber() {
+    const cards = document.querySelectorAll('#issuesContainer .issue-card');
+    cards.forEach((card, i) => {
+      const n = i + 1;
+      const id = card.id.replace('card-', '');
+      const lbl = document.getElementById('lbl-' + id);
+      if (lbl) lbl.textContent = 'Concern / Issue ' + n;
+      const printLbl = card.querySelector('.print-photo-label');
+      if (printLbl) printLbl.textContent = 'Photos - Concern / Issue ' + n;
+    });
+  }
+
+  function updatePriStyle(sel) {
+    sel.classList.remove('pri-high','pri-med','pri-low');
+    if (sel.value === 'HIGH') sel.classList.add('pri-high');
+    else if (sel.value === 'MEDIUM') sel.classList.add('pri-med');
+    else if (sel.value === 'LOW') sel.classList.add('pri-low');
+  }
+
+  function triggerPhoto(id) {
+    document.getElementById('file-' + id).click();
+  }
+
+  function handlePhotos(input, id) {
+    const files = Array.from(input.files);
+    files.forEach(function(file) {
+      const isHeic = file.type === 'image/heic' || file.type === 'image/heif' ||
+                     file.name.toLowerCase().endsWith('.heic') ||
+                     file.name.toLowerCase().endsWith('.heif');
+
+      // Try loading via object URL - works natively on iPhone Safari for HEIC
+      const objectUrl = URL.createObjectURL(file);
+      const testImg = new Image();
+
+      testImg.onload = function() {
+        // Browser decoded it - draw to canvas to get a safe JPEG data URL
+        const canvas = document.createElement('canvas');
+        canvas.width = testImg.naturalWidth;
+        canvas.height = testImg.naturalHeight;
+        canvas.getContext('2d').drawImage(testImg, 0, 0);
+        URL.revokeObjectURL(objectUrl);
+        let src;
+        try {
+          src = canvas.toDataURL('image/jpeg', 0.92);
+        } catch(e) {
+          src = objectUrl;
+        }
+        if (!photoStore[id]) photoStore[id] = [];
+        const idx = photoStore[id].length;
+        photoStore[id].push(src);
+        addThumb(id, src, idx);
+        addPrintImg(id, src);
+      };
+
+      testImg.onerror = function() {
+        URL.revokeObjectURL(objectUrl);
+        if (isHeic) {
+          // Desktop browser can't decode HEIC natively
+          showHeicAlert();
+        } else {
+          // Non-HEIC error - try FileReader fallback
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const src = e.target.result;
+            if (!photoStore[id]) photoStore[id] = [];
+            const idx = photoStore[id].length;
+            photoStore[id].push(src);
+            addThumb(id, src, idx);
+            addPrintImg(id, src);
+          };
+          reader.readAsDataURL(file);
+        }
+      };
+
+      testImg.src = objectUrl;
+    });
+    input.value = '';
+  }
+
+  function showHeicAlert() {
+    const existing = document.getElementById('heic-notice');
+    if (existing) return;
+    const notice = document.createElement('div');
+    notice.id = 'heic-notice';
+    notice.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#2C1810;color:#FAF7F2;padding:16px 20px;border-radius:10px;max-width:340px;width:90%;font-size:13px;line-height:1.6;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.3)';
+    notice.innerHTML = `
+      <div style="font-weight:500;margin-bottom:6px">HEIC photo not supported on this device</div>
+      <div style="opacity:0.85">On iPhone, go to:<br><strong>Settings &rarr; Camera &rarr; Formats &rarr; Most Compatible</strong><br>This makes your camera shoot JPG instead of HEIC.</div>
+      <button onclick="document.getElementById('heic-notice').remove()" style="margin-top:10px;background:var(--rust,#8B4513);border:none;color:#fff;padding:6px 16px;border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit">Got it</button>
+    `;
+    document.body.appendChild(notice);
+    setTimeout(function(){ if(notice.parentNode) notice.remove(); }, 8000);
+  }
+
+  function addThumb(id, src, idx) {
+    const grid = document.getElementById('grid-' + id);
+    if (!grid) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'photo-thumb';
+    wrap.id = 'thumb-' + id + '-' + idx;
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = 'site photo';
+    const btn = document.createElement('button');
+    btn.className = 'del-photo';
+    btn.title = 'Remove photo';
+    btn.textContent = '×';
+    btn.onclick = function(){ removeThumb(id, idx); };
+    wrap.appendChild(img);
+    wrap.appendChild(btn);
+    grid.appendChild(wrap);
+  }
+
+  function addPrintImg(id, src) {
+    const pg = document.getElementById('print-grid-' + id);
+    if (!pg) return;
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = 'site photo';
+    pg.appendChild(img);
+  }
+
+  function removeThumb(id, idx) {
+    const thumb = document.getElementById('thumb-' + id + '-' + idx);
+    if (thumb) thumb.remove();
+    // also remove from print grid (match by src)
+    const src = photoStore[id] && photoStore[id][idx];
+    if (src) {
+      const pg = document.getElementById('print-grid-' + id);
+      if (pg) {
+        Array.from(pg.querySelectorAll('img')).forEach(img => {
+          if (img.src === src) img.remove();
+        });
+      }
+      photoStore[id][idx] = null;
+    }
+  }
+
+  // Default 3 issues on load
+  document.addEventListener('DOMContentLoaded', function() {
+    addIssue(); addIssue(); addIssue();
+    const d = document.getElementById('inspDate');
+    if (d) d.valueAsDate = new Date();
+    initSigPad('sig-inspector');
+    initSigPad('sig-client');
+  });
+
+  // ── SIGNATURE PAD ──
+  function initSigPad(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const printImg = document.getElementById(canvasId + '-img');
+    let drawing = false;
+    let lastX = 0, lastY = 0;
+
+    function getPos(e) {
+      const rect = canvas.getBoundingClientRect();
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      return {
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY
+      };
+    }
+
+    function syncPrintImg() {
+      if (!printImg) return;
+      printImg.src = canvas.toDataURL('image/png');
+    }
+
+    function start(e) {
+      e.preventDefault();
+      canvas.setPointerCapture(e.pointerId);
+      drawing = true;
+      const pos = getPos(e);
+      lastX = pos.x;
+      lastY = pos.y;
+      ctx.beginPath();
+      ctx.arc(lastX, lastY, 1, 0, Math.PI * 2);
+      ctx.fillStyle = '#2C1810';
+      ctx.fill();
+    }
+
+    function draw(e) {
+      if (!drawing) return;
+      e.preventDefault();
+      const pos = getPos(e);
+      ctx.beginPath();
+      ctx.moveTo(lastX, lastY);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.strokeStyle = '#2C1810';
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.stroke();
+      lastX = pos.x;
+      lastY = pos.y;
+    }
+
+    function stop(e) {
+      if (!drawing) return;
+      drawing = false;
+      syncPrintImg();
+    }
+
+    canvas.addEventListener('pointerdown', start);
+    canvas.addEventListener('pointermove', draw);
+    canvas.addEventListener('pointerup', stop);
+    canvas.addEventListener('pointercancel', stop);
+    canvas.addEventListener('pointerleave', stop);
+  }
+
+  function clearSig(canvasId) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+    const printImg = document.getElementById(canvasId + '-img');
+    if (printImg) printImg.src = '';
+  }
+
+  function printReport() {
+    window.print();
+  }
+</script>
+</body>
+</html>
