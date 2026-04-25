@@ -410,11 +410,20 @@ tr:last-child td{border-bottom:none}tr:hover td{background:rgba(0,0,0,.03)}
 <!-- MOBILE FAB BAR — crew quick actions -->
 <div class="mobile-fab-bar" id="mobileFabBar">
   <button class="fab-btn" onclick="nav('dashboard')"><span class="fab-btn-icon">🏠</span>Home</button>
-  <button class="fab-btn primary" onclick="openReportModal()"><span class="fab-btn-icon">📋</span>Report</button>
-  <button class="fab-btn primary" onclick="openInspectionModal()"><span class="fab-btn-icon">🔍</span>Inspect</button>
   <button class="fab-btn" onclick="nav('jobs')"><span class="fab-btn-icon">🔨</span>Jobs</button>
+  <button class="fab-btn" onclick="nav('leads')"><span class="fab-btn-icon">📋</span>Leads</button>
+  <button class="fab-btn" onclick="nav('schedule')"><span class="fab-btn-icon">📅</span>Booking</button>
+  <button class="fab-btn" onclick="nav('inspections')"><span class="fab-btn-icon">🔍</span>Inspect</button>
+  <button class="fab-btn" onclick="nav('reports')"><span class="fab-btn-icon">📊</span>Reports</button>
+  <button class="fab-btn" onclick="nav('tasks')"><span class="fab-btn-icon">✅</span>Tasks</button>
+  <button class="fab-btn" onclick="nav('invoices')"><span class="fab-btn-icon">💰</span>Invoices</button>
+  <button class="fab-btn" onclick="nav('reminders')"><span class="fab-btn-icon">🔔</span>Reminders</button>
+  <button class="fab-btn" onclick="nav('files')"><span class="fab-btn-icon">🗂️</span>Files</button>
   <button class="fab-btn" onclick="nav('messages')"><span class="fab-btn-icon">💬</span>Msgs</button>
   <button class="fab-btn" onclick="nav('networking')"><span class="fab-btn-icon">🤝</span>Network</button>
+  <button class="fab-btn" onclick="nav('advertising')"><span class="fab-btn-icon">📢</span>Ads</button>
+  <button class="fab-btn" onclick="nav('workflow')"><span class="fab-btn-icon">📌</span>Workflow</button>
+  <button class="fab-btn admin-only" id="fabAdmin" onclick="nav('admin')"><span class="fab-btn-icon">⚙️</span>Admin</button>
 </div>
 
 <!-- AUTH -->
